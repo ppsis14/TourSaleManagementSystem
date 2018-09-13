@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="saleSystem.ReservePageController">
+   <children>
+      <Pane layoutX="26.0" prefHeight="108.0" prefWidth="900.0" style="-fx-background-color: #2C3E50;" AnchorPane.bottomAnchor="492.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label graphicTextGap="10.0" layoutX="90.0" layoutY="35.0" text="Reservation Card" textFill="WHITE">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/icons8_Profile_24px.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children></Pane>
+      <JFXTabPane layoutX="90.0" layoutY="62.0" prefHeight="522.0" prefWidth="720.0" side="TOP" stylesheets="@style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="80.0">
+         <tabs>
+            <Tab text="Information">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #ecf0f1;">
+                     <children>
+                        <JFXButton fx:id="loginButton" buttonType="RAISED" layoutX="550.0" layoutY="420.0" prefHeight="30.0" prefWidth="86.0" style="-fx-background-color: #1b75bc; -fx-background-radius: 5;" text="Save" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </JFXButton>
+                     </children></AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="More Function">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #ecf0f1;">
+                     <children>
+                        <JFXButton fx:id="loginButton1" buttonType="RAISED" layoutX="550.0" layoutY="420.0" prefHeight="30.0" prefWidth="86.0" style="-fx-background-color: #1b75bc; -fx-background-radius: 5;" text="Save" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </JFXButton>
+                     </children></AnchorPane>
+              </content>
+            </Tab>
+         </tabs></JFXTabPane>
+   </children>
+</AnchorPane>
