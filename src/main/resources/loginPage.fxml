@@ -7,7 +7,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2C3E50;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="saleSystem.LoginPageController">
@@ -23,7 +22,6 @@
             <DropShadow color="#000000e3" height="28.41" radius="17.7825" width="44.72" />
          </effect>
       </Label>
-      <HBox layoutX="200.0" layoutY="112.0" prefHeight="100.0" prefWidth="200.0" />
       <FontAwesomeIconView fill="#a0a2ab" glyphName="USER" layoutX="167.0" layoutY="169.0" size="25" text="" />
       <FontAwesomeIconView fill="#a0a2ab" glyphName="KEY" layoutX="167.0" layoutY="223.0" size="25" text="" />
       <Label fx:id="showErrorLogin" alignment="CENTER" contentDisplay="CENTER" layoutX="202.0" layoutY="260.0" prefHeight="17.0" prefWidth="237.0" textAlignment="CENTER" textFill="#ffffff" />
