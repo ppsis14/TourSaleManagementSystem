@@ -23,8 +23,14 @@ public class HomePageController implements Initializable {
     @FXML private JFXButton logoutBtn;
 
     @FXML
-    void handleInvoiceBtn(ActionEvent event) {
-
+    void handleInvoiceBtn(ActionEvent event) throws IOException {
+        invoiceBtn.getScene().getWindow().hide();
+        Stage loginHomeWindow = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/invoicePage.fxml"));
+        Scene scene = new Scene(root);
+        loginHomeWindow.setScene(scene);
+        loginHomeWindow.show();
+        loginHomeWindow.setResizable(false);
     }
 
     @FXML
@@ -40,12 +46,26 @@ public class HomePageController implements Initializable {
     }
 
     @FXML
-    void handleMemberBtn(ActionEvent event) {
+    void handleMemberBtn(ActionEvent event) throws IOException {
+        memberBtn.getScene().getWindow().hide();
+        Stage loginHomeWindow = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/memberPage.fxml"));
+        Scene scene = new Scene(root);
+        loginHomeWindow.setScene(scene);
+        loginHomeWindow.show();
+        loginHomeWindow.setResizable(false);
 
     }
 
     @FXML
-    void handleReceiptBtn(ActionEvent event) {
+    void handleReceiptBtn(ActionEvent event) throws IOException {
+        receiptBtn.getScene().getWindow().hide();
+        Stage loginHomeWindow = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/paymentReceiptPage.fxml"));
+        Scene scene = new Scene(root);
+        loginHomeWindow.setScene(scene);
+        loginHomeWindow.show();
+        loginHomeWindow.setResizable(false);
 
     }
 
@@ -62,7 +82,14 @@ public class HomePageController implements Initializable {
     }
 
     @FXML
-    void handleTourCheckBtn(ActionEvent event) {
+    void handleTourCheckBtn(ActionEvent event) throws IOException {
+        tourCheckBtn.getScene().getWindow().hide();
+        Stage loginHomeWindow = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/tourCheckPage.fxml"));
+        Scene scene = new Scene(root);
+        loginHomeWindow.setScene(scene);
+        loginHomeWindow.show();
+        loginHomeWindow.setResizable(false);
 
     }
 

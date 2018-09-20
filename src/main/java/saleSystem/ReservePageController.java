@@ -25,6 +25,7 @@ public class ReservePageController implements Initializable {
     @FXML private JFXButton invoiceBtn;
     @FXML private JFXButton ReceiptBtn;
     @FXML private JFXButton logoutBtn;
+    @FXML private JFXButton bckHomeBtn;
     @FXML private Pane homePane;
     @FXML private Label showUserLogin;
 
@@ -40,57 +41,14 @@ public class ReservePageController implements Initializable {
 
 
     @FXML
-    void handleHomeBtn(ActionEvent event) throws IOException {
-        homeBtn.getScene().getWindow().hide();
-        Stage homeWindow = new Stage();
+    void handleBackHomeFromReserveBtn() throws IOException {
+        bckHomeBtn.getScene().getWindow().hide();
+        Stage reserveToHomeWindow = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("/homePage.fxml"));
         Scene scene = new Scene(root);
-        homeWindow.setScene(scene);
-        homeWindow.show();
-        homeWindow.setResizable(false);
-    }
-
-    @FXML
-    void handleInvoiceBtn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleLogoutBtn(ActionEvent event) throws IOException {
-        logoutBtn.getScene().getWindow().hide();
-        Stage loginWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/loginPage.fxml"));
-        Scene scene = new Scene(root);
-        loginWindow.setScene(scene);
-        loginWindow.show();
-        loginWindow.setResizable(false);
-
-    }
-
-    @FXML
-    public void handleMember(ActionEvent event) {
-
-    }
-
-    @FXML
-    public void handleReceiptBtn(ActionEvent event) {
-
-    }
-
-    @FXML
-    public void handleReserveBtn(ActionEvent event) throws IOException {
-        /*logoutBtn.getScene().getWindow().hide();
-        Stage reservationWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("reservationPage.fxml"));
-        Scene scene = new Scene(root);
-        reservationWindow.setScene(scene);
-        reservationWindow.show();
-        reservationWindow.setResizable(false);
-*/
-    }
-
-    @FXML
-    public void handleTourCheckBtn(ActionEvent event) {
+        reserveToHomeWindow.setScene(scene);
+        reserveToHomeWindow.show();
+        reserveToHomeWindow.setResizable(false);
 
     }
 

@@ -10,20 +10,19 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MemberPageController {
+public class InvoicePageController {
     @FXML
-    private JFXButton memberHomeBtn;
+    private JFXButton invoiceHomeBtn;
 
     @FXML
-    void handleBackHomeFromMemberBtn(ActionEvent event) throws IOException {
-        memberHomeBtn.getScene().getWindow().hide();
-        Stage memberToHomeWindow = new Stage();
+    void handleBackHomeFromInvoiceBtn(ActionEvent event) throws IOException {
+        invoiceHomeBtn.getScene().getWindow().hide();
+        Stage invoiceToHomeWindow = new Stage();
         Parent root = FXMLLoader.load(getClass().getResource("/homePage.fxml"));
         Scene scene = new Scene(root);
-        memberToHomeWindow.setScene(scene);
-        memberToHomeWindow.show();
-        memberToHomeWindow.setResizable(false);
-
+        invoiceToHomeWindow.setScene(scene);
+        invoiceToHomeWindow.show();
+        invoiceToHomeWindow.setResizable(false);
     }
 
 

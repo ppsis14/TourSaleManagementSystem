@@ -54,7 +54,6 @@ public class LoginPageController implements Initializable {
         if(resultSet.next()){
 
             FXMLLoader loader = new FXMLLoader();
-        //String name = resultSet.getString("Firstname")+"  "+resultSet.getString("Lastname");
             loginButton.getScene().getWindow().hide();
             Stage homeWindow = new Stage();
             Parent root = loader.load(getClass().getResource("/homePage.fxml"));

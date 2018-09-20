@@ -13,7 +13,7 @@ public class DbConnect {
     }
 
     public Connection getConnection() {
-        String connect_string = "jdbc:sqlite:sale_system_database.db";
+        String connect_string = "jdbc:sqlite::resource:sale_system_database.db";
 
         try {
             Class.forName("org.sqlite.JDBC");

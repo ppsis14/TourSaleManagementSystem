@@ -49,6 +49,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </JFXButton>
             <JFXButton fx:id="memberBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleMemberBtn" prefHeight="130.0" prefWidth="201.0" style="-fx-background-color: #2C3E50;" styleClass="jfx-button" stylesheets="@style.css" text="Member Card" textFill="WHITE" GridPane.columnIndex="1">
                <graphic>
@@ -58,6 +61,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </JFXButton>
             <JFXButton fx:id="tourCheckBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleTourCheckBtn" prefHeight="130.0" prefWidth="201.0" style="-fx-background-color: #2C3E50;" styleClass="jfx-button" stylesheets="@style.css" text="Tour Checking" textFill="WHITE" GridPane.columnIndex="2">
                <graphic>
@@ -67,8 +73,11 @@
                      </image>
                   </ImageView>
                </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </JFXButton>
-            <JFXButton fx:id="invoiceBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleInvoiceBtn" prefHeight="130.0" prefWidth="201.0" style="-fx-background-color: #2C3E50;" styleClass="jfx-button" stylesheets="@style.css" text="Invioces" textFill="WHITE" GridPane.rowIndex="1">
+            <JFXButton fx:id="invoiceBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleInvoiceBtn" prefHeight="130.0" prefWidth="201.0" style="-fx-background-color: #2C3E50;" styleClass="jfx-button" stylesheets="@style.css" text="Invioce" textFill="WHITE" GridPane.rowIndex="1">
                <graphic>
                   <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -76,6 +85,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </JFXButton>
             <JFXButton fx:id="receiptBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleReceiptBtn" prefHeight="130.0" prefWidth="201.0" style="-fx-background-color: #2C3E50;" styleClass="jfx-button" stylesheets="@style.css" text="Payment Receipt" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <graphic>
@@ -85,6 +97,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </JFXButton>
             <JFXButton fx:id="logoutBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleLogoutBtn" prefHeight="130.0" prefWidth="201.0" style="-fx-background-color: #2C3E50;" styleClass="jfx-button" stylesheets="@style.css" text="Logout" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <graphic>
@@ -94,6 +109,9 @@
                      </image>
                   </ImageView>
                </graphic>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </JFXButton>
          </children>
       </GridPane>
