@@ -1,28 +1,21 @@
 package saleSystem;
 
-import com.jfoenix.controls.JFXButton;
-import javafx.event.ActionEvent;
+import com.jfoenix.controls.JFXDrawer;
+import com.jfoenix.controls.JFXHamburger;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.fxml.Initializable;
 
-import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class TourCheckPageController {
-    @FXML private JFXButton tourCheckToHomeBtn;
 
+public class TourCheckPageController implements Initializable {
     @FXML
-    void handleBackHomeFormTourCheckBtn(ActionEvent event) throws IOException {
-        tourCheckToHomeBtn.getScene().getWindow().hide();
-        Stage tourToHomeWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/homePage.fxml"));
-        Scene scene = new Scene(root);
-        tourToHomeWindow.setScene(scene);
-        tourToHomeWindow.show();
-        tourToHomeWindow.setResizable(false);
+    private JFXHamburger menu;
+    @FXML private JFXDrawer drawerMenu;
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
     }
-
 }

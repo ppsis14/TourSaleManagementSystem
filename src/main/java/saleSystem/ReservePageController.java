@@ -1,34 +1,16 @@
 package saleSystem;
 
 import com.jfoenix.controls.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ReservePageController implements Initializable {
 
-    @FXML private Pane reservePane;
-    @FXML private JFXButton homeBtn;
-    @FXML private JFXButton reserveBtn;
-    @FXML private JFXButton memberBtn;
-    @FXML private JFXButton tourCheckBtn;
-    @FXML private JFXButton invoiceBtn;
-    @FXML private JFXButton ReceiptBtn;
-    @FXML private JFXButton logoutBtn;
-    @FXML private JFXButton bckHomeBtn;
-    @FXML private Pane homePane;
-    @FXML private Label showUserLogin;
-
+    @FXML private JFXHamburger menu;
+    @FXML private JFXDrawer drawerMenu;
     @FXML private JFXTextField th_Firstname;
     @FXML private JFXTextField th_Lastname;
     @FXML private JFXTextField en_Firstname;
@@ -40,20 +22,11 @@ public class ReservePageController implements Initializable {
     @FXML private JFXTextArea address;
 
 
-    @FXML
-    void handleBackHomeFromReserveBtn() throws IOException {
-        bckHomeBtn.getScene().getWindow().hide();
-        Stage reserveToHomeWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/homePage.fxml"));
-        Scene scene = new Scene(root);
-        reserveToHomeWindow.setScene(scene);
-        reserveToHomeWindow.show();
-        reserveToHomeWindow.setResizable(false);
-
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+
         // set user login by call from database
         //showUserLogin.setText("Thikamporn Simud");
         //homePane.toFront();
@@ -70,7 +43,28 @@ public class ReservePageController implements Initializable {
 
     }
 
-    public void setLoginName(String name){
+    /*private void initDrawerToolBar(){
+        try {
+            VBox toolbar = FXMLLoader.load(getClass().getResource("/hamburgerMenu.fxml"));
+            drawerMenu.setSidePane(toolbar);
+            drawerMenu.setDefaultDrawerSize(100);
+        } catch (IOException e) {
+            Logger.getLogger(FXMLLoader.class.getName()).log(Level.SEVERE,null, e);
+        }
+
+        HamburgerNextArrowBasicTransition hamMenu = new HamburgerNextArrowBasicTransition(menu);
+        hamMenu.setRate(-1);
+        menu.addEventHandler(MouseEvent.MOUSE_CLICKED, (event) -> {
+            hamMenu.setRate(hamMenu.getRate()*-1);
+            hamMenu.play();
+            if (drawerMenu.isHidden()) drawerMenu.open();
+            else drawerMenu.close();
+
+        });
+    }*/
+
+
+    /*public void setLoginName(String name){
         showUserLogin.setText(name);
-    }
+    }*/
 }

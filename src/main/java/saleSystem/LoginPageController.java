@@ -4,10 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import databaseConnection.DbConnect;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -50,21 +47,15 @@ public class LoginPageController implements Initializable {
         ResultSet resultSet = statement.executeQuery("select * from employee_database where ID" + " = '" + username.getText() + "' and Password = '" + password.getText() +"'");
 
 
-
         if(resultSet.next()){
-
-            FXMLLoader loader = new FXMLLoader();
+            //load windows
             loginButton.getScene().getWindow().hide();
-            Stage homeWindow = new Stage();
-            Parent root = loader.load(getClass().getResource("/homePage.fxml"));
-            Scene scene = new Scene(root);
-            homeWindow.setScene(scene);
-            homeWindow.show();
-            homeWindow.setResizable(true);
-//          passing name login
-//            HomePageController homePageController = new HomePageController();
-//            homePageController = loader.getController();
-//            homePageController.setLoginName(name);
+            SaleManagementUtil.loadWindow(getClass().getResource("/homePage.fxml"), "Onvacation - Home", null);
+
+         /*   //passing name login
+            HomePageController homePageController = new HomePageController();
+            //homePageController = loader.getController();
+            homePageController.setLoginName(username.getText());*/
         }
         else{
             showErrorLogin.setText("Username or Password is not correct");

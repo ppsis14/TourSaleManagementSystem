@@ -3,11 +3,8 @@ package saleSystem;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,75 +18,46 @@ public class HomePageController implements Initializable {
     @FXML private JFXButton invoiceBtn;
     @FXML private JFXButton receiptBtn;
     @FXML private JFXButton logoutBtn;
+    @FXML private Label loginNameLabel;
+
 
     @FXML
-    void handleInvoiceBtn(ActionEvent event) throws IOException {
+    public void handleInvoiceBtn(ActionEvent event) throws IOException {
         invoiceBtn.getScene().getWindow().hide();
-        Stage loginHomeWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/invoicePage.fxml"));
-        Scene scene = new Scene(root);
-        loginHomeWindow.setScene(scene);
-        loginHomeWindow.show();
-        loginHomeWindow.setResizable(false);
+        SaleManagementUtil.loadWindow(getClass().getResource("/invoicePage.fxml"), "Onvacation - Home", null);
     }
 
     @FXML
-    void handleLogoutBtn(ActionEvent event) throws IOException {
+    public void handleLogoutBtn(ActionEvent event) throws IOException {
         logoutBtn.getScene().getWindow().hide();
-        Stage loginHomeWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/loginPage.fxml"));
-        Scene scene = new Scene(root);
-        loginHomeWindow.setScene(scene);
-        loginHomeWindow.show();
-        loginHomeWindow.setResizable(false);
-
+        SaleManagementUtil.loadWindow(getClass().getResource("/loginPage.fxml"), "Onvacation - Login", null);
     }
 
     @FXML
-    void handleMemberBtn(ActionEvent event) throws IOException {
+    public void handleMemberBtn(ActionEvent event) throws IOException {
         memberBtn.getScene().getWindow().hide();
-        Stage loginHomeWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/memberPage.fxml"));
-        Scene scene = new Scene(root);
-        loginHomeWindow.setScene(scene);
-        loginHomeWindow.show();
-        loginHomeWindow.setResizable(false);
+        SaleManagementUtil.loadWindow(getClass().getResource("/memberPage.fxml"), "Onvacation - Member", null);
 
     }
 
     @FXML
-    void handleReceiptBtn(ActionEvent event) throws IOException {
+    public void handleReceiptBtn(ActionEvent event) throws IOException {
         receiptBtn.getScene().getWindow().hide();
-        Stage loginHomeWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/paymentReceiptPage.fxml"));
-        Scene scene = new Scene(root);
-        loginHomeWindow.setScene(scene);
-        loginHomeWindow.show();
-        loginHomeWindow.setResizable(false);
+        SaleManagementUtil.loadWindow(getClass().getResource("/paymentReceiptPage.fxml"), "Onvacation - Receipt", null);
 
     }
 
     @FXML
-    void handleReserveBtn(ActionEvent event) throws IOException {
+    public void handleReserveBtn(ActionEvent event) throws IOException {
         reserveBtn.getScene().getWindow().hide();
-        Stage reservationWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/reservationPage.fxml"));
-        Scene scene = new Scene(root);
-        reservationWindow.setScene(scene);
-        reservationWindow.show();
-        reservationWindow.setResizable(false);
+        SaleManagementUtil.loadWindow(getClass().getResource("/reservationPage.fxml"), "Onvacation - Reservation", null);
 
     }
 
     @FXML
-    void handleTourCheckBtn(ActionEvent event) throws IOException {
+    public void handleTourCheckBtn(ActionEvent event) throws IOException {
         tourCheckBtn.getScene().getWindow().hide();
-        Stage loginHomeWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/tourCheckPage.fxml"));
-        Scene scene = new Scene(root);
-        loginHomeWindow.setScene(scene);
-        loginHomeWindow.show();
-        loginHomeWindow.setResizable(false);
+        SaleManagementUtil.loadWindow(getClass().getResource("/tourCheckPage.fxml"), "Onvacation - Tour Checking", null);
 
     }
 
@@ -101,6 +69,10 @@ public class HomePageController implements Initializable {
         //homePane.toFront();
         //reservePane.setVisible(false);
 
+    }
+
+    public void setLoginName(String txt){
+        loginNameLabel.setText(txt);
     }
 
 }

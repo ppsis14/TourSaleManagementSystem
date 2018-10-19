@@ -1,24 +1,20 @@
 package saleSystem;
 
-import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDrawer;
+import com.jfoenix.controls.JFXHamburger;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.fxml.Initializable;
 
-import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class PaymentReceiptPageController {
-    @FXML JFXButton receiptToHomeBtn;
+public class PaymentReceiptPageController implements Initializable {
     @FXML
-    void handleBackHomeFromReceiptBtn() throws IOException {
-        receiptToHomeBtn.getScene().getWindow().hide();
-        Stage receiptToHomeWindow = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/homePage.fxml"));
-        Scene scene = new Scene(root);
-        receiptToHomeWindow.setScene(scene);
-        receiptToHomeWindow.show();
-        receiptToHomeWindow.setResizable(false);
+    private JFXHamburger menu;
+    @FXML private JFXDrawer drawerMenu;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
     }
 }
