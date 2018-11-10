@@ -3,6 +3,9 @@ package saleSystem;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
+//import com.mongodb.BasicDBObject;
+//import com.mongodb.Cursor;
+//import databaseConnection.MongoDBConnect;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,26 +16,31 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+//import static databaseConnection.MongoDBConnect.reserve_card;
+
 public class ReservePageController implements Initializable {
+
 
     @FXML private JFXHamburger menu;
     @FXML private JFXDrawer drawerMenu;
     @FXML private ChoiceBox<?> tourCodeChioce;
-    @FXML private TextField tourName;
+    @FXML private TextField ReservCode;
     @FXML private DatePicker departureDate;
     @FXML private ChoiceBox<String> nameTitleTHClient;
     @FXML private TextField firstNameTHClient;
     @FXML private TextField lastNameTHClient;
     @FXML private ChoiceBox<String> nameTitleENClient;
     @FXML private TextField firstNameENClient;
+    @FXML private TextField lastNameENClient;
     @FXML private ChoiceBox<String> oldNameTitleTHClient;
     @FXML private TextField oldFirstNameClient;
     @FXML private TextField oldLastNameClient;
     @FXML private ChoiceBox<String> genderChoice;
     @FXML private TextField age;
-    @FXML private DatePicker dateOfBirthCilent;
+    @FXML private DatePicker dateOfBirthClient;
     @FXML private TextField passportClient;
     @FXML private DatePicker expPassportDate;
     @FXML private TextField homeAddrCilent;
@@ -91,16 +99,98 @@ public class ReservePageController implements Initializable {
         //homePane.toFront();
         //reservePane.setVisible(false);
 
-//        //record reservation
-//        Connection connection = DbConnect.getInstance().getConnection();
-//        Statement statement = connection.createStatement();
-//
-//        ResultSet resultSet = statement.executeQuery("insert into reserve_card_database (FirstnameTH,LastnameTH,FirstnameENG,LastnameENG,Passport_no,Expire_passport_date,Present_address,Mobile_num)"+
-//                "values ('"+th_Firstname.getText()+"','"+th_Lastname.getText()+"','"+en_Firstname.getText()+"','"+en_Lastname.getText()+"'," +
-//                "'"+passpotNumber.getText()+"','"+expireDate.getPromptText()+"','"+address.getText()+"','"+mobileNumber.getText()+"')");
+    }
+    @FXML
+    public void handleAddClientBtn(ActionEvent event) throws SQLException {
+      /*  //record reservation
+        MongoDBConnect.getMongoClient();
 
+        BasicDBObject doc = new BasicDBObject()
+                .append("Name_titleTH",nameTitleTHClient.getSelectionModel().getSelectedItem())
+                .append("FirstNameTH",firstNameTHClient.getText())
+                .append("LastNameTH",lastNameTHClient.getText())
+                .append("Name_titleENG",nameTitleENClient.getSelectionModel().getSelectedItem())
+                .append("FirstNameENG",firstNameENClient.getText())
+                .append("LastNameENG",lastNameENClient.getText())
+                .append("Old_name",oldNameTitleTHClient.getSelectionModel().getSelectedItem())
+                .append("Old_FirstnameTH",oldFirstNameClient.getText())
+                .append("Old_LastnameTH",oldLastNameClient.getText())
+                .append("Gender",genderChoice.getSelectionModel().getSelectedItem())
+                .append("Age",age.getText())
+                .append("Date_of_birth",dateOfBirthClient.getEditor().getText())
+                .append("Expire_passport_date",expPassportDate.getEditor().getText())
+                .append("Passport_no",passportClient.getText());
+
+        reserve_card.insert(doc);
+        System.out.println(reserve_card);
+
+        Cursor cursor = reserve_card.find();
+        while (cursor.hasNext())
+            System.out.println(cursor.next());
+        System.out.println("Reserve card inserted");*/
+
+
+        /*Connection c = null;
+        Statement stmt = null;
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite::resource:sale_system_database.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+
+            stmt = c.createStatement();
+            String sql = "INSERT INTO test (fth, lth, fen, len, pass)" +
+                    "VALUES ('"+firstNameTHClient.getText()+"','"+lastNameTHClient.getText()+"','"+firstNameENClient.getText()+"','"+lastNameENClient.getText()+"'," +
+                    "'"+passportClient.getText()+"')";
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+            c.commit();
+            c.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("Records created successfully");
+        */
+        /*
+        Connection connection = DbConnect.getInstance().getConnection();
+        PreparedStatement preparedStatement;
+//        String sql = "insert into test (fth, lth, fen, len, pass)"+
+//                "values ('"+firstNameTHClient.getText()+"','"+lastNameTHClient.getText()+"','"+firstNameENClient.getText()+"','"+lastNameENClient.getText()+"'," +
+//                "'"+passportClient.getText()+"')";
+
+        String sql = "insert into test (fth, lth, fen, len, pass) values(?, ?, ?, ?, ?)";
+
+        try {
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,firstNameTHClient.getText());
+            preparedStatement.setString(2,lastNameTHClient.getText());
+            preparedStatement.setString(3,firstNameENClient.getText());
+            preparedStatement.setString(4,lastNameENClient.getText());
+            preparedStatement.setString(5,passportClient.getText());
+            //preparedStatement.setString(6,expireDate.getEditor().getText());
+
+            preparedStatement.executeUpdate();
+            System.out.println("saved!");
+        } catch (SQLException e) {
+            System.err.println("Got an exception! ");
+            System.out.println(e.getMessage());
+        }finally {
+            connection.close();
+        }
+
+        //        ResultSet resultSet = statement.executeQuery("insert into reserve_card_database (FirstnameTH,LastnameTH,FirstnameENG,LastnameENG,Passport_no)"+
+//                "values ('"+firstNameTHClient.getText()+"','"+lastNameTHClient.getText()+"','"+firstNameENClient.getText()+"','"+lastNameENClient.getText()+"'," +
+//                "'"+passportClient.getText()+"')");
+
+*/
 
     }
+
+
 
     /*private void initDrawerToolBar(){
         try {
@@ -126,10 +216,4 @@ public class ReservePageController implements Initializable {
     /*public void setLoginName(String name){
         showUserLogin.setText(name);
     }*/
-
-    @FXML
-    void handleAddClientBtn(ActionEvent event) {
-
-    }
-
 }

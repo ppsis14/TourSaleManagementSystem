@@ -7,24 +7,33 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
 public class TourCheckPageController implements Initializable {
-    @FXML private JFXHamburger menu;
-    @FXML private JFXDrawer drawerMenu;
-    @FXML private TextField searchIdTour;
-    @FXML private JFXButton searchBtnTour;
-    @FXML private Label showTourDetail;
-    @FXML private TableView<?> tabletourCheck;
-    @FXML private Button editBtnTour;
-    @FXML private Button deleteBtnTour;
-    @FXML private Button updateBtnTour;
+    @FXML
+    private JFXHamburger menu;
+    @FXML
+    private JFXDrawer drawerMenu;
+    @FXML
+    private ChoiceBox<?> findTourID;
+    @FXML
+    private JFXButton searchBtnTour;
+    @FXML
+    private Label showTourDetail;
+    @FXML
+    private TableView<?> tabletourCheck;
+    @FXML
+    private Button editBtnTour;
+    @FXML
+    private Button deleteBtnTour;
+    @FXML
+    private Button updateBtnTour;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
