@@ -16,24 +16,15 @@ import java.util.ResourceBundle;
 
 
 public class TourCheckPageController implements Initializable {
-    @FXML
-    private JFXHamburger menu;
-    @FXML
-    private JFXDrawer drawerMenu;
-    @FXML
-    private ChoiceBox<?> findTourID;
-    @FXML
-    private JFXButton searchBtnTour;
-    @FXML
-    private Label showTourDetail;
-    @FXML
-    private TableView<?> tabletourCheck;
-    @FXML
-    private Button editBtnTour;
-    @FXML
-    private Button deleteBtnTour;
-    @FXML
-    private Button updateBtnTour;
+    @FXML private JFXHamburger menu;
+    @FXML private JFXDrawer drawerMenu;
+    @FXML private ChoiceBox<?> findTourID;
+    @FXML private JFXButton searchBtnTour;
+    @FXML private Label showTourDetail;
+    @FXML private TableView<?> tabletourCheck;
+    @FXML private Button editBtnTour;
+    @FXML private Button deleteBtnTour;
+    @FXML private Button updateBtnTour;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -47,7 +38,8 @@ public class TourCheckPageController implements Initializable {
 
     @FXML
     void handleEditBtnTour(ActionEvent event) {
-
+        editBtnTour.getScene().getWindow().hide();
+        SaleManagementUtil.loadWindow(getClass().getResource("/reservationForEditPage.fxml"), "Onvacation - Reservation", null);
     }
 
     @FXML
