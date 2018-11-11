@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -38,6 +39,7 @@ public class TourCheckPageController implements Initializable {
 
     @FXML
     void handleEditBtnTour(ActionEvent event) {
+        System.out.println("go to reservation edit page");
         editBtnTour.getScene().getWindow().hide();
         SaleManagementUtil.loadWindow(getClass().getResource("/reservationForEditPage.fxml"), "Onvacation - Reservation", null);
     }
