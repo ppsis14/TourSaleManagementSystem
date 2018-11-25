@@ -26,39 +26,37 @@ public class HomePageController implements Initializable {
     @FXML
     public void handleInvoiceBtn(ActionEvent event) throws IOException {
         invoiceBtn.getScene().getWindow().hide();
-
+        SaleManagementUtil.loadWindow(getClass().getResource("/invoicePage.fxml"), "Invoice");
     }
 
     @FXML
     public void handleLogoutBtn(ActionEvent event) throws IOException {
         logoutBtn.getScene().getWindow().hide();
-
+        SaleManagementUtil.loadWindow(getClass().getResource("/loginPage.fxml"), "Log in");
     }
 
     @FXML
     public void handleCustomerManageBtn(ActionEvent event) throws IOException {
         customerManageBtn.getScene().getWindow().hide();
-
-
+        SaleManagementUtil.loadWindow(getClass().getResource("/customerManagePage.fxml"), "Customer Management");
     }
 
     @FXML
     public void handleReceiptBtn(ActionEvent event) throws IOException {
         receiptBtn.getScene().getWindow().hide();
-
-
+        SaleManagementUtil.loadWindow(getClass().getResource("/paymentReceiptPage.fxml"), "Payment Receipt");
     }
 
     @FXML
     public void handleReserveBtn(ActionEvent event) throws IOException {
         reserveBtn.getScene().getWindow().hide();
-
+        SaleManagementUtil.loadWindow(getClass().getResource("/reservationPage.fxml"), "Reservation");
     }
 
     @FXML
     public void handleTourCheckBtn(ActionEvent event) throws IOException {
         tourCheckBtn.getScene().getWindow().hide();
-
+        SaleManagementUtil.loadWindow(getClass().getResource("/tourCheckPage.fxml"), "Tour Checking");
     }
 
     @Override
@@ -74,25 +72,4 @@ public class HomePageController implements Initializable {
     public void setLoginName(String txt){
         loginNameLabel.setText(txt);
     }
-
-    /*SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-
-    ObservableList<String> nameENTitleChoices = FXCollections.observableArrayList("Miss", "Mrs.", "Mr.", "Master", "Professor", "Assistant Professor", "Associate Professor");
-        nameTitleEN.getSelectionModel().selectFirst();
-        nameTitleEN.setValue("Miss");
-        nameTitleEN.getItems().addAll(nameENTitleChoices);
-
-    ObservableList<String> nameTHTitleChoices = FXCollections.observableArrayList("นางสาว", "นาง", "นาย", "เด็กหญิง", "เด็กชาย", "ศาตราจารย์", "ผู้ช่วยศาสตราจารย์", "รองศาสตราจารย์");
-        nameTitleTH.getSelectionModel().selectFirst();
-        nameTitleTH.setValue("นางสาว");
-        nameTitleTH.getItems().addAll(nameTHTitleChoices);
-
-    ObservableList<String> travelServices = FXCollections.observableArrayList("ชื่อเสียงของบริษัท", "โปรแกรมทัวร์", "ราคา", "การบริการของพนักงานขาย", "วันเวลาเดินทาง");
-        travelServiceChoice.setValue("ชื่อเสียงของบริษัท");
-        travelServiceChoice.setItems(travelServices);
-
-    ObservableList<String> travelFocus = FXCollections.observableArrayList("ที่พัก", "ร้านอาหาร", "ยานพาหนะ", "ระยะเวลาชมสถานที่ท่องเที่ยว", "ไกด์/มัคคุเทศน์");
-        travelFocusingChoice.setValue("ที่พัก");
-        travelFocusingChoice.setItems(travelFocus);*/
-
 }

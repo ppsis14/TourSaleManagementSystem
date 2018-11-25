@@ -50,7 +50,7 @@ public class LoginPageController implements Initializable {
         if(resultSet.next()){
             //load windows
             loginButton.getScene().getWindow().hide();
-            SaleManagementUtil.loadWindow(getClass().getResource("/homePage.fxml"), "Onvacation - Home", null);
+            SaleManagementUtil.loadWindow(getClass().getResource("/homePage.fxml"), "Home");
 
          /*   //passing name login
             HomePageController homePageController = new HomePageController();

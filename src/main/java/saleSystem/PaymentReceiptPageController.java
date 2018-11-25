@@ -5,11 +5,15 @@ import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 
-public class PaymentReceiptPageController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class PaymentReceiptPageController implements Initializable {
 
     @FXML
     private ComboBox<?> tourIDComboBoxDR;
@@ -74,4 +78,8 @@ public class PaymentReceiptPageController {
 
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+    }
 }

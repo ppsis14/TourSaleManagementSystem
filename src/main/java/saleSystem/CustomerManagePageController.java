@@ -48,6 +48,7 @@ public class CustomerManagePageController implements Initializable {
 
     @FXML
     void handleEditCustomerBtn(ActionEvent event) {
+        SaleManagementUtil.loadWindow(getClass().getResource("/editCustomer.fxml"), "Edit Customer Information");
 
     }
 
@@ -63,6 +64,7 @@ public class CustomerManagePageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
 
     }
 }

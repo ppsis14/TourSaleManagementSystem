@@ -76,7 +76,7 @@
                   </VBox>
                </children>
             </Pane>
-            <JFXTabPane prefHeight="345.0" prefWidth="800.0" side="RIGHT" styleClass="tab-selected-line" stylesheets="@style.css">
+            <JFXTabPane prefHeight="345.0" prefWidth="800.0" styleClass="tab-selected-line" stylesheets="@style.css">
                <tabs>
                   <Tab text="Reservation List">
                      <content>

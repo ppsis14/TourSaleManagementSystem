@@ -116,10 +116,16 @@ public class ReservePageController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    @FXML
+    void handleSearchCustomerBtn(ActionEvent event){
 
     }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+        SaleManagementUtil.setTitleNameTH(titleNameTH);
+        SaleManagementUtil.setTitleNameEN(titleNameEN);
+        SaleManagementUtil.setGender(genderChoice);
+    }
 }
-/*public class ReservePageController {
-}*/
