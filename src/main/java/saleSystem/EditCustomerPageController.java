@@ -22,7 +22,7 @@ public class EditCustomerPageController implements Initializable {
     private StackPane rootPane;
 
     @FXML
-    private ChoiceBox<?> titleNameTH;
+    private ChoiceBox<String> titleNameTH;
 
     @FXML
     private TextField firstNameTH;
@@ -31,7 +31,7 @@ public class EditCustomerPageController implements Initializable {
     private TextField lastNameTH;
 
     @FXML
-    private ChoiceBox<?> titleNameEN;
+    private ChoiceBox<String> titleNameEN;
 
     @FXML
     private TextField firstNameEN;
@@ -40,7 +40,7 @@ public class EditCustomerPageController implements Initializable {
     private TextField lastNameEN;
 
     @FXML
-    private ChoiceBox<?> genderChoice;
+    private ChoiceBox<String> genderChoice;
 
     @FXML
     private TextField age;
@@ -85,7 +85,7 @@ public class EditCustomerPageController implements Initializable {
     private TextField moreDetail;
 
     @FXML
-    private ChoiceBox<?> tourCodeChioce1;
+    private ComboBox<String> hearAboutUsChoices;
 
     @FXML
     private JFXButton saveDataBtn;
@@ -137,6 +137,7 @@ public class EditCustomerPageController implements Initializable {
         SaleManagementUtil.setTitleNameTH(titleNameTH);
         SaleManagementUtil.setTitleNameEN(titleNameEN);
         SaleManagementUtil.setGender(genderChoice);
+        SaleManagementUtil.setHearAboutUs(hearAboutUsChoices);
 
     }
 }

@@ -7,11 +7,7 @@ import com.jfoenix.controls.JFXHamburger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -85,7 +81,7 @@ public class ReservePageController implements Initializable {
     private TextField moreDetail;
 
     @FXML
-    private ChoiceBox<?> hearAboutUsChoice;
+    private ComboBox<String> hearAboutUsChoices;
 
     @FXML
     private JFXHamburger menu;
@@ -103,7 +99,7 @@ public class ReservePageController implements Initializable {
     private Label customerNo;
 
     @FXML
-    private ChoiceBox<?> tourCodeChioce;
+    private ChoiceBox<String> tourCodeChioce;
 
     @FXML
     private JFXCheckBox oldCustomer;
@@ -127,5 +123,6 @@ public class ReservePageController implements Initializable {
         SaleManagementUtil.setTitleNameTH(titleNameTH);
         SaleManagementUtil.setTitleNameEN(titleNameEN);
         SaleManagementUtil.setGender(genderChoice);
+        SaleManagementUtil.setHearAboutUs(hearAboutUsChoices);
     }
 }

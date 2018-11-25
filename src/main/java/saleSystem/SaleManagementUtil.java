@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -72,6 +73,14 @@ public class SaleManagementUtil {
         choiceBox.getSelectionModel().selectFirst();
         choiceBox.setValue("Male");
         choiceBox.getItems().addAll(genderChoices);
+    }
+
+    public static void setHearAboutUs(ComboBox comboBox){
+        ObservableList<String> hereAboutUsChoices = FXCollections.observableArrayList("Bangkokbizs News", "Daily News", "Komchadluek", "Website", "E-News", "SMS", "TV Ads", "Others");
+        comboBox.getSelectionModel().selectFirst();
+        comboBox.setValue("Bangkokbizs News");
+        comboBox.getItems().addAll(hereAboutUsChoices);
+
     }
 
 }
