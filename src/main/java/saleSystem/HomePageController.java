@@ -1,6 +1,8 @@
 package saleSystem;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,7 +15,7 @@ import java.util.ResourceBundle;
 public class HomePageController implements Initializable {
 
     @FXML private JFXButton reserveBtn;
-    @FXML private JFXButton memberBtn;
+    @FXML private JFXButton customerManageBtn;
     @FXML private JFXButton tourCheckBtn;
     @FXML private JFXButton invoiceBtn;
     @FXML private JFXButton receiptBtn;
@@ -24,40 +26,38 @@ public class HomePageController implements Initializable {
     @FXML
     public void handleInvoiceBtn(ActionEvent event) throws IOException {
         invoiceBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/invoicePage.fxml"), "Onvacation - Home", null);
+
     }
 
     @FXML
     public void handleLogoutBtn(ActionEvent event) throws IOException {
         logoutBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/loginPage.fxml"), "Onvacation - Login", null);
+
     }
 
     @FXML
-    public void handleMemberBtn(ActionEvent event) throws IOException {
-        memberBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/memberPage.fxml"), "Onvacation - Member", null);
+    public void handleCustomerManageBtn(ActionEvent event) throws IOException {
+        customerManageBtn.getScene().getWindow().hide();
+
 
     }
 
     @FXML
     public void handleReceiptBtn(ActionEvent event) throws IOException {
         receiptBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/paymentReceiptPage.fxml"), "Onvacation - Receipt", null);
+
 
     }
 
     @FXML
     public void handleReserveBtn(ActionEvent event) throws IOException {
         reserveBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/reservationPage.fxml"), "Onvacation - Reservation", null);
 
     }
 
     @FXML
     public void handleTourCheckBtn(ActionEvent event) throws IOException {
         tourCheckBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/tourCheckPage.fxml"), "Onvacation - Tour Checking", null);
 
     }
 
@@ -74,5 +74,25 @@ public class HomePageController implements Initializable {
     public void setLoginName(String txt){
         loginNameLabel.setText(txt);
     }
+
+    /*SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+
+    ObservableList<String> nameENTitleChoices = FXCollections.observableArrayList("Miss", "Mrs.", "Mr.", "Master", "Professor", "Assistant Professor", "Associate Professor");
+        nameTitleEN.getSelectionModel().selectFirst();
+        nameTitleEN.setValue("Miss");
+        nameTitleEN.getItems().addAll(nameENTitleChoices);
+
+    ObservableList<String> nameTHTitleChoices = FXCollections.observableArrayList("นางสาว", "นาง", "นาย", "เด็กหญิง", "เด็กชาย", "ศาตราจารย์", "ผู้ช่วยศาสตราจารย์", "รองศาสตราจารย์");
+        nameTitleTH.getSelectionModel().selectFirst();
+        nameTitleTH.setValue("นางสาว");
+        nameTitleTH.getItems().addAll(nameTHTitleChoices);
+
+    ObservableList<String> travelServices = FXCollections.observableArrayList("ชื่อเสียงของบริษัท", "โปรแกรมทัวร์", "ราคา", "การบริการของพนักงานขาย", "วันเวลาเดินทาง");
+        travelServiceChoice.setValue("ชื่อเสียงของบริษัท");
+        travelServiceChoice.setItems(travelServices);
+
+    ObservableList<String> travelFocus = FXCollections.observableArrayList("ที่พัก", "ร้านอาหาร", "ยานพาหนะ", "ระยะเวลาชมสถานที่ท่องเที่ยว", "ไกด์/มัคคุเทศน์");
+        travelFocusingChoice.setValue("ที่พัก");
+        travelFocusingChoice.setItems(travelFocus);*/
 
 }

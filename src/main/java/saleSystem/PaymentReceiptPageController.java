@@ -5,56 +5,38 @@ import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class PaymentReceiptPageController implements Initializable {
-    @FXML
-    private TextField ReserveCodeDPayment;
+public class PaymentReceiptPageController {
 
     @FXML
-    private JFXButton searchBtnDPayment;
+    private ComboBox<?> tourIDComboBoxDR;
 
     @FXML
-    private JFXButton createDPaymentBtn;
+    private TableView<?> depositReceiptTable;
 
     @FXML
-    private TableView<?> tableDepositPayment;
+    private JFXButton createDepositReceiptBtn;
 
     @FXML
-    private Button editBtnDPayment;
+    private JFXButton confirmDepositReceiptStatusBtn;
 
     @FXML
-    private Button deleteBtnDPayment;
+    private Tab tourIDComboBoxAR;
 
     @FXML
-    private Button updateBtnDPayment;
+    private ComboBox<?> tourIDChoiceAR;
 
     @FXML
-    private TextField ReserveCodeAPayment;
+    private TableView<?> arrearReceiptTable;
 
     @FXML
-    private JFXButton searchBtnAPayment;
+    private JFXButton createArrearsReceiptBtn;
 
     @FXML
-    private JFXButton createAPaymentBtn;
-
-    @FXML
-    private TableView<?> tableArrearPayment;
-
-    @FXML
-    private Button editBtnAPayment;
-
-    @FXML
-    private Button deleteBtnAPayment;
-
-    @FXML
-    private Button updateBtnAPayment;
+    private JFXButton confirmArrearsReceiptStatusBtn;
 
     @FXML
     private JFXHamburger menu;
@@ -63,69 +45,33 @@ public class PaymentReceiptPageController implements Initializable {
     private JFXDrawer drawerMenu;
 
     @FXML
-    void handleCreateArrearsPayment(ActionEvent event) {
+    void handleConfirmArrearsReceiptStatusBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void handleCreateDPayment(ActionEvent event) {
+    void handleConfirmDepositReceiptStatusBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void handleDeleteAPayment(ActionEvent event) {
+    void handleCreateArrearsReceiptBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void handleDeleteDPayment(ActionEvent event) {
+    void handleCreateDepositReceiptBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void handleEditBtnAPayment(ActionEvent event) {
+    void handleTourIDChoiceAR(ActionEvent event) {
 
     }
 
     @FXML
-    void handleEditBtnDPayment(ActionEvent event) {
+    void handleTourIDChoiceDR(ActionEvent event) {
 
     }
-
-    @FXML
-    void handleRsvCodeAPayment(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleRsvCodeDPayment(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleSearchBtnAPayment(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleSearchBtnDPayment(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleUpdateBtnAPayment(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleUpdateBtnDPayment(ActionEvent event) {
-
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-    }
-
 
 }

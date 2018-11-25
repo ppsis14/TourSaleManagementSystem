@@ -34,7 +34,6 @@
 }
 
 .jfx-tab-pane{
-    -fx-border-color: #2C3E50;
     -fx-padding: 1px;
     -fx-background-insets: 0, 1;
 }

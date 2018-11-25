@@ -5,56 +5,34 @@ import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class InvoicePageController implements Initializable {
-    @FXML
-    private TextField ReserveCodeDepositInvoice;
+public class InvoicePageController {
 
     @FXML
-    private JFXButton searchBtnDInvoice;
+    private ComboBox<String> tourIDChoiceDI;
 
     @FXML
-    private JFXButton createDInvoiceBtn;
+    private TableView<?> depositInvoiceTable;
 
     @FXML
-    private TableView<?> tableDepositInvoice;
+    private JFXButton createDepositInvoiceBtn;
 
     @FXML
-    private Button editBtnDInvoice;
+    private JFXButton confirmDepositInvoiceStatusBtn;
 
     @FXML
-    private Button deleteBtnDInvoice;
+    private ComboBox<String> tourIDChoiceAI;
 
     @FXML
-    private Button updateBtnDInvoice;
+    private TableView<?> arrearInvoiceTable;
 
     @FXML
-    private TextField ReserveCodeArrearInsvoice;
+    private JFXButton createArrearsInvoiceBtn;
 
     @FXML
-    private JFXButton searchBtnAInvoice;
-
-    @FXML
-    private JFXButton createAInvoiceBtn;
-
-    @FXML
-    private TableView<?> tableArrearsInvoice;
-
-    @FXML
-    private Button editBtnAInvoice;
-
-    @FXML
-    private Button deleteBtnAInvoice;
-
-    @FXML
-    private Button updateBtnAInvoice;
+    private JFXButton confirmArrearsInvoiceStatusBtn;
 
     @FXML
     private JFXHamburger menu;
@@ -63,68 +41,33 @@ public class InvoicePageController implements Initializable {
     private JFXDrawer drawerMenu;
 
     @FXML
-    void handleCreateArrearInvoice(ActionEvent event) {
+    void handleConfirmArrearsInvoiceStatusBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void handleCreateDepositInvoice(ActionEvent event) {
+    void handleConfirmDepositInvoiceStatusBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void handleDeleteArrearsInvoice(ActionEvent event) {
+    void handleCreateArrearsInvoiceBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void handleDeleteDepositInvoice(ActionEvent event) {
+    void handleCreateDepositInvoiceBtn(ActionEvent event) {
 
     }
 
     @FXML
-    void handleEditBtnArrearsInvoice(ActionEvent event) {
+    void handleTourIDChoiceDI(ActionEvent event) {
 
     }
 
     @FXML
-    void handleEditBtnDepositInvoice(ActionEvent event) {
+    void handleTourIDComboBox(ActionEvent event) {
 
     }
 
-    @FXML
-    void handleRsvCodeArrearsInvoice(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleRsvCodeDInvoice(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleSearchBtnArrearsInvoice(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleSearchBtnDInvoice(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleUpdateBtnArrearsInvoice(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleUpdateBtnDepositInvoice(ActionEvent event) {
-
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-
-    }
 }

@@ -33,7 +33,7 @@ public class ToolBarController {
     @FXML
     private void loadMemberWindow(ActionEvent event){
         memberWindow.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/memberPage.fxml"), "Onvacation - Member", null);
+        SaleManagementUtil.loadWindow(getClass().getResource("/customerManagePage.fxml"), "Onvacation - Member", null);
     }
 
     @FXML

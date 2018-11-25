@@ -2,21 +2,17 @@ package saleSystem;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXHamburger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ReservePageController implements Initializable {
+public class EditCustomerPageController implements Initializable {
 
     @FXML
     private ChoiceBox<?> titleNameTH;
@@ -55,19 +51,16 @@ public class ReservePageController implements Initializable {
     private DatePicker expPassportDate;
 
     @FXML
-    private TextArea address;
+    private TextField cellphoneClient;
 
     @FXML
-    private TextField phoneNum;
+    private TextField homeTelClient;
 
     @FXML
-    private TextField homeTelNum;
+    private TextField homeFaxClient;
 
     @FXML
-    private TextField faxNum;
-
-    @FXML
-    private TextField email;
+    private TextField emailClient;
 
     @FXML
     private TextField underlyingDisease;
@@ -85,34 +78,13 @@ public class ReservePageController implements Initializable {
     private TextField moreDetail;
 
     @FXML
-    private ChoiceBox<?> hearAboutUsChoice;
+    private ChoiceBox<?> tourCodeChioce1;
 
     @FXML
-    private JFXHamburger menu;
+    private JFXButton createDPaymentBtn;
 
     @FXML
-    private JFXDrawer drawerMenu;
-
-    @FXML
-    private JFXButton addCustomerBtn;
-
-    @FXML
-    private TextField reserveCode;
-
-    @FXML
-    private Label customerNo;
-
-    @FXML
-    private ChoiceBox<?> tourCodeChioce;
-
-    @FXML
-    private JFXCheckBox oldCustomer;
-
-    @FXML
-    private JFXCheckBox newCustomer;
-
-    @FXML
-    void handleAddCustomerBtn(ActionEvent event) {
+    void handleCreateDPayment(ActionEvent event) {
 
     }
 
@@ -121,5 +93,3 @@ public class ReservePageController implements Initializable {
 
     }
 }
-/*public class ReservePageController {
-}*/
