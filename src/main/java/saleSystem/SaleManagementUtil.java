@@ -1,8 +1,11 @@
 package saleSystem;
 
+import Table.Employee;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerNextArrowBasicTransition;
+import databaseConnection.ManageableDatabase;
+import databaseConnection.SpringJDBC_DB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -14,12 +17,23 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SaleManagementUtil {
+
+    public static ApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
+
+    public static ManageableDatabase manageableDatabase = context.getBean("SpringJDBC_DB", SpringJDBC_DB.class);
+
+    public static Employee loginEmployee = new Employee();
+
+
     public static void loadWindow(URL loc, String title){
         try {
             Parent parent = FXMLLoader.load(loc);
@@ -69,9 +83,9 @@ public class SaleManagementUtil {
     }
 
     public static void setGender(ChoiceBox choiceBox){
-        ObservableList<String> genderChoices = FXCollections.observableArrayList("Male", "Female");
+        ObservableList<String> genderChoices = FXCollections.observableArrayList("Female", "Male");
         choiceBox.getSelectionModel().selectFirst();
-        choiceBox.setValue("Male");
+        choiceBox.setValue("Female");
         choiceBox.getItems().addAll(genderChoices);
     }
 
@@ -82,5 +96,7 @@ public class SaleManagementUtil {
         comboBox.getItems().addAll(hereAboutUsChoices);
 
     }
+
+
 
 }
