@@ -1,7 +1,6 @@
 package saleSystem;
 
 import com.jfoenix.controls.JFXButton;
-import databaseConnection.DbConnect;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,11 +11,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ResourceBundle;
+
+import static saleSystem.SaleManagementUtil.loginEmployee;
+import static saleSystem.SaleManagementUtil.manageableDatabase;
 
 
 public class LoginPageController implements Initializable {
@@ -40,22 +39,12 @@ public class LoginPageController implements Initializable {
     @FXML
     public void handleLoginButton(ActionEvent event) throws IOException, SQLException {
 
-        Connection connection = DbConnect.getInstance().getConnection();
-
-        Statement statement = connection.createStatement();
-
-        ResultSet resultSet = statement.executeQuery("select * from employee_database where ID" + " = '" + username.getText() + "' and Password = '" + password.getText() +"'");
-
-
-        if(resultSet.next()){
+        if(manageableDatabase.checkLogin(username.getText(),password.getText())){
+            loginEmployee = manageableDatabase.getEmployeeLogin(username.getText(),password.getText());
             //load windows
             loginButton.getScene().getWindow().hide();
             SaleManagementUtil.loadWindow(getClass().getResource("/homePage.fxml"), "Home");
 
-         /*   //passing name login
-            HomePageController homePageController = new HomePageController();
-            //homePageController = loader.getController();
-            homePageController.setLoginName(username.getText());*/
         }
         else{
             showErrorLogin.setText("Username or Password is not correct");

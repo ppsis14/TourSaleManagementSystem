@@ -1,9 +1,12 @@
 package saleSystem;
 
+import Table.Customer;
+import Table.Reservation;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
+import com.sun.javafx.binding.StringFormatter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,10 +15,13 @@ import javafx.scene.control.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static saleSystem.SaleManagementUtil.loginEmployee;
+import static saleSystem.SaleManagementUtil.manageableDatabase;
+
 public class ReservePageController implements Initializable {
 
     @FXML
-    private ChoiceBox<?> titleNameTH;
+    private ChoiceBox<String> titleNameTH;
 
     @FXML
     private TextField firstNameTH;
@@ -24,7 +30,7 @@ public class ReservePageController implements Initializable {
     private TextField lastNameTH;
 
     @FXML
-    private ChoiceBox<?> titleNameEN;
+    private ChoiceBox<String> titleNameEN;
 
     @FXML
     private TextField firstNameEN;
@@ -33,7 +39,7 @@ public class ReservePageController implements Initializable {
     private TextField lastNameEN;
 
     @FXML
-    private ChoiceBox<?> genderChoice;
+    private ChoiceBox<String> genderChoice;
 
     @FXML
     private TextField age;
@@ -99,23 +105,21 @@ public class ReservePageController implements Initializable {
     private Label customerNo;
 
     @FXML
-    private ChoiceBox<String> tourCodeChioce;
+    private ChoiceBox<String> tourCodeChoice;
 
     @FXML
     private JFXCheckBox oldCustomer;
 
     @FXML
     private JFXCheckBox newCustomer;
-
     @FXML
-    void handleAddCustomerBtn(ActionEvent event) {
-
-    }
-
+    private TextField searchByCustomerName;
     @FXML
-    void handleSearchCustomerBtn(ActionEvent event){
+    private Button searchCustomerBtn;
+    @FXML private Label loginNameLabel;
 
-    }
+    private Reservation reservation = null ;
+    private Customer customer = new Customer();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -124,5 +128,80 @@ public class ReservePageController implements Initializable {
         SaleManagementUtil.setTitleNameEN(titleNameEN);
         SaleManagementUtil.setGender(genderChoice);
         SaleManagementUtil.setHearAboutUs(hearAboutUsChoices);
+        reserveCode.setText(createReservationCode());
+        loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition()+" ]");
+
     }
+
+    @FXML public void handleNotEatBeefCheckbox(ActionEvent event) { eatBeefY.setSelected(false); }
+    @FXML public void handleEatBeefCheckbox(ActionEvent event) { eatBeefN.setSelected(false); }
+    @FXML public void handleNewCustomerCheckbox(ActionEvent event) {
+        oldCustomer.setSelected(false);
+        searchByCustomerName.setDisable(true);
+        searchCustomerBtn.setDisable(true);
+    }
+    @FXML public void handleOldCustomerCheckbox(ActionEvent event) {
+        newCustomer.setSelected(false);
+        searchByCustomerName.setDisable(false);
+        searchCustomerBtn.setDisable(false);
+    }
+
+    @FXML
+    void handleAddCustomerBtn(ActionEvent event) {
+        reservation.setReservationCode(createReservationCode());    //create reservation code on display and set into class object
+        this.setCustomerData();                     //set value in customer object
+        manageableDatabase.insertData(customer);    //insert data into customer table
+
+    }
+
+    @FXML
+    void handleSearchCustomerBtn(ActionEvent event){
+
+    }
+
+    public void setCustomerData(){
+        //information
+        customer.setTitleNameTH(titleNameTH.getSelectionModel().getSelectedItem());
+        customer.setFirstNameTH(firstNameTH.getText());
+        customer.setLastNameTH(lastNameTH.getText());
+        customer.setTitleNameENG(titleNameEN.getSelectionModel().getSelectedItem());
+        customer.setFirstNameENG(firstNameEN.getText());
+        customer.setLastNameENG(lastNameEN.getText());
+        customer.setGender(genderChoice.getSelectionModel().getSelectedItem());
+        customer.setAge(age.getText());
+        customer.setDateOfBirth(dateOfBirth.getEditor().getText());
+        customer.setPassport_no(passportNo.getText());
+        customer.setExp_passport(expPassportDate.getEditor().getText());
+        customer.setOccupation(occupation.getText());
+        //Contact
+        customer.setContactAddress(address.getText());
+        customer.setCell_phone(phoneNum.getText());
+        customer.setHome_Tel(homeTelNum.getText());
+        customer.setFax(faxNum.getText());
+        customer.setEmail(email.getText());
+        //moreInfo
+        customer.setDisease(underlyingDisease.getText());
+        customer.setFoodAllergy(foodAllergy.getText());
+        customer.setEatBeef(eatBeefY.isSelected() ? eatBeefY.getText() : eatBeefN.getText());
+        customer.setMoreDetail(moreDetail.getText());
+        customer.setHearAboutUs(hearAboutUsChoices.getSelectionModel().getSelectedItem());
+    }
+
+    public String createReservationCode(){
+        String lastReservCode;
+        String currentReservCode;
+
+        lastReservCode = manageableDatabase.getLastReservationCode();
+        currentReservCode = String.format("%06d",Integer.parseInt(lastReservCode) + 1) ;
+
+        return currentReservCode;
+    }
+
+    public void addReservation(){
+        reservation.setReservationCode(reserveCode.getText());
+        reservation.setTourID(tourCodeChoice.getSelectionModel().getSelectedItem());
+        reservation.setAmountCustomer(Integer.parseInt(customerNo.getText()));
+        //reservation.setEmployeeName();
+    }
+
 }

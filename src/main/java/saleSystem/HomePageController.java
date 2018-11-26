@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static saleSystem.SaleManagementUtil.loginEmployee;
+
 public class HomePageController implements Initializable {
 
     @FXML private JFXButton reserveBtn;
@@ -62,14 +64,10 @@ public class HomePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        // set user login by call from database
-        //showUserLogined.setText("Thikamporn Simud");
-        //homePane.toFront();
-        //reservePane.setVisible(false);
+        // set user login
+        loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition()+" ]");
 
     }
 
-    public void setLoginName(String txt){
-        loginNameLabel.setText(txt);
-    }
+
 }
