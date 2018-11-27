@@ -11,8 +11,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static saleSystem.SaleManagementUtil.loginEmployee;
@@ -148,9 +150,36 @@ public class ReservePageController implements Initializable {
 
     @FXML
     void handleAddCustomerBtn(ActionEvent event) {
-        reservation.setReservationCode(createReservationCode());    //create reservation code on display and set into class object
-        this.setCustomerData();                     //set value in customer object
-        manageableDatabase.insertData(customer);    //insert data into customer table
+/*
+        //pop up 1
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you want to add customer?");
+        Optional<ButtonType> action = alert.showAndWait();
+        if (action.get() == ButtonType.OK){
+
+            setCustomerFromGUI();
+            reservation.addCustomerToReservationList(customer);
+            System.out.println("จองสำเร็จ");
+
+            //pop up 2
+            Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+            alert2.setTitle("Confirmation Dialog");
+            alert2.setHeaderText(null);
+            alert2.setContentText("Do you want to add another customer?");
+            Optional<ButtonType> action2 = alert.showAndWait();
+            if (action2.get() == ButtonType.OK){
+
+                Customer newCustomer = new Customer();
+                customer = newCustomer;
+
+            }
+
+
+
+        }
+        */
 
     }
 
@@ -159,7 +188,15 @@ public class ReservePageController implements Initializable {
 
     }
 
-    public void setCustomerData(){
+    public void setReservationFromGUI(){
+        reservation.setReservationCode(reserveCode.getText());
+        //reservation.setTourID(tourCodeChoice.getSelectionModel().getSelectedItem());
+        reservation.setAmountCustomer(Integer.parseInt(customerNo.getText()));
+        reservation.setEmployeeName(loginEmployee.getTitleName()+" "+loginEmployee.getFirstName()+" "+loginEmployee.getLastName());
+
+    }
+
+    public void setCustomerFromGUI(){
         //information
         customer.setTitleNameTH(titleNameTH.getSelectionModel().getSelectedItem());
         customer.setFirstNameTH(firstNameTH.getText());
@@ -197,11 +234,5 @@ public class ReservePageController implements Initializable {
         return currentReservCode;
     }
 
-    public void addReservation(){
-        reservation.setReservationCode(reserveCode.getText());
-        reservation.setTourID(tourCodeChoice.getSelectionModel().getSelectedItem());
-        reservation.setAmountCustomer(Integer.parseInt(customerNo.getText()));
-        //reservation.setEmployeeName();
-    }
 
 }
