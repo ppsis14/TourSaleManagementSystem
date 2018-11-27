@@ -176,7 +176,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
                     rs.getString("Age"),
                     rs.getString("Occupation"),
                     rs.getString("Date_of_birth"),
-                    rs.getString("Passport_nope"),
+                    rs.getString("Passport_no"),
                     rs.getString("Expire_passport_date"),
                     rs.getString("Contact_Address"),
                     rs.getString("Cell_phone"),

@@ -1,16 +1,24 @@
 package saleSystem;
 
+import Table.Customer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static saleSystem.SaleManagementUtil.manageableDatabase;
 
 public class CustomerManagePageController implements Initializable {
 
@@ -23,8 +31,12 @@ public class CustomerManagePageController implements Initializable {
     @FXML
     private JFXButton searchCustomerBtn;
 
-    @FXML
-    private TableView<?> customerTable;
+    @FXML private TableView<Customer> customerTable;
+    @FXML private TableColumn<Customer, Integer> customerIDColumn;
+    @FXML private TableColumn<Customer, String> titleNameColumn;
+    @FXML private TableColumn<Customer, String> firstNameColumn;
+    @FXML private TableColumn<Customer, String> lastNameColumn;
+    @FXML private TableColumn<Customer, String> passportNoColumn;
 
     @FXML
     private JFXButton editCustomerBtn;
@@ -41,13 +53,35 @@ public class CustomerManagePageController implements Initializable {
     @FXML
     private JFXDrawer drawerMenu;
 
-    @FXML
-    void handleDeleteCustomerBtn(ActionEvent event) {
+    ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+
+        showTableView(obListCustomer);  //show data on table view
+
 
     }
 
     @FXML
+    void handleDeleteCustomerBtn(ActionEvent event) {
+
+        Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();  //select item for delete
+
+        if (deleteCustomer != null) {   //when user select data
+
+            manageableDatabase.deleteData(deleteCustomer);  //delete in database
+            obListCustomer.remove(customerTable.getSelectionModel().getSelectedItem()); //delete on table view
+        }
+
+    }
+
+
+    @FXML
     void handleEditCustomerBtn(ActionEvent event) {
+
+        Customer editCustomer = customerTable.getSelectionModel().getSelectedItem();
+
         SaleManagementUtil.loadWindow(getClass().getResource("/editCustomer.fxml"), "Edit Customer Information");
 
     }
@@ -62,10 +96,21 @@ public class CustomerManagePageController implements Initializable {
 
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+    public void showTableView(ObservableList<Customer> obListCustomer){
 
+        //find data base for show on table view.
+
+        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        titleNameColumn.setCellValueFactory(new PropertyValueFactory<>("titleNameTH"));
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstNameTH"));
+        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastNameTH"));
+        passportNoColumn.setCellValueFactory(new PropertyValueFactory<>("passport_no"));
+        passportNoColumn.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
+        passportNoColumn.setCellValueFactory(new PropertyValueFactory<>("cell_phone"));
+        passportNoColumn.setCellValueFactory(new PropertyValueFactory<>("contactAddress"));
+
+        customerTable.setItems(obListCustomer);
     }
+
 }
 

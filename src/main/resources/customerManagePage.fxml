@@ -55,14 +55,14 @@
                               </HBox>
                               <TableView fx:id="customerTable" editable="true" prefHeight="344.0" prefWidth="717.0">
                                 <columns>
-                                    <TableColumn minWidth="105.0" prefWidth="105.0" text="Customer ID" />
-                                    <TableColumn minWidth="100.0" prefWidth="100.0" text="Title Name" />
-                                  <TableColumn minWidth="180.0" prefWidth="180.0" text="First Name" />
-                                  <TableColumn minWidth="200.0" prefWidth="200.0" text="Last Name" />
-                                    <TableColumn minWidth="120.0" prefWidth="120.0" text="Passport No." />
-                                    <TableColumn minWidth="100.0" prefWidth="100.0" text="DOB" />
-                                    <TableColumn minWidth="100.0" prefWidth="100.0" text="Phone" />
-                                    <TableColumn minWidth="400.0" prefWidth="400.0" text="Address" />
+                                    <TableColumn fx:id="customerIDColumn" minWidth="105.0" prefWidth="105.0" text="Customer ID" />
+                                    <TableColumn fx:id="titleNameColumn" minWidth="100.0" prefWidth="100.0" text="Title Name" />
+                                  <TableColumn fx:id="firstNameColumn" minWidth="180.0" prefWidth="180.0" text="First Name" />
+                                  <TableColumn fx:id="lastNameColumn" minWidth="200.0" prefWidth="200.0" text="Last Name" />
+                                    <TableColumn fx:id="passportNoColumn" minWidth="120.0" prefWidth="120.0" text="Passport No." />
+                                    <TableColumn fx:id="dateOfBirthColumn" minWidth="100.0" prefWidth="100.0" text="Date of birth" />
+                                    <TableColumn fx:id="phoneNumberColumn" minWidth="100.0" prefWidth="100.0" text="Phone" />
+                                    <TableColumn fx:id="addressColumn" minWidth="400.0" prefWidth="400.0" text="Address" />
                                 </columns>
                               </TableView>
                               <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
