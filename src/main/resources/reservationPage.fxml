@@ -50,7 +50,7 @@
       <Label layoutX="52.0" layoutY="119.0" prefHeight="17.0" prefWidth="118.0" text="Reservation Code :" />
       <TextField fx:id="reserveCode" layoutX="198.0" layoutY="113.0" prefHeight="29.0" prefWidth="200.0" promptText="Reservation Code" style="-fx-border-color: #2C3E50;" />
       <Label layoutX="642.0" layoutY="119.0" prefHeight="17.0" prefWidth="100.0" text="Customer No." />
-      <Label fx:id="customerNo" alignment="CENTER" contentDisplay="RIGHT" layoutX="748.0" layoutY="113.0" prefHeight="29.0" prefWidth="100.0" style="-fx-border-color: #2C3E50;" text="0" />
+      <Label fx:id="customerNo" alignment="CENTER" contentDisplay="RIGHT" layoutX="748.0" layoutY="113.0" prefHeight="29.0" prefWidth="100.0" style="-fx-border-color: #2C3E50;" text="1" />
       <Label layoutX="52.0" layoutY="165.0" prefHeight="17.0" prefWidth="59.0" text="Tour ID :" />
       <ChoiceBox fx:id="tourCodeChoice" layoutX="132.0" layoutY="161.0" prefHeight="29.0" prefWidth="202.0" style="-fx-border-color: #2C3E50; -fx-background-color: WHITE;" />
       <HBox alignment="CENTER_LEFT" layoutX="50.0" layoutY="206.0" prefHeight="29.0" prefWidth="800.0" spacing="10.0">

@@ -165,8 +165,8 @@
                                     </HBox>
                                     <HBox prefHeight="33.0" prefWidth="240.0" spacing="10.0">
                                        <children>
-                                          <JFXCheckBox fx:id="eatBeefY" maxHeight="1.7976931348623157E308" prefHeight="27.0" prefWidth="100.0" text="Yes" />
-                                          <JFXCheckBox fx:id="eatBeefN" maxHeight="1.7976931348623157E308" text="No" />
+                                          <JFXCheckBox fx:id="eatBeefY" onAction="#handleEatBeefCheckbox" maxHeight="1.7976931348623157E308" prefHeight="27.0" prefWidth="100.0" text="Yes" />
+                                          <JFXCheckBox fx:id="eatBeefN" onAction="#handleNotEatBeefCheckbox" maxHeight="1.7976931348623157E308" text="No" />
                                        </children>
                                     </HBox>
                                     <HBox prefHeight="19.0" prefWidth="664.0" spacing="10.0">

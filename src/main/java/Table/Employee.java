@@ -5,6 +5,7 @@ public class Employee {
     private String username;
     private String password;
     private String position;
+    private String titleName;
     private String firstName;
     private String lastName;
     private String email;
@@ -12,21 +13,23 @@ public class Employee {
 
     public Employee(){}
 
-    public Employee(String username, String password, String position, String firstName, String lastName, String email, String mobileNum) {
+    public Employee(String username, String password, String position, String titleName, String firstName, String lastName, String email, String mobileNum) {
         this.username = username;
         this.password = password;
         this.position = position;
+        this.titleName = titleName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.mobileNum = mobileNum;
     }
 
-    public Employee(String employee_ID, String username, String password, String position, String firstName, String lastName, String email, String mobileNum) {
+    public Employee(String employee_ID, String username, String password, String position, String titleName, String firstName, String lastName, String email, String mobileNum) {
         this.employee_ID = employee_ID;
         this.username = username;
         this.password = password;
         this.position = position;
+        this.titleName = titleName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -95,5 +98,13 @@ public class Employee {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getTitleName() {
+        return titleName;
+    }
+
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
     }
 }

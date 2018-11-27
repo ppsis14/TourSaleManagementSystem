@@ -153,8 +153,9 @@ public class SpringJDBC_DB implements ManageableDatabase {
                     resultSet.getString("Username"),
                     resultSet.getString("Password"),
                     resultSet.getString("Position"),
+                    resultSet.getString("TitleName"),
                     resultSet.getString("FirstName"),
-                    resultSet.getString("lastName"),
+                    resultSet.getString("LastName"),
                     resultSet.getString("Email"),
                     resultSet.getString("Mobile_num"));
             return employee;

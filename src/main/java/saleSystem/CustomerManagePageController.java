@@ -8,13 +8,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -82,8 +88,20 @@ public class CustomerManagePageController implements Initializable {
 
         Customer editCustomer = customerTable.getSelectionModel().getSelectedItem();
 
-        SaleManagementUtil.loadWindow(getClass().getResource("/editCustomer.fxml"), "Edit Customer Information");
-
+        //SaleManagementUtil.loadWindow(getClass().getResource("/editCustomer.fxml"), "Edit Customer Information");
+        if(editCustomer != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/editCustomer.fxml"));
+                Parent parent = (Parent) loader.load();
+                EditCustomerPageController editCustomerPageController = loader.getController();
+                editCustomerPageController.setCustomer(editCustomer);
+                Stage stage = new Stage(StageStyle.DECORATED);
+                stage.show();
+                stage.setScene(new Scene(parent));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
@@ -93,6 +111,9 @@ public class CustomerManagePageController implements Initializable {
 
     @FXML
     void handleUpdateCustomerBtn(ActionEvent event) {
+
+        obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
+        this.showTableView(obListCustomer);
 
     }
 
