@@ -45,7 +45,7 @@
                               <HBox prefHeight="29.0" prefWidth="676.0" spacing="20.0">
                                  <children>
                                     <Label maxHeight="1.7976931348623157E308" text="Tour ID :" />
-                                    <ComboBox fx:id="tourIDComboBoxDR" onAction="#handleTourIDChoiceDR" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" />
+                                    <ComboBox fx:id="tourIDChoiceDR" onAction="#handleTourIDChoiceDR" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" />
                                  </children>
                               </HBox>
                               <TableView fx:id="depositReceiptTable" editable="true" fixedCellSize="0.0" prefHeight="308.0" prefWidth="772.0">
@@ -77,7 +77,7 @@
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab fx:id="tourIDComboBoxAR" onSelectionChanged="#handleTourIDChoiceAR" text="Receipt">
+            <Tab text="Receipt">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>

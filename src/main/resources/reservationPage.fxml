@@ -48,16 +48,14 @@
          </children>
       </Pane>
       <Label layoutX="52.0" layoutY="119.0" prefHeight="17.0" prefWidth="118.0" text="Reservation Code :" />
-      <TextField fx:id="reserveCode" layoutX="198.0" layoutY="113.0" prefHeight="29.0" prefWidth="200.0" promptText="Reservation Code" style="-fx-border-color: #2C3E50;" />
       <Label layoutX="642.0" layoutY="119.0" prefHeight="17.0" prefWidth="100.0" text="Customer No." />
       <Label fx:id="customerNo" alignment="CENTER" contentDisplay="RIGHT" layoutX="748.0" layoutY="113.0" prefHeight="29.0" prefWidth="100.0" style="-fx-border-color: #2C3E50;" text="1" />
       <Label layoutX="52.0" layoutY="165.0" prefHeight="17.0" prefWidth="59.0" text="Tour ID :" />
-      <ChoiceBox fx:id="tourCodeChoice" layoutX="132.0" layoutY="161.0" prefHeight="29.0" prefWidth="202.0" style="-fx-border-color: #2C3E50; -fx-background-color: WHITE;" />
       <HBox alignment="CENTER_LEFT" layoutX="50.0" layoutY="206.0" prefHeight="29.0" prefWidth="800.0" spacing="10.0">
          <children>
             <Label prefHeight="17.0" prefWidth="129.0" text="Customer Status :" />
-            <JFXCheckBox fx:id="newCustomer" onAction="#handleNewCustomerCheckbox" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="129.0" text="New Customer" />
-            <JFXCheckBox fx:id="oldCustomer" onAction="#handleOldCustomerCheckbox" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="115.0" text="Old Customer" />
+            <JFXCheckBox fx:id="newCustomer" maxHeight="1.7976931348623157E308" onAction="#handleNewCustomerCheckbox" prefHeight="29.0" prefWidth="129.0" text="New Customer" />
+            <JFXCheckBox fx:id="oldCustomer" maxHeight="1.7976931348623157E308" onAction="#handleOldCustomerCheckbox" prefHeight="29.0" prefWidth="115.0" text="Old Customer" />
             <TextField fx:id="searchByCustomerName" disable="true" prefHeight="29.0" prefWidth="319.0" promptText="Search by Name" style="-fx-border-color: #2C3E50;" />
             <JFXButton fx:id="searchCustomerBtn" buttonType="RAISED" disable="true" onAction="#handleSearchCustomerBtn" prefHeight="30.0" prefWidth="105.0" style="-fx-background-color: #F4D03F; -fx-background-radius: 5;" text="Search" textFill="#2c3e50">
                <font>
@@ -192,8 +190,8 @@
                               </HBox>
                               <HBox prefHeight="33.0" prefWidth="240.0" spacing="10.0">
                                  <children>
-                                    <JFXCheckBox fx:id="eatBeefY" onAction="#handleEatBeefCheckbox" maxHeight="1.7976931348623157E308" prefHeight="27.0" prefWidth="100.0" text="Yes" />
-                                    <JFXCheckBox fx:id="eatBeefN" onAction="#handleNotEatBeefCheckbox" maxHeight="1.7976931348623157E308" text="No" />
+                                    <JFXCheckBox fx:id="eatBeefY" maxHeight="1.7976931348623157E308" onAction="#handleEatBeefCheckbox" prefHeight="27.0" prefWidth="100.0" text="Yes" />
+                                    <JFXCheckBox fx:id="eatBeefN" maxHeight="1.7976931348623157E308" onAction="#handleNotEatBeefCheckbox" text="No" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="19.0" prefWidth="664.0" spacing="10.0">
@@ -234,5 +232,7 @@
          </font>
       </JFXButton>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="167.0" layoutY="589.0" prefHeight="29.0" prefWidth="567.0" text="** Please check the accuracy and completeness of the information before add customer." />
+      <ComboBox fx:id="tourIDComboBox" layoutX="131.0" layoutY="159.0" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" />
+      <Label fx:id="reserveCode" alignment="CENTER" contentDisplay="RIGHT" layoutX="201.0" layoutY="113.0" prefHeight="29.0" prefWidth="185.0" style="-fx-border-color: #2C3E50;" />
    </children>
 </AnchorPane>

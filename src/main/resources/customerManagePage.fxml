@@ -60,8 +60,8 @@
                                   <TableColumn fx:id="firstNameColumn" minWidth="180.0" prefWidth="180.0" text="First Name" />
                                   <TableColumn fx:id="lastNameColumn" minWidth="200.0" prefWidth="200.0" text="Last Name" />
                                     <TableColumn fx:id="passportNoColumn" minWidth="120.0" prefWidth="120.0" text="Passport No." />
-                                    <TableColumn fx:id="dateOfBirthColumn" minWidth="100.0" prefWidth="100.0" text="Date of birth" />
-                                    <TableColumn fx:id="phoneNumberColumn" minWidth="100.0" prefWidth="100.0" text="Phone" />
+                                    <TableColumn fx:id="dateOfBirthColumn" minWidth="150.0" prefWidth="150.0" text="Date of birth" />
+                                    <TableColumn fx:id="phoneNumberColumn" minWidth="150.0" prefWidth="150.0" text="Phone" />
                                     <TableColumn fx:id="addressColumn" minWidth="400.0" prefWidth="400.0" text="Address" />
                                 </columns>
                               </TableView>

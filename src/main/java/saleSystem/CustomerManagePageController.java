@@ -12,9 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
@@ -22,6 +20,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static saleSystem.SaleManagementUtil.manageableDatabase;
@@ -71,15 +70,21 @@ public class CustomerManagePageController implements Initializable {
 
     @FXML
     void handleDeleteCustomerBtn(ActionEvent event) {
+        Alert alertConfirmToDeleteCustomer = new Alert(Alert.AlertType.CONFIRMATION);
+        alertConfirmToDeleteCustomer.setTitle("Confirmation Dialog");
+        alertConfirmToDeleteCustomer.setHeaderText(null);
+        alertConfirmToDeleteCustomer.setContentText("Do you want to delete this customer?");
+        Optional<ButtonType> action = alertConfirmToDeleteCustomer.showAndWait();
+        if (action.get() == ButtonType.OK){
+            // code for delete reservation
+            Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();  //select item for delete
 
-        Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();  //select item for delete
+            if (deleteCustomer != null) {   //when user select data
 
-        if (deleteCustomer != null) {   //when user select data
-
-            manageableDatabase.deleteData(deleteCustomer);  //delete in database
-            obListCustomer.remove(customerTable.getSelectionModel().getSelectedItem()); //delete on table view
+                manageableDatabase.deleteData(deleteCustomer);  //delete in database
+                obListCustomer.remove(customerTable.getSelectionModel().getSelectedItem()); //delete on table view
+            }
         }
-
     }
 
 
@@ -111,9 +116,16 @@ public class CustomerManagePageController implements Initializable {
 
     @FXML
     void handleUpdateCustomerBtn(ActionEvent event) {
-
-        obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
-        this.showTableView(obListCustomer);
+        Alert alertShowInformationIsUpdate = new Alert(Alert.AlertType.INFORMATION);
+        alertShowInformationIsUpdate.setTitle("Confirmation Dialog");
+        alertShowInformationIsUpdate.setHeaderText(null);
+        alertShowInformationIsUpdate.setContentText("Customer Information is update!");
+        Optional<ButtonType> action = alertShowInformationIsUpdate.showAndWait();
+        if (action.get() == ButtonType.OK){
+            // code for delete reservation
+            obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
+            this.showTableView(obListCustomer);
+        }
 
     }
 

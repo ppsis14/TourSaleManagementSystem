@@ -6,11 +6,10 @@ import com.jfoenix.controls.JFXHamburger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class TourCheckPageController implements Initializable {
@@ -55,12 +54,28 @@ public class TourCheckPageController implements Initializable {
     private JFXDrawer drawerMenu;
 
     @FXML
-    void handleCreateDPayment(ActionEvent event) {
+    void handleConfirmStatusBtn(ActionEvent event) {
+        Alert alertConfirmStatus = new Alert(Alert.AlertType.CONFIRMATION);
+        alertConfirmStatus.setTitle("Confirmation Dialog");
+        alertConfirmStatus.setHeaderText(null);
+        alertConfirmStatus.setContentText("Do you want to confirm status?");
+        Optional<ButtonType> action = alertConfirmStatus.showAndWait();
+        if (action.get() == ButtonType.OK){
+            // code for set deposit and arrears status
+        }
 
     }
 
     @FXML
     void handleDeleteReserveListBtn(ActionEvent event) {
+        Alert alertConfirmToDeleteReservationList = new Alert(Alert.AlertType.CONFIRMATION);
+        alertConfirmToDeleteReservationList.setTitle("Confirmation Dialog");
+        alertConfirmToDeleteReservationList.setHeaderText(null);
+        alertConfirmToDeleteReservationList.setContentText("Do you want to delete this reservation?");
+        Optional<ButtonType> action = alertConfirmToDeleteReservationList.showAndWait();
+        if (action.get() == ButtonType.OK){
+            // code for delete reservation
+        }
 
     }
 

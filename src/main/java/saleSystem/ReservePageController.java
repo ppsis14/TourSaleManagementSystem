@@ -101,13 +101,13 @@ public class ReservePageController implements Initializable {
     private JFXButton addCustomerBtn;
 
     @FXML
-    private TextField reserveCode;
+    private Label reserveCode;
 
     @FXML
     private Label customerNo;
 
     @FXML
-    private ChoiceBox<String> tourCodeChoice;
+    private ComboBox<String> tourIDComboBox;
 
     @FXML
     private JFXCheckBox oldCustomer;
@@ -118,7 +118,8 @@ public class ReservePageController implements Initializable {
     private TextField searchByCustomerName;
     @FXML
     private Button searchCustomerBtn;
-    @FXML private Label loginNameLabel;
+    @FXML
+    private Label loginNameLabel;
 
     private Reservation reservation = null ;
     private Customer customer = new Customer();
@@ -150,36 +151,35 @@ public class ReservePageController implements Initializable {
 
     @FXML
     void handleAddCustomerBtn(ActionEvent event) {
-/*
         //pop up 1
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you want to add customer?");
-        Optional<ButtonType> action = alert.showAndWait();
-        if (action.get() == ButtonType.OK){
+        Alert alertConfirmToAddCustomerData = new Alert(Alert.AlertType.INFORMATION);
+        alertConfirmToAddCustomerData.setTitle("Information Dialog");
+        //alertConfirmToAddCustomerData.setHeaderText("Reservation is successfully!");
+        alertConfirmToAddCustomerData.setHeaderText(null);
+        alertConfirmToAddCustomerData.setContentText("Reservation is successfully!");
+        Optional<ButtonType> addCustomerDataAction = alertConfirmToAddCustomerData.showAndWait();
+        if (addCustomerDataAction.get() == ButtonType.OK){
 
-            setCustomerFromGUI();
-            reservation.addCustomerToReservationList(customer);
+            //setCustomerFromGUI();
+            //reservation.addCustomerToReservationList(customer);
             System.out.println("จองสำเร็จ");
 
             //pop up 2
-            Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-            alert2.setTitle("Confirmation Dialog");
-            alert2.setHeaderText(null);
-            alert2.setContentText("Do you want to add another customer?");
-            Optional<ButtonType> action2 = alert.showAndWait();
-            if (action2.get() == ButtonType.OK){
-
+            Alert alertConfirmToAddCustomerMore = new Alert(Alert.AlertType.CONFIRMATION);
+            alertConfirmToAddCustomerMore.setTitle("Confirmation Dialog");
+            alertConfirmToAddCustomerMore.setHeaderText(null);
+            alertConfirmToAddCustomerMore.setContentText("Do you want to add another customer?");
+            Optional<ButtonType> addCustomerMoreAction = alertConfirmToAddCustomerMore.showAndWait();
+            if (addCustomerMoreAction.get() == ButtonType.OK){
+                clearText();
                 Customer newCustomer = new Customer();
                 customer = newCustomer;
 
             }
-
-
-
+            if (addCustomerMoreAction.get() == ButtonType.CANCEL){
+                clearText();
+            }
         }
-        */
 
     }
 
@@ -225,13 +225,50 @@ public class ReservePageController implements Initializable {
     }
 
     public String createReservationCode(){
-        String lastReservCode;
-        String currentReservCode;
+        String lastReserveCode;
+        String currentReserveCode;
 
-        lastReservCode = manageableDatabase.getLastReservationCode();
-        currentReservCode = String.format("%06d",Integer.parseInt(lastReservCode) + 1) ;
+        lastReserveCode = manageableDatabase.getLastReservationCode();
+        currentReserveCode = String.format("%06d",Integer.parseInt(lastReserveCode) + 1) ;
 
-        return currentReservCode;
+        return currentReserveCode;
+    }
+
+    public void clearText(){
+        newCustomer.setSelected(false);
+        oldCustomer.setSelected(false);
+        //information
+        titleNameTH.getSelectionModel().clearSelection();
+        titleNameTH.setValue("นางสาว");
+        firstNameTH.clear();
+        lastNameTH.clear();
+        titleNameEN.getSelectionModel().clearSelection();
+        titleNameEN.setValue("Miss");
+        firstNameEN.clear();
+        lastNameEN.clear();
+        genderChoice.getSelectionModel().clearSelection();
+        genderChoice.setValue("Female");
+        age.clear();
+        dateOfBirth.getEditor().clear();
+        passportNo.clear();
+        expPassportDate.getEditor().clear();
+        occupation.clear();
+        //Contact
+        address.clear();
+        phoneNum.clear();
+        homeTelNum.clear();
+        faxNum.clear();
+        email.clear();
+        //moreInfo
+        underlyingDisease.clear();
+        foodAllergy.clear();
+        eatBeefY.setSelected(false);
+        eatBeefN.setSelected(false);
+        moreDetail.clear();
+        hearAboutUsChoices.getSelectionModel().clearSelection();
+        hearAboutUsChoices.setValue("Bangkokbizs News");
+        searchByCustomerName.setDisable(false);
+        searchCustomerBtn.setDisable(false);
     }
 
 

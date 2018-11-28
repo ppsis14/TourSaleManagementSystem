@@ -73,7 +73,7 @@
 }
 
 .combo-box {
-    -fx-pref-width: 300;
+    -fx-pref-width: 250;
     -fx-border-color: #34495e;
     -fx-background-color: #FFFFFF;
 }
