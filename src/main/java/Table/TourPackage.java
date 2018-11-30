@@ -1,18 +1,21 @@
 package Table;
 
 public class TourPackage {
-    private int tourID;
+    private  int tourID;
     private  String tourName;
-    private  String price;
+    private  int price;
     private  String departureDate;
     private  String returnDate;
     private  String depositDate;
     private  String arrearsDate;
     private  int amount;
     private  int available;
+    private String status;
 
     public TourPackage(){}
-    public TourPackage(String tourName, String price, String departureDate, String returnDate, String depositDate, String arrearsDate, int amount, int available) {
+
+    public TourPackage(int tourID, String tourName, int price, String departureDate, String returnDate, String depositDate, String arrearsDate, int amount, int available, String status) {
+        this.tourID = tourID;
         this.tourName = tourName;
         this.price = price;
         this.departureDate = departureDate;
@@ -21,6 +24,7 @@ public class TourPackage {
         this.arrearsDate = arrearsDate;
         this.amount = amount;
         this.available = available;
+        this.status = status;
     }
 
     public String getTourName() {
@@ -31,11 +35,11 @@ public class TourPackage {
         this.tourName = tourName;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -85,5 +89,21 @@ public class TourPackage {
 
     public void setAvailable(int available) {
         this.available = available;
+    }
+
+    public int getTourID() {
+        return tourID;
+    }
+
+    public void setTourID(int tourID) {
+        this.tourID = tourID;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

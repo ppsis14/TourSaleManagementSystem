@@ -1,8 +1,6 @@
 package databaseConnection;
 
-import Table.Customer;
-import Table.Employee;
-import Table.Reservation;
+import Table.*;
 
 import java.util.List;
 
@@ -12,13 +10,21 @@ public interface ManageableDatabase {
     void deleteData(Customer customer);
     List<Customer> getAllCustomer();
     Customer getOneCustomer(String name);
+    String getLastCustomerID();
 
     void insertData(Reservation reservation);
     void updateData(Reservation reservation);
     void deleteData(Reservation reservation);
     List<Reservation> getAllReservation();
 
+    void insertData(ReservationPayment reservationPayment);
+    void updateData(ReservationPayment reservationPayment);
+    void deleteData(ReservationPayment reservationPayment);
+    List<ReservationPayment> getAllReservationPayment();
+
     Employee getEmployeeLogin(String username, String password);
     String getLastReservationCode();
     boolean checkLogin(String username ,String password);
+
+    List<TourPackage> getAllTourPackage();
 }

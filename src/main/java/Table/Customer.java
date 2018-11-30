@@ -1,7 +1,7 @@
 package Table;
 
 public class Customer {
-    private int customerID;
+    private String customerID;
     private String titleNameTH;
     private String firstNameTH;
     private String lastNameTH;
@@ -31,7 +31,7 @@ public class Customer {
 
     }
 
-    public Customer(int customerID, String titleNameTH, String firstNameTH, String lastNameTH, String titleNameENG, String firstNameENG, String lastNameENG, String gender, String age, String occupation, String dateOfBirth, String passport_no, String exp_passport, String contactAddress, String cell_phone, String home_Tel, String fax, String email, String disease, String foodAllergy, String eatBeef, String moreDetail, String hearAboutUs) {
+    public Customer(String customerID, String titleNameTH, String firstNameTH, String lastNameTH, String titleNameENG, String firstNameENG, String lastNameENG, String gender, String age, String occupation, String dateOfBirth, String passport_no, String exp_passport, String contactAddress, String cell_phone, String home_Tel, String fax, String email, String disease, String foodAllergy, String eatBeef, String moreDetail, String hearAboutUs) {
         this.customerID = customerID;
         this.titleNameTH = titleNameTH;
         this.firstNameTH = firstNameTH;
@@ -57,11 +57,11 @@ public class Customer {
         this.hearAboutUs = hearAboutUs;
     }
 
-    public int getCustomerID() {
+    public String getCustomerID() {
         return customerID;
     }
 
-    public void setCustomerID(int customerID) {
+    public void setCustomerID(String customerID) {
         this.customerID = customerID;
     }
 

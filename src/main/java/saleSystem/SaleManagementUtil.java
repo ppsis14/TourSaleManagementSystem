@@ -1,6 +1,7 @@
 package saleSystem;
 
 import Table.Employee;
+import Table.TourPackage;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerNextArrowBasicTransition;
@@ -22,6 +23,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -94,6 +96,21 @@ public class SaleManagementUtil {
         comboBox.getSelectionModel().selectFirst();
         comboBox.setValue("Bangkokbizs News");
         comboBox.getItems().addAll(hereAboutUsChoices);
+
+    }
+
+    public static void setTourID(ComboBox comboBox){
+
+        List<TourPackage> tourPackageList = manageableDatabase.getAllTourPackage();
+        ObservableList<String> tourNameList = FXCollections.observableArrayList();
+
+        for (TourPackage tourPackage: tourPackageList) {
+            if(tourPackage.getStatus().equalsIgnoreCase("open"))
+                tourNameList.add(tourPackage.getTourName());
+        }
+        comboBox.getSelectionModel().selectFirst();
+        comboBox.setValue(tourNameList.get(0));
+        comboBox.getItems().addAll(tourNameList);
 
     }
 

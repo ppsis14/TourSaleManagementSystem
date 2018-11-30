@@ -2,23 +2,25 @@ package saleSystem;
 
 import Table.Customer;
 import Table.Reservation;
+import Table.ReservationPayment;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
-import com.sun.javafx.binding.StringFormatter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static saleSystem.SaleManagementUtil.loginEmployee;
 import static saleSystem.SaleManagementUtil.manageableDatabase;
+
 
 public class ReservePageController implements Initializable {
 
@@ -121,7 +123,10 @@ public class ReservePageController implements Initializable {
     @FXML
     private Label loginNameLabel;
 
-    private Reservation reservation = null ;
+    //private ArrayList<Reservation> reservationList = new ArrayList<>();
+    private ArrayList<String> customer_id_List = new ArrayList<>();
+    private ReservationPayment reservationPayment = new ReservationPayment();
+    private Reservation reservationCustomer = new Reservation() ;
     private Customer customer = new Customer();
 
     @Override
@@ -131,9 +136,10 @@ public class ReservePageController implements Initializable {
         SaleManagementUtil.setTitleNameEN(titleNameEN);
         SaleManagementUtil.setGender(genderChoice);
         SaleManagementUtil.setHearAboutUs(hearAboutUsChoices);
+        newCustomer.setSelected(true);
         reserveCode.setText(createReservationCode());
         loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition()+" ]");
-
+        SaleManagementUtil.setTourID(tourIDComboBox);
     }
 
     @FXML public void handleNotEatBeefCheckbox(ActionEvent event) { eatBeefY.setSelected(false); }
@@ -151,18 +157,33 @@ public class ReservePageController implements Initializable {
 
     @FXML
     void handleAddCustomerBtn(ActionEvent event) {
+
         //pop up 1
-        Alert alertConfirmToAddCustomerData = new Alert(Alert.AlertType.INFORMATION);
-        alertConfirmToAddCustomerData.setTitle("Information Dialog");
-        //alertConfirmToAddCustomerData.setHeaderText("Reservation is successfully!");
+        Alert alertConfirmToAddCustomerData = new Alert(Alert.AlertType.CONFIRMATION);
+        alertConfirmToAddCustomerData.setTitle("Confirmation Dialog");
         alertConfirmToAddCustomerData.setHeaderText(null);
-        alertConfirmToAddCustomerData.setContentText("Reservation is successfully!");
+        alertConfirmToAddCustomerData.setContentText("Do you want to add reservation?");
         Optional<ButtonType> addCustomerDataAction = alertConfirmToAddCustomerData.showAndWait();
+
+
         if (addCustomerDataAction.get() == ButtonType.OK){
 
-            //setCustomerFromGUI();
-            //reservation.addCustomerToReservationList(customer);
-            System.out.println("จองสำเร็จ");
+            if(newCustomer.isSelected()){
+
+                setCustomerFromGUI();
+                setReservationCustomerFromGUI();
+                customer_id_List.add(customer.getCustomerID());
+                manageableDatabase.insertData(customer);
+
+                //when customer inserted
+                clearText();
+                Customer newCustomer = new Customer();
+                customer = newCustomer;
+            }
+
+            else if (oldCustomer.isSelected()){ //search name
+            }
+
 
             //pop up 2
             Alert alertConfirmToAddCustomerMore = new Alert(Alert.AlertType.CONFIRMATION);
@@ -170,16 +191,46 @@ public class ReservePageController implements Initializable {
             alertConfirmToAddCustomerMore.setHeaderText(null);
             alertConfirmToAddCustomerMore.setContentText("Do you want to add another customer?");
             Optional<ButtonType> addCustomerMoreAction = alertConfirmToAddCustomerMore.showAndWait();
-            if (addCustomerMoreAction.get() == ButtonType.OK){
+
+            if (addCustomerMoreAction.get() == ButtonType.OK){ // if user want to add another customer
+
+                customerNo.setText(String.valueOf(Integer.valueOf(customerNo.getText()) + 1));     // add count amount customer
+
+                //clear text for fill next data
                 clearText();
                 Customer newCustomer = new Customer();
                 customer = newCustomer;
 
             }
-            if (addCustomerMoreAction.get() == ButtonType.CANCEL){
+            else if (addCustomerMoreAction.get() == ButtonType.CANCEL){     //stop reserving another customer
+
+                //insert payment into database
+                setReservationPaymentFromGUI();
+                reservationPayment.setCustomerID(customer_id_List.get(0));
+
+                //insert reservarion payment to database
+                manageableDatabase.insertData(reservationPayment);
+
+                //insert reservation customer to database
+                for (String customer_id: customer_id_List) {
+                    reservationCustomer.setCustomerID(customer_id);
+                    manageableDatabase.insertData(reservationCustomer);
+                }
+
+                //setup value of reservation page
+                reserveCode.setText(createReservationCode());
+                customerNo.setText("1");     // setup count amount customer
                 clearText();
+                Customer newCustomer = new Customer();
+                customer = newCustomer;
             }
+
         }
+        else if (addCustomerDataAction.get() == ButtonType.CANCEL){
+            //back to edit
+        }
+
+
 
     }
 
@@ -188,15 +239,28 @@ public class ReservePageController implements Initializable {
 
     }
 
-    public void setReservationFromGUI(){
-        reservation.setReservationCode(reserveCode.getText());
-        //reservation.setTourID(tourCodeChoice.getSelectionModel().getSelectedItem());
-        reservation.setAmountCustomer(Integer.parseInt(customerNo.getText()));
-        reservation.setEmployeeName(loginEmployee.getTitleName()+" "+loginEmployee.getFirstName()+" "+loginEmployee.getLastName());
+    public void setReservationCustomerFromGUI(){
+
+        reservationCustomer.setReservationCode(reserveCode.getText());
+        reservationCustomer.setCustomerID(customer.getCustomerID());
+        reservationCustomer.setTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
+        reservationCustomer.setEmployeeID(loginEmployee.getEmployee_ID());
+
+    }
+    public void setReservationPaymentFromGUI(){
+
+        reservationPayment.setReservationCode(reserveCode.getText());
+        reservationPayment.setCustomerID(customer.getCustomerID());
+        reservationPayment.setTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
+        reservationPayment.setEmployeeID(loginEmployee.getEmployee_ID());
+        reservationPayment.setAmountCustomer(Integer.valueOf(customerNo.getText()));
 
     }
 
     public void setCustomerFromGUI(){
+        int newCustomerID = Integer.valueOf(manageableDatabase.getLastCustomerID())+1;
+
+        customer.setCustomerID(String.valueOf(newCustomerID));
         //information
         customer.setTitleNameTH(titleNameTH.getSelectionModel().getSelectedItem());
         customer.setFirstNameTH(firstNameTH.getText());
@@ -229,13 +293,13 @@ public class ReservePageController implements Initializable {
         String currentReserveCode;
 
         lastReserveCode = manageableDatabase.getLastReservationCode();
-        currentReserveCode = String.format("%06d",Integer.parseInt(lastReserveCode) + 1) ;
+        currentReserveCode = String.format("%08d",Integer.parseInt(lastReserveCode) + 1) ;
 
         return currentReserveCode;
     }
 
     public void clearText(){
-        newCustomer.setSelected(false);
+        newCustomer.setSelected(true);
         oldCustomer.setSelected(false);
         //information
         titleNameTH.getSelectionModel().clearSelection();
@@ -270,6 +334,5 @@ public class ReservePageController implements Initializable {
         searchByCustomerName.setDisable(false);
         searchCustomerBtn.setDisable(false);
     }
-
 
 }
