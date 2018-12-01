@@ -44,7 +44,7 @@
                            <children>
                               <HBox prefHeight="29.0" prefWidth="676.0" spacing="20.0">
                                  <children>
-                                    <TextField fx:id="searchByCustomerID" prefHeight="29.0" prefWidth="219.0" promptText="Search by ID" style="-fx-border-color: #2C3E50;" />
+                                    <TextField fx:id="searchByCustomerID" prefHeight="29.0" prefWidth="219.0" promptText="Search Customer" style="-fx-border-color: #2C3E50;" />
                                     <TextField fx:id="searchByCustomerName" prefHeight="29.0" prefWidth="319.0" promptText="Search by Name" style="-fx-border-color: #2C3E50;" />
                                     <JFXButton fx:id="searchCustomerBtn" buttonType="RAISED" onAction="#handleSearchCustomerBtn" prefHeight="30.0" prefWidth="105.0" style="-fx-background-color: #F4D03F; -fx-background-radius: 5;" text="Search" textFill="#2c3e50">
                                        <font>

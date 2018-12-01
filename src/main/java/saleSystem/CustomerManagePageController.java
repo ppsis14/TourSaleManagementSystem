@@ -6,6 +6,8 @@ import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,11 +19,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 import static saleSystem.SaleManagementUtil.manageableDatabase;
 
@@ -65,6 +69,12 @@ public class CustomerManagePageController implements Initializable {
 
         showTableView(obListCustomer);  //show data on table view
 
+        // search by customer name
+        String[] possibleCustomerName = {"ploy", "fern", "faeng"};
+        TextFields.bindAutoCompletion(searchByCustomerName, possibleCustomerName);
+
+        //setSearchCustomer();
+
 
     }
 
@@ -93,7 +103,7 @@ public class CustomerManagePageController implements Initializable {
 
         Customer editCustomer = customerTable.getSelectionModel().getSelectedItem();
 
-        //SaleManagementUtil.loadWindow(getClass().getResource("/editCustomer.fxml"), "Edit Customer Information");
+        SaleManagementUtil.loadWindow(getClass().getResource("/editCustomer.fxml"), "Edit Customer Information");
         if(editCustomer != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/editCustomer.fxml"));
@@ -144,6 +154,40 @@ public class CustomerManagePageController implements Initializable {
 
         customerTable.setItems(obListCustomer);
     }
+
+  /*  public void setSearchCustomer(){
+        FilteredList<Customer> filteredData = new FilteredList<>(obListCustomer, e -> true);
+        searchByCustomerID.setOnKeyPressed(event -> {
+            searchByCustomerID.textProperty().addListener((observable, oldValue, newValue) -> {
+                filteredData.setPredicate((Predicate<? super Customer>) customer -> {
+                    if (newValue == null || newValue.isEmpty()){
+                        return true;
+                    }
+                    String lowerCaseFilter = newValue.toLowerCase();
+                    // because customer is integer!!
+                    if (customer.getCustomerID().contains(newValue)){
+                        return true;
+                    }
+                    else if (customer.getFirstNameENG().toLowerCase().contains(lowerCaseFilter)){
+                        return true;
+                    }
+                    else if (customer.getLastNameENG().toLowerCase().contains(lowerCaseFilter)){
+                        return true;
+                    }
+                    else if (customer.getFirstNameTH().contains(newValue)){
+                        return true;
+                    }
+                    else if (customer.getLastNameTH().contains(newValue)){
+                        return true;
+                    }
+                    return false;
+                });
+            });
+            SortedList<Customer> sortData = new SortedList<>(filteredData);
+            sortData.comparatorProperty().bind(customerTable.comparatorProperty());
+            customerTable.setItems(sortData);
+        });
+    }*/
 
 }
 
