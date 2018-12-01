@@ -74,7 +74,7 @@ public class PaymentReceiptPageController implements Initializable {
 
         if (createArrearsReceiptAction.get() == ButtonType.OK){
             // create receipt
-            createReceipt("thikampornDepositReceipt", "DEPOSIT RECEIPT / ใบสำคัญรับเงิน");
+            createReceipt("thikampornDepositReceipt", "RECEIPT / ใบสำคัญรับเงิน");
             Alert alertShowCreateArrearsReceipt = new Alert(Alert.AlertType.INFORMATION);
             alertShowCreateArrearsReceipt.setTitle("Information Dialog");
             alertShowCreateArrearsReceipt.setHeaderText(null);
