@@ -21,6 +21,15 @@ public class SpringJDBC_DB implements ManageableDatabase {
     }
 
     @Override
+    public Employee getEmployeeLogin(String username , String password) {
+
+        String query = "Select * From employee Where Username" + " = '" + username + "' and Password = '" + password +"'";
+        Employee employee = jdbcTemplate.queryForObject(query , new EmployeeRowMapper());
+
+        return employee;
+    }
+
+    @Override
     public boolean checkLogin(String username ,String password){
 
         String query = "Select * From employee Where Username = " + username + " and Password = " + password ;
@@ -44,26 +53,10 @@ public class SpringJDBC_DB implements ManageableDatabase {
     }
 
     @Override
-    public String getLastInvoiceNo(String invoiceType) {
-
-        String lastInvoiceNo;
-        List<Invoice> invoiceList = getAllInvoice(invoiceType);
-
-        if (invoiceList.isEmpty())
-            return "0";
-        else {
-
-            lastInvoiceNo = invoiceList.get(invoiceList.size() - 1).getInvoiceNo();
-            return lastInvoiceNo;
-        }
-    }
-
-    @Override
     public String getTourID(String tourName) {
         String tourID;
 
-        //tourName=tourName.replaceAll(" ","% %");
-        String query = "Select * From tour_package Where TourName = "+"'"+tourName+"'";
+        String query = "Select * From tour_package Where Tour_name = "+"'"+tourName+"'";
 
         TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
         tourID = String.valueOf(tourPackage.getTourID());
@@ -71,6 +64,24 @@ public class SpringJDBC_DB implements ManageableDatabase {
         return tourID;
     }
 
+    @Override
+    public int getTourPrice(String tourID) {
+
+        String query = "Select * From tour_package Where Tour_ID = " + tourID;
+        TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
+
+        return tourPackage.getPrice();
+    }
+
+
+    @Override
+    public List<TourPackage> getAllTourPackage() {
+
+        String query = "Select * From tour_package";
+        List<TourPackage> tourPackageList = jdbcTemplate.query(query , new TourPackageRowMapper());
+
+        return tourPackageList;
+    }
 
     @Override
     public void insertData(Customer customer) {
@@ -123,8 +134,21 @@ public class SpringJDBC_DB implements ManageableDatabase {
     }
 
     @Override
-    public Customer getOneCustomer(String name) {
+    public Customer getOneCustomer(String customerID) {
+//        String customerName = null;
+//        String query = "select * from customer Where = " + customerID;
+//        Customer customer = jdbcTemplate.query(query, new CustomerRowMapper());
         return null;
+    }
+
+    @Override
+    public String getNameCustomer(String customerID) {
+
+        String customerName;
+        String query = "select * from customer Where Customer_ID = " + customerID;
+        Customer customer = jdbcTemplate.queryForObject(query,new CustomerRowMapper());
+        customerName = customer.getTitleNameENG()+" "+customer.getFirstNameENG()+" "+customer.getLastNameENG();
+        return customerName;
     }
 
     @Override
@@ -140,15 +164,19 @@ public class SpringJDBC_DB implements ManageableDatabase {
         return lastCustomerID;
     }
 
+
     @Override
     public void insertData(Reservation reservation) {
-        String query = "insert into reservation_customer (Reservation_code, Customer_ID, Tour_ID, Employee_ID)" +
-                "values(?, ?, ?, ?)";
+        String query = "insert into reservation_customer (Reservation_code,Tour_ID,Tour_name,Customer_ID,Customer_name, Employee_ID,Employee_name)" +
+                "values(?, ?, ?, ?, ?, ?, ?)";
         Object[] data = new Object[]{
                 reservation.getReservationCode(),
-                reservation.getCustomerID(),
                 reservation.getTourID(),
-                reservation.getEmployeeID()};
+                reservation.getTourName(),
+                reservation.getCustomerID(),
+                reservation.getCustomerName(),
+                reservation.getEmployeeID(),
+                reservation.getEmployeeName()};
         jdbcTemplate.update(query, data);
 
     }
@@ -160,7 +188,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public void deleteData(Reservation reservation) {
-        String deleteQuery = "Delete From reservation Where reservation_code = ?";
+        String deleteQuery = "Delete From reservation Where Reservation_code = ?";
         jdbcTemplate.update(deleteQuery, reservation.getReservationCode());
 
 
@@ -173,14 +201,20 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public void insertData(ReservationPayment reservationPayment) {
-        String query = "insert into reservation_payment (Reservation_code, Customer_ID, Tour_ID,Amount_customer, Employee_ID)" +
-                "values(?, ?, ?, ?,?)";
+        String query = "insert into reservation_payment (Reservation_code,Tour_ID,Tour_name,Customer_ID,Customer_name, Employee_ID,Employee_name,Amount_customer,Total_price,Deposit_status,Arrears_status)" +
+                "values(?, ?, ?, ? ,? ,?, ?, ?, ?, ?, ?)";
         Object[] data = new Object[]{
                 reservationPayment.getReservationCode(),
-                reservationPayment.getCustomerID(),
                 reservationPayment.getTourID(),
+                reservationPayment.getTourName(),
+                reservationPayment.getCustomerID(),
+                reservationPayment.getCustomerName(),
+                reservationPayment.getEmployeeID(),
+                reservationPayment.getEmployeeName(),
                 reservationPayment.getAmountCustomer(),
-                reservationPayment.getEmployeeID()};
+                reservationPayment.getTotal_price(),
+                reservationPayment.getDepositStatus(),
+                reservationPayment.getArrearsStatus()};
         jdbcTemplate.update(query, data);
 
     }
@@ -193,7 +227,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public void deleteData(ReservationPayment reservationPayment) {
 
-        String deleteQuery = "Delete From reservation_payment Where reservation_code = ?";
+        String deleteQuery = "Delete From reservation_payment Where Reservation_code = ?";
         jdbcTemplate.update(deleteQuery, reservationPayment.getReservationCode());
     }
 
@@ -203,6 +237,20 @@ public class SpringJDBC_DB implements ManageableDatabase {
         List<ReservationPayment> reservationPaymentList = jdbcTemplate.query(query , new ReservationPaymentRowMapper());
 
         return reservationPaymentList;
+    }
+
+    @Override
+    public String getLastReservationPaymentCode() {
+
+        String  query  = "SELECT * FROM reservation_payment ";
+        List<Reservation> reservationList = jdbcTemplate.query(query , new ReservationRowMapper());
+
+        if(reservationList.isEmpty())
+            return "0";
+        else{
+            String lastReservCode = reservationList.get(reservationList.size()-1).getReservationCode();
+            return lastReservCode;
+        }
     }
 
     @Override
@@ -230,7 +278,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public void deleteData(Invoice invoice, String invoiceType) {
 
-        String deleteQuery = "Delete From " + invoiceType + " Where reservation_code = ?";
+        String deleteQuery = "Delete From " + invoiceType + " Where Reservation_code = ?";
         jdbcTemplate.update(deleteQuery, invoice.getReservationCode());
     }
 
@@ -253,93 +301,21 @@ public class SpringJDBC_DB implements ManageableDatabase {
     }
 
     @Override
-    public Employee getEmployeeLogin(String username , String password) {
+    public String getLastInvoiceNo(String invoiceType) {
 
-        String query = "Select * From employee Where Username" + " = '" + username + "' and Password = '" + password +"'";
-        Employee employee = jdbcTemplate.queryForObject(query , new EmployeeRowMapper());
+        String lastInvoiceNo;
+        List<Invoice> invoiceList = getAllInvoice(invoiceType);
 
-        return employee;
-    }
-
-    @Override
-    public String getLastReservationCode() {
-
-        String  query  = "SELECT * FROM reservation_payment ";
-        List<Reservation> reservationList = jdbcTemplate.query(query , new ReservationRowMapper());
-
-        if(reservationList.isEmpty())
+        if (invoiceList.isEmpty())
             return "0";
-        else{
-            String lastReservCode = reservationList.get(reservationList.size()-1).getReservationCode();
-            return lastReservCode;
+        else {
+
+            lastInvoiceNo = invoiceList.get(invoiceList.size() - 1).getInvoiceNo();
+            return lastInvoiceNo;
         }
     }
 
-    @Override
-    public List<TourPackage> getAllTourPackage() {
-
-        String query = "Select * From tour_package";
-        List<TourPackage> tourPackageList = jdbcTemplate.query(query , new TourPackageRowMapper());
-
-        return tourPackageList;
-    }
-
-    class InvoiceRowMapper implements RowMapper<Invoice>{
-        public Invoice mapRow(ResultSet rs, int i) throws SQLException {
-            Invoice invoice = new Invoice(
-                rs.getString("Reservation_code"),
-                rs.getString("Invoice_no"),
-                rs.getInt("Amount"),
-                rs.getString("Employee_name"),
-                rs.getString("Invoice_status"),
-                rs.getString("Tour_ID"));
-            return invoice;
-        }
-    }
-    class TourPackageRowMapper implements RowMapper<TourPackage>{
-
-        public TourPackage mapRow(ResultSet rs, int i) throws SQLException {
-            TourPackage tourPackage = new TourPackage(
-            rs.getInt("Tour_ID"),
-            rs.getString("TourName"),
-            rs.getInt("Price"),
-            rs.getString("Departure_date"),
-            rs.getString("Return_date"),
-            rs.getString("Deposit_date"),
-            rs.getString("Arrears_date"),
-            rs.getInt("Amount"),
-            rs.getInt("Available"),
-            rs.getString("Status"));
-
-            return tourPackage;
-        }
-    }
-
-    class ReservationRowMapper implements RowMapper<Reservation>{
-
-        public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Reservation reservation = new Reservation(
-                rs.getString("Reservation_code"),
-                rs.getString("Customer_ID"),
-                rs.getString("Tour_ID"),
-                rs.getString("Employee_ID"));
-
-            return  reservation;
-        }
-    }
-    class ReservationPaymentRowMapper implements RowMapper<ReservationPayment>{
-
-        public ReservationPayment mapRow(ResultSet rs, int rowNum) throws SQLException {
-            ReservationPayment reservationPayment = new ReservationPayment(
-                rs.getString("Reservation_code"),
-                rs.getString("Customer_ID"),
-                rs.getString("Tour_ID"),
-                rs.getInt("Amount_customer"),
-                rs.getString("Employee_ID"));
-
-            return  reservationPayment;
-        }
-    }
+    // class row mapper
 
     class EmployeeRowMapper implements RowMapper<Employee>{
 
@@ -355,6 +331,25 @@ public class SpringJDBC_DB implements ManageableDatabase {
                     resultSet.getString("Email"),
                     resultSet.getString("Mobile_num"));
             return employee;
+        }
+    }
+
+    class TourPackageRowMapper implements RowMapper<TourPackage>{
+
+        public TourPackage mapRow(ResultSet rs, int i) throws SQLException {
+            TourPackage tourPackage = new TourPackage(
+                    rs.getString("Tour_ID"),
+                    rs.getString("Tour_name"),
+                    rs.getInt("Price"),
+                    rs.getString("Departure_date"),
+                    rs.getString("Return_date"),
+                    rs.getString("Deposit_date"),
+                    rs.getString("Arrears_date"),
+                    rs.getInt("Amount"),
+                    rs.getInt("Available"),
+                    rs.getString("Status"));
+
+            return tourPackage;
         }
     }
 
@@ -387,6 +382,54 @@ public class SpringJDBC_DB implements ManageableDatabase {
                     rs.getString("HearAboutUs"));
 
             return customer;
+        }
+    }
+
+    class ReservationRowMapper implements RowMapper<Reservation>{
+
+        public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Reservation reservation = new Reservation(
+                    rs.getString("Reservation_code"),
+                    rs.getString("Tour_ID"),
+                    rs.getString("Tour_name"),
+                    rs.getString("Customer_ID"),
+                    rs.getString("Customer_name"),
+                    rs.getString("Employee_ID"),
+                    rs.getString("Employee_name"));
+
+            return  reservation;
+        }
+    }
+    class ReservationPaymentRowMapper implements RowMapper<ReservationPayment>{
+
+        public ReservationPayment mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ReservationPayment reservationPayment = new ReservationPayment(
+                    rs.getString("Reservation_code"),
+                    rs.getString("Tour_ID"),
+                    rs.getString("Tour_name"),
+                    rs.getString("Customer_ID"),
+                    rs.getString("Customer_name"),
+                    rs.getString("Employee_ID"),
+                    rs.getString("Employee_name"),
+                    rs.getInt("Amount_customer"), rs.getInt("Total_price"),
+                    rs.getString("Deposit_invoice"),
+                    rs.getString("Arrears_invoice")
+            );
+
+            return  reservationPayment;
+        }
+    }
+
+    class InvoiceRowMapper implements RowMapper<Invoice>{
+        public Invoice mapRow(ResultSet rs, int i) throws SQLException {
+            Invoice invoice = new Invoice(
+                    rs.getString("Reservation_code"),
+                    rs.getString("Invoice_no"),
+                    rs.getInt("Amount"),
+                    rs.getString("Employee_name"),
+                    rs.getString("Invoice_status"),
+                    rs.getString("Tour_ID"));
+            return invoice;
         }
     }
 }
