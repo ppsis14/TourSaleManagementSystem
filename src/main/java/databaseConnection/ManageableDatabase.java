@@ -22,9 +22,19 @@ public interface ManageableDatabase {
     void deleteData(ReservationPayment reservationPayment);
     List<ReservationPayment> getAllReservationPayment();
 
+    void insertData(Invoice invoice,String invoiceType);
+    void updateData(Invoice invoice,String invoiceType);
+    void deleteData(Invoice invoice,String invoiceType);
+    List<Invoice> getAllInvoice(String invoiceType);
+    List<Invoice> getAllInvoiceInTourName(String invoiceType,String tourName);
+
+
     Employee getEmployeeLogin(String username, String password);
     String getLastReservationCode();
     boolean checkLogin(String username ,String password);
+    String getNameEmployee(String employeeID);
+    String getLastInvoiceNo(String invoiceType);
+    String getTourID(String tourName);
 
     List<TourPackage> getAllTourPackage();
 }

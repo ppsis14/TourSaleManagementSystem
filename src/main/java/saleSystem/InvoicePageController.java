@@ -1,28 +1,28 @@
 package saleSystem;
 
 import Table.Customer;
+import Table.Invoice;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static saleSystem.SaleManagementUtil.*;
+
 public class InvoicePageController implements Initializable {
 
     @FXML
     private ComboBox<String> tourIDChoiceDI;
-
-    @FXML
-    private TableView<?> depositInvoiceTable;
 
     @FXML
     private JFXButton createDepositInvoiceBtn;
@@ -33,8 +33,19 @@ public class InvoicePageController implements Initializable {
     @FXML
     private ComboBox<String> tourIDChoiceAI;
 
-    @FXML
-    private TableView<?> arrearsInvoiceTable;
+    @FXML private TableView<Invoice> depositInvoiceTable;
+    @FXML private TableColumn<Invoice, String> reservationCodeColumnDI;
+    @FXML private TableColumn<Invoice, String> invoice_No_ColumnDI;
+    @FXML private TableColumn<Invoice, Integer> amountColumnDI;
+    @FXML private TableColumn<Invoice, String> employeeColumnDI;
+    @FXML private TableColumn<Invoice, String> invoiceStatusColumnDI;
+
+    @FXML private TableView<Invoice> arrearsInvoiceTable;
+    @FXML private TableColumn<Invoice, String> reservationCodeColumnAI;
+    @FXML private TableColumn<Invoice, String> invoice_No_ColumnAI;
+    @FXML private TableColumn<Invoice, Integer> amountColumnAI;
+    @FXML private TableColumn<Invoice, String> employeeColumnAI;
+    @FXML private TableColumn<Invoice, String> invoiceStatusColumnAI;
 
     @FXML
     private JFXButton createArrearsInvoiceBtn;
@@ -47,6 +58,10 @@ public class InvoicePageController implements Initializable {
 
     @FXML
     private JFXDrawer drawerMenu;
+
+
+    ObservableList<Invoice> obListInvoiceDI = FXCollections.observableArrayList();
+    ObservableList<Invoice> obListInvoiceAI = FXCollections.observableArrayList();
 
     @FXML
     void handleConfirmArrearsInvoiceStatusBtn(ActionEvent event) {
@@ -109,16 +124,44 @@ public class InvoicePageController implements Initializable {
 
     @FXML
     void handleTourIDChoiceDI(ActionEvent event) {
+        showTableView();
 
     }
 
     @FXML
     void handleTourIDChoiceAI(ActionEvent event) {
-
+        showTableView();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+        SaleManagementUtil.setTourID(tourIDChoiceDI);
+        SaleManagementUtil.setTourID(tourIDChoiceAI);
+        showTableView();
+    }
+
+    public void showTableView(){
+
+        String tourNameDI = tourIDChoiceDI.getSelectionModel().getSelectedItem();
+        String tourNameAI = tourIDChoiceDI.getSelectionModel().getSelectedItem();
+        obListInvoiceDI = FXCollections.observableArrayList(manageableDatabase.getAllInvoiceInTourName(DEPOSIT_INVOICE,tourNameDI));
+        obListInvoiceAI = FXCollections.observableArrayList(manageableDatabase.getAllInvoiceInTourName(ARREARS_INVOICE,tourNameAI));
+
+        //find data base for show on table view.
+        reservationCodeColumnDI.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
+        invoice_No_ColumnDI.setCellValueFactory(new PropertyValueFactory<>("invoiceNo"));
+        amountColumnDI.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        employeeColumnDI.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
+        invoiceStatusColumnDI.setCellValueFactory(new PropertyValueFactory<>("invoiceStatus"));
+
+        reservationCodeColumnAI.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
+        invoice_No_ColumnAI.setCellValueFactory(new PropertyValueFactory<>("invoiceNo"));
+        amountColumnAI.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        employeeColumnAI.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
+        invoiceStatusColumnAI.setCellValueFactory(new PropertyValueFactory<>("invoiceStatus"));
+
+        depositInvoiceTable.setItems(obListInvoiceDI);
+        arrearsInvoiceTable.setItems(obListInvoiceAI);
     }
 }

@@ -169,10 +169,10 @@ public class EditCustomerPageController implements Initializable {
         lastNameEN.setText(customer.getLastNameENG());
         genderChoice.setValue(customer.getGender());
         age.setText(customer.getAge());
-        String[] dateCut = customer.getDateOfBirth().split("/");
+        String[] dateCut = customer.getDateOfBirth().split("-");
         dateOfBirth.setValue(LocalDate.of(Integer.valueOf(dateCut[2]), Integer.valueOf(dateCut[0]), Integer.valueOf(dateCut[1])));
         passportNo.setText(customer.getPassport_no());
-        String[] dateExpCut = customer.getExp_passport().split("/");
+        String[] dateExpCut = customer.getExp_passport().split("-");
         expPassportDate.setValue(LocalDate.of(Integer.valueOf(dateExpCut[2]), Integer.valueOf(dateExpCut[0]), Integer.valueOf(dateExpCut[1])));
         occupation.setText(customer.getOccupation());
         //Contact

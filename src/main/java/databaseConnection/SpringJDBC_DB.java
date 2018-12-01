@@ -1,8 +1,10 @@
 package databaseConnection;
 
 import Table.*;
+import com.sun.rowset.internal.Row;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.lang.Nullable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +23,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public boolean checkLogin(String username ,String password){
 
-        String query = "Select * From employee Where Username" + " = '" + username + "' and Password = '" + password +"'";
+        String query = "Select * From employee Where Username = " + username + " and Password = " + password ;
         Employee employee = jdbcTemplate.queryForObject(query , new EmployeeRowMapper());
         if (employee == null){
             return false;
@@ -30,6 +32,44 @@ public class SpringJDBC_DB implements ManageableDatabase {
             return true;
     }
 
+    @Override
+    public String getNameEmployee(String employeeID) {
+        String employeeName;
+        String query = "Select * From employee Where Employee_ID = " + employeeID;
+
+        Employee employee = jdbcTemplate.queryForObject(query,new EmployeeRowMapper());
+        employeeName = employee.getTitleName()+" "+employee.getFirstName()+" "+employee.getLastName();
+
+        return employeeName;
+    }
+
+    @Override
+    public String getLastInvoiceNo(String invoiceType) {
+
+        String lastInvoiceNo;
+        List<Invoice> invoiceList = getAllInvoice(invoiceType);
+
+        if (invoiceList.isEmpty())
+            return "0";
+        else {
+
+            lastInvoiceNo = invoiceList.get(invoiceList.size() - 1).getInvoiceNo();
+            return lastInvoiceNo;
+        }
+    }
+
+    @Override
+    public String getTourID(String tourName) {
+        String tourID;
+
+        //tourName=tourName.replaceAll(" ","% %");
+        String query = "Select * From tour_package Where TourName = "+"'"+tourName+"'";
+
+        TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
+        tourID = String.valueOf(tourPackage.getTourID());
+
+        return tourID;
+    }
 
 
     @Override
@@ -120,6 +160,9 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public void deleteData(Reservation reservation) {
+        String deleteQuery = "Delete From reservation Where reservation_code = ?";
+        jdbcTemplate.update(deleteQuery, reservation.getReservationCode());
+
 
     }
 
@@ -150,11 +193,63 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public void deleteData(ReservationPayment reservationPayment) {
 
+        String deleteQuery = "Delete From reservation_payment Where reservation_code = ?";
+        jdbcTemplate.update(deleteQuery, reservationPayment.getReservationCode());
     }
 
     @Override
     public List<ReservationPayment> getAllReservationPayment() {
-        return null;
+        String query = "Select * From reservation_payment";
+        List<ReservationPayment> reservationPaymentList = jdbcTemplate.query(query , new ReservationPaymentRowMapper());
+
+        return reservationPaymentList;
+    }
+
+    @Override
+    public void insertData(Invoice invoice ,String invoiceType) {
+
+        String query = "insert into " + invoiceType + " (Reservation_code, Invoice_no, Amount, Employee_name ,Invoice_status , Tour_ID)" +
+                "values(?, ?, ?, ?, ?, ?)";
+
+        Object[] data = new Object[]{
+                invoice.getReservationCode(),
+                invoice.getInvoiceNo(),
+                invoice.getAmount(),
+                invoice.getEmployeeName(),
+                invoice.getInvoiceStatus(),
+                invoice.getTourID()
+        };
+        jdbcTemplate.update(query, data);
+    }
+
+    @Override
+    public void updateData(Invoice invoice ,String invoiceType) {
+
+    }
+
+    @Override
+    public void deleteData(Invoice invoice, String invoiceType) {
+
+        String deleteQuery = "Delete From " + invoiceType + " Where reservation_code = ?";
+        jdbcTemplate.update(deleteQuery, invoice.getReservationCode());
+    }
+
+    @Override
+    public List<Invoice> getAllInvoice(String invoiceType) {
+
+        String query = "Select * From " + invoiceType ;
+        List<Invoice> invoiceList = jdbcTemplate.query(query , new InvoiceRowMapper());
+
+        return invoiceList;
+    }
+
+    @Override
+    public List<Invoice> getAllInvoiceInTourName(String invoiceType, String tourName) {
+
+        String tourID = getTourID(tourName);
+        String query = "Select * From " + invoiceType +" Where Tour_ID = " + tourID;
+        List<Invoice> invoiceList = jdbcTemplate.query(query , new InvoiceRowMapper());
+        return invoiceList;
     }
 
     @Override
@@ -189,10 +284,22 @@ public class SpringJDBC_DB implements ManageableDatabase {
         return tourPackageList;
     }
 
+    class InvoiceRowMapper implements RowMapper<Invoice>{
+        public Invoice mapRow(ResultSet rs, int i) throws SQLException {
+            Invoice invoice = new Invoice(
+                rs.getString("Reservation_code"),
+                rs.getString("Invoice_no"),
+                rs.getInt("Amount"),
+                rs.getString("Employee_name"),
+                rs.getString("Invoice_status"),
+                rs.getString("Tour_ID"));
+            return invoice;
+        }
+    }
     class TourPackageRowMapper implements RowMapper<TourPackage>{
 
         public TourPackage mapRow(ResultSet rs, int i) throws SQLException {
-            TourPackage tourPackageList = new TourPackage(
+            TourPackage tourPackage = new TourPackage(
             rs.getInt("Tour_ID"),
             rs.getString("TourName"),
             rs.getInt("Price"),
@@ -204,9 +311,10 @@ public class SpringJDBC_DB implements ManageableDatabase {
             rs.getInt("Available"),
             rs.getString("Status"));
 
-            return tourPackageList;
+            return tourPackage;
         }
     }
+
     class ReservationRowMapper implements RowMapper<Reservation>{
 
         public Reservation mapRow(ResultSet rs, int rowNum) throws SQLException {

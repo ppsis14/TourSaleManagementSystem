@@ -82,6 +82,7 @@ public class TourCheckPageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+        SaleManagementUtil.setTourID(tourIDComboBox);
 
     }
 }

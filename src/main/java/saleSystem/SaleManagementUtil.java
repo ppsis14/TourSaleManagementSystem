@@ -14,20 +14,28 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.StringConverter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class SaleManagementUtil {
+
+
+    public static final String DEPOSIT_INVOICE = "invoice_deposit";
+    public static final String ARREARS_INVOICE = "invoice_arrears";
 
     public static ApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
 
@@ -112,6 +120,34 @@ public class SaleManagementUtil {
         comboBox.setValue(tourNameList.get(0));
         comboBox.getItems().addAll(tourNameList);
 
+    }
+
+    public static void setDatePickerFormat(DatePicker datePicker){
+        String pattern = "dd-MM-yyyy";
+
+        datePicker.setPromptText(pattern.toLowerCase());
+
+        datePicker.setConverter(new StringConverter<LocalDate>() {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+
+            @Override
+            public String toString(LocalDate date) {
+                if (date != null) {
+                    return dateFormatter.format(date);
+                } else {
+                    return "";
+                }
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                if (string != null && !string.isEmpty()) {
+                    return LocalDate.parse(string, dateFormatter);
+                } else {
+                    return null;
+                }
+            }
+        });
     }
 
 

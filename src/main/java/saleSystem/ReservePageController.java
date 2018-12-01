@@ -1,6 +1,7 @@
 package saleSystem;
 
 import Table.Customer;
+import Table.Invoice;
 import Table.Reservation;
 import Table.ReservationPayment;
 import com.jfoenix.controls.JFXButton;
@@ -14,7 +15,6 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -123,11 +123,14 @@ public class ReservePageController implements Initializable {
     @FXML
     private Label loginNameLabel;
 
-    //private ArrayList<Reservation> reservationList = new ArrayList<>();
+    private final String DEPOSIT_INVOICE = "invoice_deposit";
+    private final String ARREARS_INVOICE = "invoice_arrears";
+
     private ArrayList<String> customer_id_List = new ArrayList<>();
     private ReservationPayment reservationPayment = new ReservationPayment();
     private Reservation reservationCustomer = new Reservation() ;
     private Customer customer = new Customer();
+    private Invoice invoice = new Invoice();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -140,6 +143,8 @@ public class ReservePageController implements Initializable {
         reserveCode.setText(createReservationCode());
         loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition()+" ]");
         SaleManagementUtil.setTourID(tourIDComboBox);
+        SaleManagementUtil.setDatePickerFormat(dateOfBirth);
+        SaleManagementUtil.setDatePickerFormat(expPassportDate);
     }
 
     @FXML public void handleNotEatBeefCheckbox(ActionEvent event) { eatBeefY.setSelected(false); }
@@ -204,17 +209,20 @@ public class ReservePageController implements Initializable {
             }
             else if (addCustomerMoreAction.get() == ButtonType.CANCEL){     //stop reserving another customer
 
-                //insert payment into database
+                //insert reservation payment and deposit invoice into database
                 setReservationPaymentFromGUI();
+                setDepositInvoice();
                 reservationPayment.setCustomerID(customer_id_List.get(0));
+                manageableDatabase.insertData(invoice,DEPOSIT_INVOICE);
 
-                //insert reservarion payment to database
+                //insert reservation payment to database
                 manageableDatabase.insertData(reservationPayment);
 
                 //insert reservation customer to database
                 for (String customer_id: customer_id_List) {
                     reservationCustomer.setCustomerID(customer_id);
                     manageableDatabase.insertData(reservationCustomer);
+
                 }
 
                 //setup value of reservation page
@@ -236,6 +244,16 @@ public class ReservePageController implements Initializable {
 
     @FXML
     void handleSearchCustomerBtn(ActionEvent event){
+
+    }
+
+    public void setDepositInvoice(){
+        invoice.setReservationCode(reservationPayment.getReservationCode());
+        invoice.setInvoiceNo(String.valueOf(Integer.valueOf(manageableDatabase.getLastInvoiceNo(DEPOSIT_INVOICE))+1));
+        invoice.setAmount(reservationPayment.getAmountCustomer());
+        invoice.setEmployeeName(manageableDatabase.getNameEmployee(reservationPayment.getEmployeeID()));
+        invoice.setInvoiceStatus("not paid");
+        invoice.setTourID(manageableDatabase.getTourID(reservationPayment.getTourID()));
 
     }
 
@@ -333,6 +351,7 @@ public class ReservePageController implements Initializable {
         hearAboutUsChoices.setValue("Bangkokbizs News");
         searchByCustomerName.setDisable(false);
         searchCustomerBtn.setDisable(false);
+
     }
 
 }
