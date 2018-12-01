@@ -1,21 +1,28 @@
 package Table;
 
-import java.util.List;
-
 public class Reservation {
     private String reservationCode;
-    private String customerID;
     private String tourID;
+    private String tourName;
+    private String customerID;
+    private String customerName;
     private String employeeID;
+    private String employeeName;
 
-    public Reservation(){
+
+    public Reservation() {
+
+
     }
-
-    public Reservation(String reservationCode, String customerID, String tourID, String employeeID) {
+    public Reservation(String reservationCode, String tourID, String tourName, String customerID, String customerName, String employeeID, String employeeName) {
         this.reservationCode = reservationCode;
-        this.customerID = customerID;
         this.tourID = tourID;
+        this.tourName = tourName;
+        this.customerID = customerID;
+        this.customerName = customerName;
         this.employeeID = employeeID;
+        this.employeeName = employeeName;
+
     }
 
     public String getReservationCode() {
@@ -26,6 +33,22 @@ public class Reservation {
         this.reservationCode = reservationCode;
     }
 
+    public String getTourID() {
+        return tourID;
+    }
+
+    public void setTourID(String tourID) {
+        this.tourID = tourID;
+    }
+
+    public String getTourName() {
+        return tourName;
+    }
+
+    public void setTourName(String tourName) {
+        this.tourName = tourName;
+    }
+
     public String getCustomerID() {
         return customerID;
     }
@@ -34,12 +57,12 @@ public class Reservation {
         this.customerID = customerID;
     }
 
-    public String getTourID() {
-        return tourID;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setTourID(String tourID) {
-        this.tourID = tourID;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getEmployeeID() {
@@ -49,4 +72,16 @@ public class Reservation {
     public void setEmployeeID(String employeeID) {
         this.employeeID = employeeID;
     }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+
 }
+
+

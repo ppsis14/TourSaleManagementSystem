@@ -14,12 +14,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static saleSystem.SaleManagementUtil.loginEmployee;
-import static saleSystem.SaleManagementUtil.manageableDatabase;
+import static saleSystem.SaleManagementUtil.*;
 
 
 public class ReservePageController implements Initializable {
@@ -176,9 +176,9 @@ public class ReservePageController implements Initializable {
             if(newCustomer.isSelected()){
 
                 setCustomerFromGUI();
-                setReservationCustomerFromGUI();
-                customer_id_List.add(customer.getCustomerID());
                 manageableDatabase.insertData(customer);
+                customer_id_List.add(customer.getCustomerID());
+                setReservationCustomerFromGUI();
 
                 //when customer inserted
                 clearText();
@@ -187,6 +187,7 @@ public class ReservePageController implements Initializable {
             }
 
             else if (oldCustomer.isSelected()){ //search name
+                setUpOldCustomerData();
             }
 
 
@@ -247,31 +248,42 @@ public class ReservePageController implements Initializable {
 
     }
 
+
+
     public void setDepositInvoice(){
         invoice.setReservationCode(reservationPayment.getReservationCode());
         invoice.setInvoiceNo(String.valueOf(Integer.valueOf(manageableDatabase.getLastInvoiceNo(DEPOSIT_INVOICE))+1));
         invoice.setAmount(reservationPayment.getAmountCustomer());
         invoice.setEmployeeName(manageableDatabase.getNameEmployee(reservationPayment.getEmployeeID()));
-        invoice.setInvoiceStatus("not paid");
-        invoice.setTourID(manageableDatabase.getTourID(reservationPayment.getTourID()));
+        invoice.setInvoiceStatus(NOT_CREATED);
+        invoice.setTourID(reservationPayment.getTourID());
 
     }
 
     public void setReservationCustomerFromGUI(){
 
         reservationCustomer.setReservationCode(reserveCode.getText());
+        reservationCustomer.setTourID(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
+        reservationCustomer.setTourName(tourIDComboBox.getSelectionModel().getSelectedItem());
         reservationCustomer.setCustomerID(customer.getCustomerID());
-        reservationCustomer.setTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
+        reservationCustomer.setCustomerName(manageableDatabase.getNameCustomer(reservationCustomer.getCustomerID()));
         reservationCustomer.setEmployeeID(loginEmployee.getEmployee_ID());
+        reservationCustomer.setEmployeeName(manageableDatabase.getNameEmployee(reservationCustomer.getEmployeeID()));
 
     }
     public void setReservationPaymentFromGUI(){
 
         reservationPayment.setReservationCode(reserveCode.getText());
-        reservationPayment.setCustomerID(customer.getCustomerID());
-        reservationPayment.setTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
+        reservationPayment.setTourID(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
+        reservationPayment.setTourName(tourIDComboBox.getSelectionModel().getSelectedItem());
+        reservationPayment.setCustomerID(customer_id_List.get(0));
+        reservationPayment.setCustomerName(manageableDatabase.getNameCustomer(reservationPayment.getCustomerID()));
         reservationPayment.setEmployeeID(loginEmployee.getEmployee_ID());
-        reservationPayment.setAmountCustomer(Integer.valueOf(customerNo.getText()));
+        reservationPayment.setEmployeeName(manageableDatabase.getNameEmployee(reservationCustomer.getEmployeeID()));
+        reservationPayment.setAmountCustomer(Integer.parseInt(customerNo.getText()));
+        reservationPayment.setTotal_price(reservationPayment.calculateTotalPrice(manageableDatabase.getTourPrice(reservationPayment.getTourID())));
+        reservationPayment.setDepositStatus(NOT_PAID);
+        reservationPayment.setArrearsStatus(NOT_PAID);
 
     }
 
@@ -306,14 +318,59 @@ public class ReservePageController implements Initializable {
         customer.setHearAboutUs(hearAboutUsChoices.getSelectionModel().getSelectedItem());
     }
 
+
+
     public String createReservationCode(){
         String lastReserveCode;
         String currentReserveCode;
 
-        lastReserveCode = manageableDatabase.getLastReservationCode();
+        lastReserveCode = manageableDatabase.getLastReservationPaymentCode();
         currentReserveCode = String.format("%08d",Integer.parseInt(lastReserveCode) + 1) ;
 
         return currentReserveCode;
+    }
+
+    public void setUpOldCustomerData(){
+
+        //customer = manageableDatabase.getOneCustomer();
+        newCustomer.setSelected(false);
+        oldCustomer.setSelected(true);
+        //information
+        titleNameTH.setValue(customer.getTitleNameTH());
+        firstNameTH.setText(customer.getFirstNameTH());
+        lastNameTH.setText(customer.getLastNameTH());
+        titleNameEN.setValue(customer.getTitleNameENG());
+        firstNameEN.setText(customer.getFirstNameENG());
+        lastNameEN.setText(customer.getLastNameENG());
+        genderChoice.setValue(customer.getGender());
+        age.setText(customer.getAge());
+        String[] dateCut = customer.getDateOfBirth().split("-");
+        dateOfBirth.setValue(LocalDate.of(Integer.valueOf(dateCut[2]), Integer.valueOf(dateCut[0]), Integer.valueOf(dateCut[1])));
+        passportNo.setText(customer.getPassport_no());
+        String[] dateExpCut = customer.getExp_passport().split("-");
+        expPassportDate.setValue(LocalDate.of(Integer.valueOf(dateExpCut[2]), Integer.valueOf(dateExpCut[0]), Integer.valueOf(dateExpCut[1])));
+        occupation.setText(customer.getOccupation());
+        //Contact
+        address.setText(customer.getContactAddress());
+        phoneNum.setText(customer.getCell_phone());
+        homeTelNum.setText(customer.getHome_Tel());
+        faxNum.setText(customer.getFax());
+        email.setText(customer.getEmail());
+        //moreInfo
+        underlyingDisease.setText(customer.getDisease());
+        foodAllergy.setText(customer.getFoodAllergy());
+
+        if (customer.getEatBeef().equalsIgnoreCase("yes")) {
+            eatBeefY.setSelected(true);
+            eatBeefN.setSelected(false);
+        } else {
+            eatBeefY.setSelected(false);
+            eatBeefN.setSelected(true);
+        }
+
+        moreDetail.setText(customer.getMoreDetail());
+        hearAboutUsChoices.setValue(customer.getHearAboutUs());
+
     }
 
     public void clearText(){
