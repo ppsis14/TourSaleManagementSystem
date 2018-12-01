@@ -158,7 +158,7 @@ public class PaymentReceiptPageController implements Initializable {
             compCell.setRowspan(4);
             compCell.setPaddingLeft(10);
             compCell.setBorderColor(new BaseColor(255,255,255));
-            Image image = Image.getInstance("/Users/thikamporn/Documents/SE/tourSaleSystemManagement/src/main/resources/images/logo2.png");
+            Image image = Image.getInstance("./src/main/resources/images/logo2.png");
             compCell.addElement(image);
             compCell.setPaddingTop(9);
             compCell.setPaddingRight(8);
