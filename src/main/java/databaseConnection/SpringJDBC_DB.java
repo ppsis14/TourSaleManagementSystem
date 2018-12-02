@@ -22,6 +22,13 @@ public class SpringJDBC_DB implements ManageableDatabase {
     }
 
     @Override
+    public void updateAvailableData(String tourID ,int availableSeat) {
+        String updateQuery = "update tour_package set Available = " + availableSeat + " where Tour_ID ="+tourID;
+
+        jdbcTemplate.update(updateQuery);
+    }
+
+    @Override
     public Employee getEmployeeLogin(String username , String password) {
         Employee employee;
 
@@ -59,6 +66,15 @@ public class SpringJDBC_DB implements ManageableDatabase {
         return employeeName;
     }
 
+
+    @Override
+    public TourPackage getTourPackage(String tourID) {
+        String query = "Select * From tour_package Where Tour_ID = "+tourID;
+        TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
+
+        return tourPackage;
+    }
+
     @Override
     public String getTourID(String tourName) {
         String tourID;
@@ -91,6 +107,14 @@ public class SpringJDBC_DB implements ManageableDatabase {
     }
 
     @Override
+    public int getAvailableByTourID(String tourID) {
+
+        String query = "Select * From tour_package Where Tour_ID = " + tourID;
+        TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
+        return tourPackage.getAvailable();
+    }
+
+    @Override
     public void insertData(Customer customer) {
 
         String query = "insert into customer (Customer_ID,TitleNameTH, FirstNameTH, LastNameTH, TitleNameENG, FirstNameENG, LastNameENG ," +
@@ -113,7 +137,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     public void updateData(Customer customer) {
         String updateQuery = "update customer set TitleNameTH = ? , FirstNameTH = ?, LastNameTH = ?, TitleNameENG = ?, FirstNameENG = ?, LastNameENG = ?," +
                 "Gender = ?, Age = ?, Occupation = ? , Date_of_birth = ?, Passport_no = ?, Expire_passport_date = ?, Contact_address = ?,Cell_phone = ?, Home_Tel = ?, Fax = ?, " +
-                "Email_address = ?, Disease = ?, Food_allergy = ?,Eat_beef = ?,More_detail = ?, HearAboutUs = ? where customer_id";
+                "Email_address = ?, Disease = ?, Food_allergy = ?,Eat_beef = ?,More_detail = ?, HearAboutUs = ? where customer_id = "+customer.getCustomerID();
         Object[] data = new Object[]{
                 customer.getTitleNameTH(), customer.getFirstNameTH(), customer.getLastNameTH(),
                 customer.getTitleNameENG(), customer.getFirstNameENG(), customer.getLastNameENG(),
@@ -142,10 +166,10 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public Customer getOneCustomer(String customerID) {
-//        String customerName = null;
-//        String query = "select * from customer Where = " + customerID;
-//        Customer customer = jdbcTemplate.query(query, new CustomerRowMapper());
-        return null;
+
+        String query = "select * from customer Where Customer_ID = " + customerID;
+        Customer customer = jdbcTemplate.queryForObject(query,new CustomerRowMapper());
+        return customer;
     }
 
     @Override
@@ -195,15 +219,24 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public void deleteData(Reservation reservation) {
-        String deleteQuery = "Delete From reservation Where Reservation_code = ?";
+        String deleteQuery = "Delete * From reservation_customer Where Reservation_code = ?";
         jdbcTemplate.update(deleteQuery, reservation.getReservationCode());
 
 
     }
 
     @Override
-    public List<Reservation> getAllReservation() {
-        return null;
+    public void deleteDataByReservCode(String reservationCode) {
+        String deleteQuery = "Delete * From reservation_customer Where Reservation_code = ?";
+        jdbcTemplate.update(deleteQuery, reservationCode);
+    }
+
+    @Override
+    public List<Reservation> getAllReservationByTourID(String tourID) {
+        String query = "Select * From reservation_customer Where Tour_ID = " + tourID ;
+        List<Reservation> reservationList = jdbcTemplate.query(query , new ReservationRowMapper());
+
+        return reservationList;
     }
 
     @Override
@@ -234,16 +267,16 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public void deleteData(ReservationPayment reservationPayment) {
 
-        String deleteQuery = "Delete From reservation_payment Where Reservation_code = ?";
+        String deleteQuery = "Delete * From reservation_payment Where Reservation_code = ?";
         jdbcTemplate.update(deleteQuery, reservationPayment.getReservationCode());
     }
 
     @Override
-    public List<ReservationPayment> getAllReservationPayment() {
-        String query = "Select * From reservation_payment";
-        List<ReservationPayment> reservationPaymentList = jdbcTemplate.query(query , new ReservationPaymentRowMapper());
+    public List<ReservationPayment> getAllReservationPaymentByTourID(String tourID) {
+        String query = "Select * From reservation_payment Where Tour_ID = " + tourID ;
+        List<ReservationPayment> reservationPaymentsList = jdbcTemplate.query(query , new ReservationPaymentRowMapper());
 
-        return reservationPaymentList;
+        return reservationPaymentsList;
     }
 
     @Override
@@ -263,16 +296,21 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public void insertData(Invoice invoice ,String invoiceType) {
 
-        String query = "insert into " + invoiceType + " (Reservation_code, Invoice_no, Amount, Employee_name ,Invoice_status , Tour_ID)" +
-                "values(?, ?, ?, ?, ?, ?)";
+        String query = "insert into " + invoiceType + " (Reservation_code, Invoice_no, Tour_ID ,Tour_name,Customer_ID,Customer_name,Employee_ID,Employee_name ,Amount_customer,Total_price ,Invoice_status)" +
+                "values(?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?)";
 
         Object[] data = new Object[]{
                 invoice.getReservationCode(),
                 invoice.getInvoiceNo(),
-                invoice.getAmount(),
+                invoice.getTourID(),
+                invoice.getTourName(),
+                invoice.getCustomerID(),
+                invoice.getCustomerName(),
+                invoice.getEmployeeID(),
                 invoice.getEmployeeName(),
-                invoice.getInvoiceStatus(),
-                invoice.getTourID()
+                invoice.getAmountCustomer(),
+                invoice.getTotalPrice(),
+                invoice.getInvoiceStatus()
         };
         jdbcTemplate.update(query, data);
     }
@@ -319,6 +357,66 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
             lastInvoiceNo = invoiceList.get(invoiceList.size() - 1).getInvoiceNo();
             return lastInvoiceNo;
+        }
+    }
+
+    @Override
+    public void insertData(Receipt receipt, String receiptType) {
+
+        String query = "insert into " + receiptType + " (Reservation_code, Receipt_no, Tour_ID ,Tour_name,Customer_ID,Customer_name,Employee_ID,Employee_name ,Amount_customer,Total_price ,Receipt_status)" +
+                "values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        Object[] data = new Object[]{
+                receipt.getReservationCode(),
+                receipt.getReceiptNo(),
+                receipt.getTourID(),
+                receipt.getTourName(),
+                receipt.getCustomerID(),
+                receipt.getCustomerName(),
+                receipt.getEmployeeID(),
+                receipt.getEmployeeName(),
+                receipt.getAmountCustomer(),
+                receipt.getTotalPrice(),
+                receipt.getReceiptStatus()
+        };
+        jdbcTemplate.update(query, data);
+
+    }
+
+    @Override
+    public void updateData(Receipt receipt, String receiptType) {
+
+    }
+
+    @Override
+    public void deleteData(Receipt receipt, String receiptType) {
+
+    }
+
+    @Override
+    public List<Receipt> getAllReceipt(String receiptType) {
+        return null;
+    }
+
+    @Override
+    public List<Receipt> getAllReceiptInTourName(String receiptType, String tourName) {
+        String tourID = getTourID(tourName);
+        String query = "Select * From " + receiptType +" Where Tour_ID = " + tourID;
+        List<Receipt> receiptList = jdbcTemplate.query(query , new ReceiptRowMapper());
+        return receiptList;
+    }
+
+    @Override
+    public String getLastReceiptNo(String receiptType) {
+        String lastReceiptNo;
+        List<Receipt> receiptList = getAllReceipt(receiptType);
+
+        if (receiptList.isEmpty())
+            return "0";
+        else {
+
+            lastReceiptNo = receiptList.get(receiptList.size() - 1).getReceiptNo();
+            return lastReceiptNo;
         }
     }
 
@@ -419,9 +517,10 @@ public class SpringJDBC_DB implements ManageableDatabase {
                     rs.getString("Customer_name"),
                     rs.getString("Employee_ID"),
                     rs.getString("Employee_name"),
-                    rs.getInt("Amount_customer"), rs.getInt("Total_price"),
-                    rs.getString("Deposit_invoice"),
-                    rs.getString("Arrears_invoice")
+                    rs.getInt("Amount_customer"),
+                    rs.getInt("Total_price"),
+                    rs.getString("Deposit_Status"),
+                    rs.getString("Arrears_Status")
             );
 
             return  reservationPayment;
@@ -433,11 +532,33 @@ public class SpringJDBC_DB implements ManageableDatabase {
             Invoice invoice = new Invoice(
                     rs.getString("Reservation_code"),
                     rs.getString("Invoice_no"),
-                    rs.getInt("Amount"),
+                    rs.getString("Tour_ID"),
+                    rs.getString("Tour_name"),
+                    rs.getString("Customer_ID"),
+                    rs.getString("Customer_name"),
+                    rs.getString("Employee_ID"),
                     rs.getString("Employee_name"),
-                    rs.getString("Invoice_status"),
-                    rs.getString("Tour_ID"));
+                    rs.getInt("Amount_customer"),
+                    rs.getInt("Total_Price"),
+                    rs.getString("Invoice_status"));
             return invoice;
+        }
+    }
+    class ReceiptRowMapper implements RowMapper<Receipt>{
+        public Receipt mapRow(ResultSet rs, int i) throws SQLException {
+            Receipt receipt = new Receipt(
+                    rs.getString("Reservation_code"),
+                    rs.getString("Invoice_no"),
+                    rs.getString("Tour_ID"),
+                    rs.getString("Tour_name"),
+                    rs.getString("Customer_ID"),
+                    rs.getString("Customer_name"),
+                    rs.getString("Employee_ID"),
+                    rs.getString("Employee_name"),
+                    rs.getInt("Amount_customer"),
+                    rs.getInt("Total_Price"),
+                    rs.getString("Receipt_status"));
+            return receipt;
         }
     }
 }
