@@ -316,14 +316,14 @@ public class InvoicePageController implements Initializable {
         //find data base for show on table view.
         reservationCodeColumnDI.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
         invoice_No_ColumnDI.setCellValueFactory(new PropertyValueFactory<>("invoiceNo"));
-        amountColumnDI.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        employeeColumnDI.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
+        amountColumnDI.setCellValueFactory(new PropertyValueFactory<>("amountCustomer"));
+        employeeColumnDI.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
         invoiceStatusColumnDI.setCellValueFactory(new PropertyValueFactory<>("invoiceStatus"));
 
         reservationCodeColumnAI.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
         invoice_No_ColumnAI.setCellValueFactory(new PropertyValueFactory<>("invoiceNo"));
-        amountColumnAI.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        employeeColumnAI.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
+        amountColumnAI.setCellValueFactory(new PropertyValueFactory<>("amountCustomer"));
+        employeeColumnAI.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
         invoiceStatusColumnAI.setCellValueFactory(new PropertyValueFactory<>("invoiceStatus"));
 
         depositInvoiceTable.setItems(obListInvoiceDI);

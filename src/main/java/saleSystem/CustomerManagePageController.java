@@ -39,6 +39,9 @@ public class CustomerManagePageController implements Initializable {
     @FXML private TableColumn<Customer, String> firstNameColumn;
     @FXML private TableColumn<Customer, String> lastNameColumn;
     @FXML private TableColumn<Customer, String> passportNoColumn;
+    @FXML private TableColumn<Customer, String> dateOfBirthColumn;
+    @FXML private TableColumn<Customer, String> phoneNumberColumn;
+    @FXML private TableColumn<Customer, String> addressColumn;
     @FXML private JFXButton editCustomerBtn;
     @FXML private JFXButton updateCustomerBtn;
     @FXML private JFXButton deleteCustomerBtn;
@@ -127,9 +130,9 @@ public class CustomerManagePageController implements Initializable {
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstNameTH"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastNameTH"));
         passportNoColumn.setCellValueFactory(new PropertyValueFactory<>("passport_no"));
-        passportNoColumn.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
-        passportNoColumn.setCellValueFactory(new PropertyValueFactory<>("cell_phone"));
-        passportNoColumn.setCellValueFactory(new PropertyValueFactory<>("contactAddress"));
+        dateOfBirthColumn.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
+        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("cell_phone"));
+        addressColumn.setCellValueFactory(new PropertyValueFactory<>("contactAddress"));
 
         customerTable.setItems(obListCustomer);
     }
