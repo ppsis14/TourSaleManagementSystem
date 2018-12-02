@@ -6,16 +6,18 @@ import java.util.List;
 
 public interface ManageableDatabase {
 
-    void updateAvailableData(String tourID ,int availableSeat);
+
     Employee getEmployeeLogin(String username, String password);
     boolean checkLogin(String username ,String password);
     String getNameEmployee(String employeeID);
-    int getAvailableByTourID(String tourID);
+
 
     TourPackage getTourPackage(String tourID);
     String getTourID(String tourName);
     int getTourPrice(String tourID);
+    int getAvailableByTourID(String tourID);
     List<TourPackage> getAllTourPackage();
+    void updateAvailableData(String tourID ,int availableSeat);
 
     void insertData(Customer customer);
     void updateData(Customer customer);

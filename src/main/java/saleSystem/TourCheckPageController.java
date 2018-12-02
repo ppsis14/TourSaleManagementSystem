@@ -113,8 +113,13 @@ public class TourCheckPageController implements Initializable {
                 manageableDatabase.deleteDataByReservCode(deleteReservationPayment.getReservationCode());
                 reservPaymentObList.remove(paymentListTable.getSelectionModel().getSelectedItem()); //delete on table view
                 reservationObList = FXCollections.observableArrayList(manageableDatabase.getAllReservationByTourID(tourID));
-                //update seat
-                manageableDatabase.updateAvailableData(tourID,deleteReservationPayment.getAmountCustomer());
+                //update last data
+                TourPackage tourPackage = manageableDatabase.getTourPackage(tourID);
+                int availableSeat = tourPackage.getAvailable() + deleteReservationPayment.getAmountCustomer();
+                manageableDatabase.updateAvailableData(tourID,availableSeat);   //update seat in tour package
+
+                showDetailTourPackage();
+                setReservationListTable();
 
             }
         }

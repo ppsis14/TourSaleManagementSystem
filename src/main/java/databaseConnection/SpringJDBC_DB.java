@@ -22,13 +22,6 @@ public class SpringJDBC_DB implements ManageableDatabase {
     }
 
     @Override
-    public void updateAvailableData(String tourID ,int availableSeat) {
-        String updateQuery = "update tour_package set Available = " + availableSeat + " where Tour_ID ="+tourID;
-
-        jdbcTemplate.update(updateQuery);
-    }
-
-    @Override
     public Employee getEmployeeLogin(String username , String password) {
         Employee employee;
 
@@ -96,6 +89,13 @@ public class SpringJDBC_DB implements ManageableDatabase {
         return tourPackage.getPrice();
     }
 
+    @Override
+    public int getAvailableByTourID(String tourID) {
+
+        String query = "Select * From tour_package Where Tour_ID = " + tourID;
+        TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
+        return tourPackage.getAvailable();
+    }
 
     @Override
     public List<TourPackage> getAllTourPackage() {
@@ -107,11 +107,10 @@ public class SpringJDBC_DB implements ManageableDatabase {
     }
 
     @Override
-    public int getAvailableByTourID(String tourID) {
+    public void updateAvailableData(String tourID ,int availableSeat) {
+        String updateQuery = "update tour_package set Available = " + availableSeat + " where Tour_ID ="+tourID;
 
-        String query = "Select * From tour_package Where Tour_ID = " + tourID;
-        TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
-        return tourPackage.getAvailable();
+        jdbcTemplate.update(updateQuery);
     }
 
     @Override
@@ -227,7 +226,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public void deleteDataByReservCode(String reservationCode) {
-        String deleteQuery = "Delete * From reservation_customer Where Reservation_code = ?";
+        String deleteQuery = "Delete From reservation_customer Where Reservation_code = ?";
         jdbcTemplate.update(deleteQuery, reservationCode);
     }
 
@@ -267,7 +266,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public void deleteData(ReservationPayment reservationPayment) {
 
-        String deleteQuery = "Delete * From reservation_payment Where Reservation_code = ?";
+        String deleteQuery = "Delete From reservation_payment Where Reservation_code = ?";
         jdbcTemplate.update(deleteQuery, reservationPayment.getReservationCode());
     }
 
