@@ -106,10 +106,15 @@ public class EditCustomerPageController implements Initializable {
         SaleManagementUtil.setTitleNameEN(titleNameEN);
         SaleManagementUtil.setGender(genderChoice);
         SaleManagementUtil.setHearAboutUs(hearAboutUsChoices);
+        SaleManagementUtil.setDatePickerFormat(dateOfBirth);
+        SaleManagementUtil.setDatePickerFormat(expPassportDate);
 
     }
     @FXML
     void handleSaveDataBtn(ActionEvent event) {
+
+        setCustomerFromGUI();
+        manageableDatabase.updateData(customer);
 
         /*Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         ButtonType buttonTypeOne = new ButtonType("Submit");
@@ -193,10 +198,10 @@ public class EditCustomerPageController implements Initializable {
         genderChoice.setValue(customer.getGender());
         age.setText(customer.getAge());
         String[] dateCut = customer.getDateOfBirth().split("-");
-        dateOfBirth.setValue(LocalDate.of(Integer.valueOf(dateCut[2]), Integer.valueOf(dateCut[0]), Integer.valueOf(dateCut[1])));
+        dateOfBirth.setValue(LocalDate.of(Integer.valueOf(dateCut[2]), Integer.valueOf(dateCut[1]), Integer.valueOf(dateCut[0])));
         passportNo.setText(customer.getPassport_no());
         String[] dateExpCut = customer.getExp_passport().split("-");
-        expPassportDate.setValue(LocalDate.of(Integer.valueOf(dateExpCut[2]), Integer.valueOf(dateExpCut[0]), Integer.valueOf(dateExpCut[1])));
+        expPassportDate.setValue(LocalDate.of(Integer.valueOf(dateExpCut[2]), Integer.valueOf(dateExpCut[1]), Integer.valueOf(dateExpCut[0])));
         occupation.setText(customer.getOccupation());
         //Contact
         address.setText(customer.getContactAddress());

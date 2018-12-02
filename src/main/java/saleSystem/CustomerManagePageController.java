@@ -82,7 +82,6 @@ public class CustomerManagePageController implements Initializable {
 
         Customer editCustomer = customerTable.getSelectionModel().getSelectedItem();
 
-        SaleManagementUtil.loadWindow(getClass().getResource("/editCustomer.fxml"), "Edit Customer Information");
         if(editCustomer != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/editCustomer.fxml"));
