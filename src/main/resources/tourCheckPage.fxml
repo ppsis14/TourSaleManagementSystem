@@ -39,7 +39,8 @@
             <HBox prefHeight="29.0" prefWidth="676.0" spacing="20.0">
                <children>
                   <Label maxHeight="1.7976931348623157E308" text="Tour ID :" />
-                  <ComboBox fx:id="tourIDComboBox" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" stylesheets="@style.css" />
+                  <ComboBox fx:id="tourIDComboBox" onAction="#handleSelectTourIDCombobox" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" stylesheets="@style.css" />
+
                </children>
             </HBox>
             <Label alignment="BOTTOM_LEFT" text="Tour Detail" />
@@ -67,7 +68,7 @@
                         <HBox prefHeight="34.0" prefWidth="719.0" spacing="15.0">
                            <children>
                               <Label text="Amount :" />
-                              <Label fx:id="AmountCus" prefHeight="17.0" prefWidth="261.0" text="XXX" />
+                              <Label fx:id="amountCus" prefHeight="17.0" prefWidth="261.0" text="XXX" />
                               <Label text="Available :" />
                               <Label fx:id="availableSeat" prefHeight="17.0" prefWidth="242.0" text="XX" />
                            </children>
@@ -78,19 +79,19 @@
             </Pane>
             <JFXTabPane prefHeight="345.0" prefWidth="800.0" styleClass="tab-selected-line" stylesheets="@style.css">
                <tabs>
-                  <Tab text="Reservation List">
+                  <Tab text="Payment List">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="200.0">
                            <children>
                               <VBox layoutY="6.0" prefHeight="304.0" prefWidth="770.0" spacing="10.0">
                                  <children>
-                                    <TableView fx:id="reservationListTable" editable="true" fixedCellSize="0.0" prefHeight="258.0" prefWidth="770.0">
+                                    <TableView fx:id="paymentListTable" editable="true" fixedCellSize="0.0" prefHeight="258.0" prefWidth="770.0">
                                        <columns>
-                                          <TableColumn prefWidth="130.0" text="Reservation Code" />
-                                          <TableColumn prefWidth="156.0" text="Reservation Name" />
-                                          <TableColumn prefWidth="177.0" text="Deposit Payment Status" />
-                                          <TableColumn prefWidth="164.0" text="Arrears Payment Status" />
-                                          <TableColumn prefWidth="144.0" text="Employee ID" />
+                                          <TableColumn fx:id="reservationCodeColumnP" prefWidth="130.0" text="Reservation Code" />
+                                          <TableColumn fx:id="nameColumnP" prefWidth="156.0" text="Name" />
+                                          <TableColumn fx:id="depositPaymentStatusColumnP" prefWidth="177.0" text="Deposit Payment Status" />
+                                          <TableColumn fx:id="arrearsPaymentStatusColumnP" prefWidth="164.0" text="Arrears Payment Status" />
+                                          <TableColumn fx:id="employeeName_ColumnP" prefWidth="144.0" text="Employee Name" />
                                        </columns>
                                     </TableView>
                                     <HBox alignment="CENTER" prefHeight="41.0" prefWidth="772.0" spacing="20.0">
@@ -113,15 +114,15 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab text="Payment List">
+                  <Tab text="Reservation List">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="tableDepositPayment1" editable="true" fixedCellSize="0.0" layoutY="6.0" prefHeight="258.0" prefWidth="770.0">
+                              <TableView fx:id="reservationListTable" editable="true" fixedCellSize="0.0" layoutY="6.0" prefHeight="258.0" prefWidth="770.0">
                                  <columns>
-                                    <TableColumn prefWidth="138.0" text="Reservation Code" />
+                                    <TableColumn fx:id="reservationCodeColumnR" prefWidth="138.0" text="Reservation Code" />
                                     <TableColumn prefWidth="180.0" text="Deposit Invoice No." />
-                                    <TableColumn prefWidth="140.0" text="Amount" />
+                                    <TableColumn fx:id="nameColumnR" prefWidth="140.0" text="Name" />
                                     <TableColumn prefWidth="180.0" text="Invoice No." />
                                     <TableColumn prefWidth="140.0" text="Amount" />
                                  </columns>
