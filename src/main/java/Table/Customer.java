@@ -27,8 +27,30 @@ public class Customer {
     private String moreDetail;
     private String hearAboutUs;
 
-    public Customer(){
-
+    public Customer() {
+        this.customerID = null;
+        this.titleNameTH = "นางสาว";
+        this.firstNameTH = null;
+        this.lastNameTH = null;
+        this.titleNameENG = "Miss";
+        this.firstNameENG = null;
+        this.lastNameENG = null;
+        this.gender = "Female";
+        this.age = null;
+        this.occupation = null;
+        this.dateOfBirth = "dd-mm-yyyy";
+        this.passport_no = null;
+        this.exp_passport = "dd-mm-yyyy";
+        this.contactAddress = null;
+        this.cell_phone = null;
+        this.home_Tel = null;
+        this.fax = null;
+        this.email = null;
+        this.disease = null;
+        this.foodAllergy = null;
+        this.eatBeef = null;
+        this.moreDetail = null;
+        this.hearAboutUs = "Bangkokbizs News";
     }
 
     public Customer(String customerID, String titleNameTH, String firstNameTH, String lastNameTH, String titleNameENG, String firstNameENG, String lastNameENG, String gender, String age, String occupation, String dateOfBirth, String passport_no, String exp_passport, String contactAddress, String cell_phone, String home_Tel, String fax, String email, String disease, String foodAllergy, String eatBeef, String moreDetail, String hearAboutUs) {

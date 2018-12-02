@@ -11,7 +11,13 @@ public class Reservation {
 
 
     public Reservation() {
-
+        this.reservationCode = null;
+        this.tourID = null;
+        this.tourName = null;
+        this.customerID = null;
+        this.customerName = null;
+        this.employeeID = null;
+        this.employeeName = null;
 
     }
     public Reservation(String reservationCode, String tourID, String tourName, String customerID, String customerName, String employeeID, String employeeName) {

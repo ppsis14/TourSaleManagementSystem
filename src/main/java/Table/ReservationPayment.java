@@ -6,7 +6,12 @@ public class ReservationPayment extends Reservation {
     private String depositStatus;
     private String arrearsStatus;
 
-    public ReservationPayment(){};
+    public ReservationPayment(){
+        this.amountCustomer = 0;
+        this.total_price = 0 ;
+        this.depositStatus = "Not paid";
+        this.arrearsStatus = "Not paid";
+    }
 
     public ReservationPayment(String reservationCode, String tourID, String tourName, String customerID, String customerName, String employeeID, String employeeName, int amountCustomer, int total_price, String depositStatus, String arrearsStatus) {
         super(reservationCode, tourID, tourName, customerID, customerName, employeeID, employeeName);
