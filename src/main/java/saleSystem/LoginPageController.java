@@ -2,12 +2,17 @@ package saleSystem;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomPasswordField;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,6 +30,7 @@ public class LoginPageController implements Initializable {
     @FXML private JFXButton loginButton;
     @FXML private PasswordField password;
     @FXML private Label showErrorLogin;
+    @FXML private AnchorPane root;
 
     @FXML
     public void handleCancelButton(ActionEvent event) {
@@ -38,20 +44,23 @@ public class LoginPageController implements Initializable {
 
     @FXML
     public void handleLoginButton(ActionEvent event) throws IOException, SQLException {
-
-        if(manageableDatabase.checkLogin(username.getText(),password.getText())){
+        if (username.getText().isEmpty() || password.getText().isEmpty()){
+            showErrorLogin.setText("Username or Password is not correct");
+            username.clear();
+            password.clear();
+        }
+        else if(manageableDatabase.checkLogin(username.getText(),password.getText())){
             loginEmployee = manageableDatabase.getEmployeeLogin(username.getText(),password.getText());
             //load windows
             loginButton.getScene().getWindow().hide();
             SaleManagementUtil.loadWindow(getClass().getResource("/homePage.fxml"), "Home");
 
         }
-        else{
+        else {
             showErrorLogin.setText("Username or Password is not correct");
             username.clear();
             password.clear();
         }
-
 
     }
 

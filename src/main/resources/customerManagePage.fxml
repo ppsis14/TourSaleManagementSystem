@@ -36,7 +36,7 @@
          </children></Pane>
       <JFXTabPane layoutX="50.0" layoutY="146.0" prefHeight="540.0" prefWidth="800.0" styleClass="tab-selected-line" stylesheets="@style.css" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="130.0">
          <tabs>
-            <Tab text="Search Customer">
+            <Tab text="Customer Management">
                <content>
                   <AnchorPane accessibleRole="BUTTON" focusTraversable="true" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -44,9 +44,9 @@
                            <children>
                               <HBox prefHeight="29.0" prefWidth="676.0" spacing="20.0">
                                  <children>
-                                    <TextField fx:id="searchByCustomerID" prefHeight="29.0" prefWidth="219.0" promptText="Search Customer" style="-fx-border-color: #2C3E50;" />
-                                    <TextField fx:id="searchByCustomerName" prefHeight="29.0" prefWidth="319.0" promptText="Search by Name" style="-fx-border-color: #2C3E50;" />
-                                    <JFXButton fx:id="searchCustomerBtn" buttonType="RAISED" onAction="#handleSearchCustomerBtn" prefHeight="30.0" prefWidth="105.0" style="-fx-background-color: #F4D03F; -fx-background-radius: 5;" text="Search" textFill="#2c3e50">
+                                    <Label maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="127.0" text="Search Customer :" />
+                                    <TextField fx:id="searchCustomer" prefHeight="29.0" prefWidth="400.0" promptText="Search by ID, Firstname, Lastname" style="-fx-border-color: #2C3E50;" />
+                                    <JFXButton fx:id="clearSearchBtn" buttonType="RAISED" onAction="#handleClearSearchBtn" prefHeight="30.0" prefWidth="105.0" style="-fx-background-color: #F4D03F; -fx-background-radius: 5;" text="Clear" textFill="#2c3e50">
                                        <font>
                                           <Font name="System Bold" size="14.0" />
                                        </font>

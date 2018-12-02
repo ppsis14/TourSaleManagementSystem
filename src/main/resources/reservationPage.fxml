@@ -232,7 +232,7 @@
          </font>
       </JFXButton>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="167.0" layoutY="589.0" prefHeight="29.0" prefWidth="567.0" text="** Please check the accuracy and completeness of the information before add customer." />
-      <ComboBox fx:id="tourIDComboBox" layoutX="131.0" layoutY="159.0" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" />
+      <ComboBox fx:id="tourIDComboBox" layoutX="131.0" layoutY="159.0" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" stylesheets="@style.css" />
       <Label fx:id="reserveCode" alignment="CENTER" contentDisplay="RIGHT" layoutX="201.0" layoutY="113.0" prefHeight="29.0" prefWidth="185.0" style="-fx-border-color: #2C3E50;" />
    </children>
 </AnchorPane>

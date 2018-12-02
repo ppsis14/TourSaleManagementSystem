@@ -22,12 +22,12 @@ import javafx.stage.StageStyle;
 import javafx.util.StringConverter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -153,9 +153,4 @@ public class SaleManagementUtil {
             }
         });
     }
-
-
-
-
-
 }

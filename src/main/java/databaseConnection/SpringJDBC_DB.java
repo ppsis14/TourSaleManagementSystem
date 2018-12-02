@@ -2,6 +2,7 @@ package databaseConnection;
 
 import Table.*;
 import com.sun.rowset.internal.Row;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.Nullable;
@@ -22,22 +23,28 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public Employee getEmployeeLogin(String username , String password) {
+        Employee employee;
 
         String query = "Select * From employee Where Username" + " = '" + username + "' and Password = '" + password +"'";
-        Employee employee = jdbcTemplate.queryForObject(query , new EmployeeRowMapper());
-
+        try {
+            employee =  jdbcTemplate.queryForObject(query , new EmployeeRowMapper());
+        }
+        catch (final EmptyResultDataAccessException e){
+            employee = null;
+        }
         return employee;
     }
 
     @Override
     public boolean checkLogin(String username ,String password){
-
-        String query = "Select * From employee Where Username = " + username + " and Password = " + password ;
-        Employee employee = jdbcTemplate.queryForObject(query , new EmployeeRowMapper());
+        /*String query = "Select * From employee Where Username = " + username + " and Password = " + password ;*/
+        Employee employee = getEmployeeLogin(username, password);
         if (employee == null){
+            System.out.println("employee is null");
             return false;
         }
         else
+            System.out.println("employee isn't null");
             return true;
     }
 
@@ -320,6 +327,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     class EmployeeRowMapper implements RowMapper<Employee>{
 
         public Employee mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+
             Employee employee = new Employee(
                     resultSet.getString("Employee_ID"),
                     resultSet.getString("Username"),

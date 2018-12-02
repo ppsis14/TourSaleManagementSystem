@@ -8,120 +8,60 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Predicate;
 
 import static saleSystem.SaleManagementUtil.*;
 
 
 public class ReservePageController implements Initializable {
 
-    @FXML
-    private ChoiceBox<String> titleNameTH;
-
-    @FXML
-    private TextField firstNameTH;
-
-    @FXML
-    private TextField lastNameTH;
-
-    @FXML
-    private ChoiceBox<String> titleNameEN;
-
-    @FXML
-    private TextField firstNameEN;
-
-    @FXML
-    private TextField lastNameEN;
-
-    @FXML
-    private ChoiceBox<String> genderChoice;
-
-    @FXML
-    private TextField age;
-
-    @FXML
-    private TextField occupation;
-
-    @FXML
-    private DatePicker dateOfBirth;
-
-    @FXML
-    private TextField passportNo;
-
-    @FXML
-    private DatePicker expPassportDate;
-
-    @FXML
-    private TextArea address;
-
-    @FXML
-    private TextField phoneNum;
-
-    @FXML
-    private TextField homeTelNum;
-
-    @FXML
-    private TextField faxNum;
-
-    @FXML
-    private TextField email;
-
-    @FXML
-    private TextField underlyingDisease;
-
-    @FXML
-    private TextField foodAllergy;
-
-    @FXML
-    private JFXCheckBox eatBeefY;
-
-    @FXML
-    private JFXCheckBox eatBeefN;
-
-    @FXML
-    private TextField moreDetail;
-
-    @FXML
-    private ComboBox<String> hearAboutUsChoices;
-
-    @FXML
-    private JFXHamburger menu;
-
-    @FXML
-    private JFXDrawer drawerMenu;
-
-    @FXML
-    private JFXButton addCustomerBtn;
-
-    @FXML
-    private Label reserveCode;
-
-    @FXML
-    private Label customerNo;
-
-    @FXML
-    private ComboBox<String> tourIDComboBox;
-
-    @FXML
-    private JFXCheckBox oldCustomer;
-
-    @FXML
-    private JFXCheckBox newCustomer;
-    @FXML
-    private TextField searchByCustomerName;
-    @FXML
-    private Button searchCustomerBtn;
-    @FXML
-    private Label loginNameLabel;
+    @FXML private ChoiceBox<String> titleNameTH;
+    @FXML private TextField firstNameTH;
+    @FXML private TextField lastNameTH;
+    @FXML private ChoiceBox<String> titleNameEN;
+    @FXML private TextField firstNameEN;
+    @FXML private TextField lastNameEN;
+    @FXML private ChoiceBox<String> genderChoice;
+    @FXML private TextField age;
+    @FXML private TextField occupation;
+    @FXML private DatePicker dateOfBirth;
+    @FXML private TextField passportNo;
+    @FXML private DatePicker expPassportDate;
+    @FXML private TextArea address;
+    @FXML private TextField phoneNum;
+    @FXML private TextField homeTelNum;
+    @FXML private TextField faxNum;
+    @FXML private TextField email;
+    @FXML private TextField underlyingDisease;
+    @FXML private TextField foodAllergy;
+    @FXML private JFXCheckBox eatBeefY;
+    @FXML private JFXCheckBox eatBeefN;
+    @FXML private TextField moreDetail;
+    @FXML private ComboBox<String> hearAboutUsChoices;
+    @FXML private JFXHamburger menu;
+    @FXML private JFXDrawer drawerMenu;
+    @FXML private JFXButton addCustomerBtn;
+    @FXML private Label reserveCode;
+    @FXML private Label customerNo;
+    @FXML private ComboBox<String> tourIDComboBox;
+    @FXML private JFXCheckBox oldCustomer;
+    @FXML private JFXCheckBox newCustomer;
+    @FXML private TextField searchByCustomerName;
+    @FXML private Button searchCustomerBtn;
+    @FXML private Label loginNameLabel;
 
     private final String DEPOSIT_INVOICE = "invoice_deposit";
     private final String ARREARS_INVOICE = "invoice_arrears";
@@ -131,6 +71,7 @@ public class ReservePageController implements Initializable {
     private Reservation reservationCustomer = new Reservation() ;
     private Customer customer = new Customer();
     private Invoice invoice = new Invoice();
+    ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -141,7 +82,7 @@ public class ReservePageController implements Initializable {
         SaleManagementUtil.setHearAboutUs(hearAboutUsChoices);
         newCustomer.setSelected(true);
         reserveCode.setText(createReservationCode());
-        loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition()+" ]");
+        loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
         SaleManagementUtil.setTourID(tourIDComboBox);
         SaleManagementUtil.setDatePickerFormat(dateOfBirth);
         SaleManagementUtil.setDatePickerFormat(expPassportDate);
@@ -158,6 +99,7 @@ public class ReservePageController implements Initializable {
         newCustomer.setSelected(false);
         searchByCustomerName.setDisable(false);
         searchCustomerBtn.setDisable(false);
+        setSearchCustomer();
     }
 
     @FXML
@@ -236,15 +178,13 @@ public class ReservePageController implements Initializable {
 
         }
         else if (addCustomerDataAction.get() == ButtonType.CANCEL){
-            //back to edit
+            clearText();
         }
-
-
-
     }
 
     @FXML
     void handleSearchCustomerBtn(ActionEvent event){
+
 
     }
 
@@ -409,6 +349,16 @@ public class ReservePageController implements Initializable {
         searchByCustomerName.setDisable(false);
         searchCustomerBtn.setDisable(false);
 
+    }
+
+    public void setSearchCustomer(){
+        List<Customer> customerList = manageableDatabase.getAllCustomer();
+        List<String> searchList = new ArrayList<>();
+        for (Customer c : customerList) {
+            searchList.add("[ID : "+c.getCustomerID() + "] " + c.getFirstNameTH() + " " + c.getLastNameTH());
+            System.out.println("[ID : "+c.getCustomerID() + "] " + c.getFirstNameTH() + " " + c.getLastNameTH());
+        }
+        TextFields.bindAutoCompletion(searchByCustomerName, searchList);
     }
 
 }

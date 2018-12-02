@@ -240,4 +240,33 @@ public class Customer {
     public void setHearAboutUs(String hearAboutUs) {
         this.hearAboutUs = hearAboutUs;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerID='" + customerID + '\'' +
+                ", titleNameTH='" + titleNameTH + '\'' +
+                ", firstNameTH='" + firstNameTH + '\'' +
+                ", lastNameTH='" + lastNameTH + '\'' +
+                ", titleNameENG='" + titleNameENG + '\'' +
+                ", firstNameENG='" + firstNameENG + '\'' +
+                ", lastNameENG='" + lastNameENG + '\'' +
+                ", gender='" + gender + '\'' +
+                ", age='" + age + '\'' +
+                ", occupation='" + occupation + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", passport_no='" + passport_no + '\'' +
+                ", exp_passport='" + exp_passport + '\'' +
+                ", contactAddress='" + contactAddress + '\'' +
+                ", cell_phone='" + cell_phone + '\'' +
+                ", home_Tel='" + home_Tel + '\'' +
+                ", fax='" + fax + '\'' +
+                ", email='" + email + '\'' +
+                ", disease='" + disease + '\'' +
+                ", foodAllergy='" + foodAllergy + '\'' +
+                ", eatBeef='" + eatBeef + '\'' +
+                ", moreDetail='" + moreDetail + '\'' +
+                ", hearAboutUs='" + hearAboutUs + '\'' +
+                '}';
+    }
 }

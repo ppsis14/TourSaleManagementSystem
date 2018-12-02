@@ -31,36 +31,19 @@ import static saleSystem.SaleManagementUtil.manageableDatabase;
 
 public class CustomerManagePageController implements Initializable {
 
-    @FXML
-    private TextField searchByCustomerID;
-
-    @FXML
-    private TextField searchByCustomerName;
-
-    @FXML
-    private JFXButton searchCustomerBtn;
-
+    @FXML private TextField searchCustomer;
+    @FXML private JFXButton clearSearchBtn;
     @FXML private TableView<Customer> customerTable;
     @FXML private TableColumn<Customer, Integer> customerIDColumn;
     @FXML private TableColumn<Customer, String> titleNameColumn;
     @FXML private TableColumn<Customer, String> firstNameColumn;
     @FXML private TableColumn<Customer, String> lastNameColumn;
     @FXML private TableColumn<Customer, String> passportNoColumn;
-
-    @FXML
-    private JFXButton editCustomerBtn;
-
-    @FXML
-    private JFXButton updateCustomerBtn;
-
-    @FXML
-    private JFXButton deleteCustomerBtn;
-
-    @FXML
-    private JFXHamburger menu;
-
-    @FXML
-    private JFXDrawer drawerMenu;
+    @FXML private JFXButton editCustomerBtn;
+    @FXML private JFXButton updateCustomerBtn;
+    @FXML private JFXButton deleteCustomerBtn;
+    @FXML private JFXHamburger menu;
+    @FXML private JFXDrawer drawerMenu;
 
     ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
     @Override
@@ -69,11 +52,7 @@ public class CustomerManagePageController implements Initializable {
 
         showTableView(obListCustomer);  //show data on table view
 
-        // search by customer name
-        String[] possibleCustomerName = {"ploy", "fern", "faeng"};
-        TextFields.bindAutoCompletion(searchByCustomerName, possibleCustomerName);
-
-        //setSearchCustomer();
+        setSearchCustomer();
 
 
     }
@@ -120,7 +99,8 @@ public class CustomerManagePageController implements Initializable {
     }
 
     @FXML
-    void handleSearchCustomerBtn(ActionEvent event) {
+    void handleClearSearchBtn(ActionEvent event) {
+        searchCustomer.clear();
 
     }
 
@@ -155,16 +135,15 @@ public class CustomerManagePageController implements Initializable {
         customerTable.setItems(obListCustomer);
     }
 
-  /*  public void setSearchCustomer(){
+    public void setSearchCustomer(){
         FilteredList<Customer> filteredData = new FilteredList<>(obListCustomer, e -> true);
-        searchByCustomerID.setOnKeyPressed(event -> {
-            searchByCustomerID.textProperty().addListener((observable, oldValue, newValue) -> {
+        searchCustomer.setOnKeyPressed(event -> {
+            searchCustomer.textProperty().addListener((observable, oldValue, newValue) -> {
                 filteredData.setPredicate((Predicate<? super Customer>) customer -> {
                     if (newValue == null || newValue.isEmpty()){
                         return true;
                     }
                     String lowerCaseFilter = newValue.toLowerCase();
-                    // because customer is integer!!
                     if (customer.getCustomerID().contains(newValue)){
                         return true;
                     }
@@ -187,7 +166,7 @@ public class CustomerManagePageController implements Initializable {
             sortData.comparatorProperty().bind(customerTable.comparatorProperty());
             customerTable.setItems(sortData);
         });
-    }*/
+    }
 
 }
 
