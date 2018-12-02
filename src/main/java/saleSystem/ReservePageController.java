@@ -10,8 +10,6 @@ import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,7 +19,6 @@ import org.controlsfx.control.textfield.TextFields;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Predicate;
 
 import static saleSystem.SaleManagementUtil.*;
 
@@ -63,14 +60,15 @@ public class ReservePageController implements Initializable {
     @FXML private Button searchCustomerBtn;
     @FXML private Label loginNameLabel;
 
-    private final String DEPOSIT_INVOICE = "invoice_deposit";
-    private final String ARREARS_INVOICE = "invoice_arrears";
-
-    private ArrayList<String> customer_id_List = new ArrayList<>();
+    private ArrayList<String> newCustomerID_List = new ArrayList<>();
+    private ArrayList<Reservation> reservCustomer_List = new ArrayList<>();
+    private ArrayList<Customer> customerList = new ArrayList<>();
     private ReservationPayment reservationPayment = new ReservationPayment();
     private Reservation reservationCustomer = new Reservation() ;
     private Customer customer = new Customer();
     private Invoice invoice = new Invoice();
+    private int currentCustomerID = Integer.parseInt(manageableDatabase.getLastCustomerID());
+
     ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
 
     @Override
@@ -81,6 +79,11 @@ public class ReservePageController implements Initializable {
         SaleManagementUtil.setGender(genderChoice);
         SaleManagementUtil.setHearAboutUs(hearAboutUsChoices);
         newCustomer.setSelected(true);
+        oldCustomer.setSelected(false);
+        clearText();
+        searchByCustomerName.clear();
+        searchByCustomerName.setDisable(true);
+        searchCustomerBtn.setDisable(true);
         reserveCode.setText(createReservationCode());
         loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
         SaleManagementUtil.setTourID(tourIDComboBox);
@@ -92,8 +95,11 @@ public class ReservePageController implements Initializable {
     @FXML public void handleEatBeefCheckbox(ActionEvent event) { eatBeefN.setSelected(false); }
     @FXML public void handleNewCustomerCheckbox(ActionEvent event) {
         oldCustomer.setSelected(false);
+        clearText();
+        searchByCustomerName.clear();
         searchByCustomerName.setDisable(true);
         searchCustomerBtn.setDisable(true);
+
     }
     @FXML public void handleOldCustomerCheckbox(ActionEvent event) {
         newCustomer.setSelected(false);
@@ -105,98 +111,118 @@ public class ReservePageController implements Initializable {
     @FXML
     void handleAddCustomerBtn(ActionEvent event) {
 
-        //pop up 1
-        Alert alertConfirmToAddCustomerData = new Alert(Alert.AlertType.CONFIRMATION);
-        alertConfirmToAddCustomerData.setTitle("Confirmation Dialog");
-        alertConfirmToAddCustomerData.setHeaderText(null);
-        alertConfirmToAddCustomerData.setContentText("Do you want to add reservation?");
-        Optional<ButtonType> addCustomerDataAction = alertConfirmToAddCustomerData.showAndWait();
+        String tour_id = manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
+        int availableSeat = manageableDatabase.getAvailableByTourID(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
+        if(availableSeat - Integer.valueOf(customerNo.getText()) >= 0) {
+            //pop up 1
+            Alert alertConfirmToAddCustomerData = new Alert(Alert.AlertType.CONFIRMATION);
+            alertConfirmToAddCustomerData.setTitle("Confirmation Dialog");
+            alertConfirmToAddCustomerData.setHeaderText(null);
+            alertConfirmToAddCustomerData.setContentText("Do you want to add reservation?");
+            Optional<ButtonType> addCustomerDataAction = alertConfirmToAddCustomerData.showAndWait();
 
 
-        if (addCustomerDataAction.get() == ButtonType.OK){
-
-            if(newCustomer.isSelected()){
+            if (addCustomerDataAction.get() == ButtonType.OK) {
 
                 setCustomerFromGUI();
-                manageableDatabase.insertData(customer);
-                customer_id_List.add(customer.getCustomerID());
+                if (newCustomer.isSelected()) {
+                    newCustomerID_List.add(customer.getCustomerID());
+                    System.out.println("customer ID : "+ newCustomerID_List.toString());
+                }
+                //add customer id to list
+                customerList.add(customer);
+                System.out.println("customer list : "+customerList.toString());
                 setReservationCustomerFromGUI();
+                reservCustomer_List.add(reservationCustomer);
+                System.out.println("reservation list : "+reservCustomer_List.toString());
 
-                //when customer inserted
                 clearText();
-                Customer newCustomer = new Customer();
-                customer = newCustomer;
-            }
+                customer = new Customer();
+                reservationCustomer = new Reservation();
 
-            else if (oldCustomer.isSelected()){ //search name
-                setUpOldCustomerData();
-            }
+                //pop up 2
+                Alert alertConfirmToAddCustomerMore = new Alert(Alert.AlertType.CONFIRMATION);
+                alertConfirmToAddCustomerMore.setTitle("Confirmation Dialog");
+                alertConfirmToAddCustomerMore.setHeaderText(null);
+                alertConfirmToAddCustomerMore.setContentText("Do you want to add another customer?");
+                Optional<ButtonType> addCustomerMoreAction = alertConfirmToAddCustomerMore.showAndWait();
 
+                if (addCustomerMoreAction.get() == ButtonType.OK) { // if user want to add another customer
 
-            //pop up 2
-            Alert alertConfirmToAddCustomerMore = new Alert(Alert.AlertType.CONFIRMATION);
-            alertConfirmToAddCustomerMore.setTitle("Confirmation Dialog");
-            alertConfirmToAddCustomerMore.setHeaderText(null);
-            alertConfirmToAddCustomerMore.setContentText("Do you want to add another customer?");
-            Optional<ButtonType> addCustomerMoreAction = alertConfirmToAddCustomerMore.showAndWait();
+                    customerNo.setText(String.valueOf(Integer.valueOf(customerNo.getText()) + 1));     // add count amount customer
 
-            if (addCustomerMoreAction.get() == ButtonType.OK){ // if user want to add another customer
+                    //clear text for fill next data
+                    clearText();
+                    customer = new Customer();
+                    reservationCustomer = new Reservation();
 
-                customerNo.setText(String.valueOf(Integer.valueOf(customerNo.getText()) + 1));     // add count amount customer
+                } else if (addCustomerMoreAction.get() == ButtonType.CANCEL) {     //stop reserving another customer
 
-                //clear text for fill next data
-                clearText();
-                Customer newCustomer = new Customer();
-                customer = newCustomer;
+                    //insert customer to database
+                    for (Customer customer : customerList) {
+                        if(newCustomerID_List.contains(customer.getCustomerID()))
+                            manageableDatabase.insertData(customer);    //new customer
+                        else
+                            manageableDatabase.updateData(customer);    //old customer
+                    }
 
-            }
-            else if (addCustomerMoreAction.get() == ButtonType.CANCEL){     //stop reserving another customer
+                    //insert reservation customer to database
+                    for (Reservation reservation: reservCustomer_List) {
+                        manageableDatabase.insertData(reservation);
+                    }
 
-                //insert reservation payment and deposit invoice into database
-                setReservationPaymentFromGUI();
-                setDepositInvoice();
-                reservationPayment.setCustomerID(customer_id_List.get(0));
-                manageableDatabase.insertData(invoice,DEPOSIT_INVOICE);
+                    //insert reservation payment and deposit invoice to database
+                    setReservationPaymentFromGUI();
+                    setDepositInvoice();
+                    manageableDatabase.insertData(reservationPayment);
+                    manageableDatabase.insertData(invoice, DEPOSIT_INVOICE);
 
-                //insert reservation payment to database
-                manageableDatabase.insertData(reservationPayment);
+                    //update seat in tour package
+                    manageableDatabase.updateAvailableData(tour_id,availableSeat-Integer.valueOf(customerNo.getText()));
 
-                //insert reservation customer to database
-                for (String customer_id: customer_id_List) {
-                    reservationCustomer.setCustomerID(customer_id);
-                    manageableDatabase.insertData(reservationCustomer);
-
+                    //setup value of reservation page
+                    setUpValueReservationPage();
                 }
 
-                //setup value of reservation page
-                reserveCode.setText(createReservationCode());
-                customerNo.setText("1");     // setup count amount customer
-                clearText();
-                Customer newCustomer = new Customer();
-                customer = newCustomer;
+            } else if (addCustomerDataAction.get() == ButtonType.CANCEL) {
+                //back to edit
+            }
+        }else{
+            //pop up warning
+            Alert alertShowInformationIsUpdate = new Alert(Alert.AlertType.INFORMATION);
+            alertShowInformationIsUpdate.setTitle("Confirmation Dialog");
+            alertShowInformationIsUpdate.setHeaderText(null);
+            alertShowInformationIsUpdate.setContentText("Available seat are full.");
+            Optional<ButtonType> action = alertShowInformationIsUpdate.showAndWait();
+            setUpValueReservationPage();
+            if (action.get() == ButtonType.OK){
+                setUpValueReservationPage();
             }
 
+
         }
-        else if (addCustomerDataAction.get() == ButtonType.CANCEL){
-            clearText();
-        }
+
     }
 
     @FXML
     void handleSearchCustomerBtn(ActionEvent event){
-
-
+        if(searchByCustomerName.getText() != null)
+            setUpOldCustomerData();
     }
-
 
 
     public void setDepositInvoice(){
         invoice.setReservationCode(reservationPayment.getReservationCode());
         invoice.setInvoiceNo(String.valueOf(Integer.valueOf(manageableDatabase.getLastInvoiceNo(DEPOSIT_INVOICE))+1));
-        invoice.setAmount(reservationPayment.getAmountCustomer());
-        invoice.setEmployeeName(manageableDatabase.getNameEmployee(reservationPayment.getEmployeeID()));
-        invoice.setInvoiceStatus(NOT_CREATED);
         invoice.setTourID(reservationPayment.getTourID());
+        invoice.setTourName(reservationPayment.getTourName());
+        invoice.setCustomerID(reservationPayment.getCustomerID());
+        invoice.setCustomerName(reservationPayment.getCustomerName());
+        invoice.setEmployeeID(reservationCustomer.getEmployeeID());
+        invoice.setEmployeeName(reservationCustomer.getEmployeeName());
+        invoice.setAmountCustomer(reservationPayment.getAmountCustomer());
+        invoice.setTotalPrice(reservationPayment.getTotal_price());
+        invoice.setInvoiceStatus(NOT_CREATED);
 
     }
 
@@ -206,7 +232,7 @@ public class ReservePageController implements Initializable {
         reservationCustomer.setTourID(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
         reservationCustomer.setTourName(tourIDComboBox.getSelectionModel().getSelectedItem());
         reservationCustomer.setCustomerID(customer.getCustomerID());
-        reservationCustomer.setCustomerName(manageableDatabase.getNameCustomer(reservationCustomer.getCustomerID()));
+        reservationCustomer.setCustomerName(customer.getTitleNameENG()+" "+customer.getFirstNameENG()+" "+customer.getLastNameENG());
         reservationCustomer.setEmployeeID(loginEmployee.getEmployee_ID());
         reservationCustomer.setEmployeeName(manageableDatabase.getNameEmployee(reservationCustomer.getEmployeeID()));
 
@@ -216,10 +242,10 @@ public class ReservePageController implements Initializable {
         reservationPayment.setReservationCode(reserveCode.getText());
         reservationPayment.setTourID(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
         reservationPayment.setTourName(tourIDComboBox.getSelectionModel().getSelectedItem());
-        reservationPayment.setCustomerID(customer_id_List.get(0));
+        reservationPayment.setCustomerID(customerList.get(0).getCustomerID());
         reservationPayment.setCustomerName(manageableDatabase.getNameCustomer(reservationPayment.getCustomerID()));
         reservationPayment.setEmployeeID(loginEmployee.getEmployee_ID());
-        reservationPayment.setEmployeeName(manageableDatabase.getNameEmployee(reservationCustomer.getEmployeeID()));
+        reservationPayment.setEmployeeName(manageableDatabase.getNameEmployee(reservationPayment.getEmployeeID()));
         reservationPayment.setAmountCustomer(Integer.parseInt(customerNo.getText()));
         reservationPayment.setTotal_price(reservationPayment.calculateTotalPrice(manageableDatabase.getTourPrice(reservationPayment.getTourID())));
         reservationPayment.setDepositStatus(NOT_PAID);
@@ -228,9 +254,14 @@ public class ReservePageController implements Initializable {
     }
 
     public void setCustomerFromGUI(){
-        int newCustomerID = Integer.valueOf(manageableDatabase.getLastCustomerID())+1;
 
-        customer.setCustomerID(String.valueOf(newCustomerID));
+        if (newCustomer.isSelected()) {
+            //increase customerID
+            int newCustomerID = currentCustomerID + 1;
+            currentCustomerID++;
+            customer.setCustomerID(String.valueOf(newCustomerID));
+        }
+
         //information
         customer.setTitleNameTH(titleNameTH.getSelectionModel().getSelectedItem());
         customer.setFirstNameTH(firstNameTH.getText());
@@ -241,8 +272,10 @@ public class ReservePageController implements Initializable {
         customer.setGender(genderChoice.getSelectionModel().getSelectedItem());
         customer.setAge(age.getText());
         customer.setDateOfBirth(dateOfBirth.getEditor().getText());
+        if (customer.getDateOfBirth().isEmpty()) customer.setDateOfBirth("dd-mm-yyyy");
         customer.setPassport_no(passportNo.getText());
         customer.setExp_passport(expPassportDate.getEditor().getText());
+        if (customer.getExp_passport().isEmpty()) customer.setExp_passport("dd-mm-yyyy");
         customer.setOccupation(occupation.getText());
         //Contact
         customer.setContactAddress(address.getText());
@@ -270,52 +303,67 @@ public class ReservePageController implements Initializable {
         return currentReserveCode;
     }
 
-    public void setUpOldCustomerData(){
+    public void setUpOldCustomerData() {
+        String customerIDSearch = searchByCustomerName.getText();
+        customerIDSearch = customerIDSearch.substring(6,customerIDSearch.indexOf("]"));
+        System.out.println("select customer --> " + customerIDSearch);
+        customer = manageableDatabase.getOneCustomer(customerIDSearch);
+        if (customer != null) {
+            newCustomer.setSelected(false);
+            oldCustomer.setSelected(true);
+            //information
+            titleNameTH.setValue(customer.getTitleNameTH());
+            firstNameTH.setText(customer.getFirstNameTH());
+            lastNameTH.setText(customer.getLastNameTH());
+            titleNameEN.setValue(customer.getTitleNameENG());
+            firstNameEN.setText(customer.getFirstNameENG());
+            lastNameEN.setText(customer.getLastNameENG());
+            genderChoice.setValue(customer.getGender());
+            age.setText(customer.getAge());
+            String[] dateCut = customer.getDateOfBirth().split("-");
+            dateOfBirth.setValue(LocalDate.of(Integer.valueOf(dateCut[2]), Integer.valueOf(dateCut[1]), Integer.valueOf(dateCut[0])));
+            passportNo.setText(customer.getPassport_no());
+            String[] dateExpCut = customer.getExp_passport().split("-");
+            expPassportDate.setValue(LocalDate.of(Integer.valueOf(dateExpCut[2]), Integer.valueOf(dateExpCut[1]), Integer.valueOf(dateExpCut[0])));
+            occupation.setText(customer.getOccupation());
+            //Contact
+            address.setText(customer.getContactAddress());
+            phoneNum.setText(customer.getCell_phone());
+            homeTelNum.setText(customer.getHome_Tel());
+            faxNum.setText(customer.getFax());
+            email.setText(customer.getEmail());
+            //moreInfo
+            underlyingDisease.setText(customer.getDisease());
+            foodAllergy.setText(customer.getFoodAllergy());
 
-        //customer = manageableDatabase.getOneCustomer();
-        newCustomer.setSelected(false);
-        oldCustomer.setSelected(true);
-        //information
-        titleNameTH.setValue(customer.getTitleNameTH());
-        firstNameTH.setText(customer.getFirstNameTH());
-        lastNameTH.setText(customer.getLastNameTH());
-        titleNameEN.setValue(customer.getTitleNameENG());
-        firstNameEN.setText(customer.getFirstNameENG());
-        lastNameEN.setText(customer.getLastNameENG());
-        genderChoice.setValue(customer.getGender());
-        age.setText(customer.getAge());
-        String[] dateCut = customer.getDateOfBirth().split("-");
-        dateOfBirth.setValue(LocalDate.of(Integer.valueOf(dateCut[2]), Integer.valueOf(dateCut[0]), Integer.valueOf(dateCut[1])));
-        passportNo.setText(customer.getPassport_no());
-        String[] dateExpCut = customer.getExp_passport().split("-");
-        expPassportDate.setValue(LocalDate.of(Integer.valueOf(dateExpCut[2]), Integer.valueOf(dateExpCut[0]), Integer.valueOf(dateExpCut[1])));
-        occupation.setText(customer.getOccupation());
-        //Contact
-        address.setText(customer.getContactAddress());
-        phoneNum.setText(customer.getCell_phone());
-        homeTelNum.setText(customer.getHome_Tel());
-        faxNum.setText(customer.getFax());
-        email.setText(customer.getEmail());
-        //moreInfo
-        underlyingDisease.setText(customer.getDisease());
-        foodAllergy.setText(customer.getFoodAllergy());
+            if (customer.getEatBeef().equalsIgnoreCase("yes")) {
+                eatBeefY.setSelected(true);
+                eatBeefN.setSelected(false);
+            } else {
+                eatBeefY.setSelected(false);
+                eatBeefN.setSelected(true);
+            }
 
-        if (customer.getEatBeef().equalsIgnoreCase("yes")) {
-            eatBeefY.setSelected(true);
-            eatBeefN.setSelected(false);
-        } else {
-            eatBeefY.setSelected(false);
-            eatBeefN.setSelected(true);
+            moreDetail.setText(customer.getMoreDetail());
+            hearAboutUsChoices.setValue(customer.getHearAboutUs());
+
         }
-
-        moreDetail.setText(customer.getMoreDetail());
-        hearAboutUsChoices.setValue(customer.getHearAboutUs());
-
+        else{
+            //pop up warning
+            Alert alertConfirmToAddCustomerData = new Alert(Alert.AlertType.CONFIRMATION);
+            alertConfirmToAddCustomerData.setTitle("Confirmation Dialog");
+            alertConfirmToAddCustomerData.setHeaderText(null);
+            alertConfirmToAddCustomerData.setContentText("This name can not be found.");
+            clearText();
+        }
     }
 
     public void clearText(){
         newCustomer.setSelected(true);
         oldCustomer.setSelected(false);
+        searchByCustomerName.clear();
+        searchByCustomerName.setDisable(true);
+        searchCustomerBtn.setDisable(true);
         //information
         titleNameTH.getSelectionModel().clearSelection();
         titleNameTH.setValue("นางสาว");
@@ -351,10 +399,23 @@ public class ReservePageController implements Initializable {
 
     }
 
+    void setUpValueReservationPage(){
+        //setup value of reservation page
+        reserveCode.setText(createReservationCode());
+        customerNo.setText("1");     // setup count amount customer
+        clearText();
+        customerList.clear();
+        newCustomerID_List.clear();
+        reservCustomer_List.clear();
+        customer = new Customer();
+        reservationCustomer = new Reservation();
+        reservationPayment = new ReservationPayment();
+    }
+
     public void setSearchCustomer(){
-        List<Customer> customerList = manageableDatabase.getAllCustomer();
+        List<Customer> customerListSearch = manageableDatabase.getAllCustomer();
         List<String> searchList = new ArrayList<>();
-        for (Customer c : customerList) {
+        for (Customer c : customerListSearch) {
             searchList.add("[ID : "+c.getCustomerID() + "] " + c.getFirstNameTH() + " " + c.getLastNameTH());
             System.out.println("[ID : "+c.getCustomerID() + "] " + c.getFirstNameTH() + " " + c.getLastNameTH());
         }
