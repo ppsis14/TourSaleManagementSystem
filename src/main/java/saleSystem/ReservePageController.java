@@ -61,7 +61,7 @@ public class ReservePageController implements Initializable {
     @FXML private Label loginNameLabel;
 
     private ArrayList<String> newCustomerID_List = new ArrayList<>();
-    private ArrayList<Reservation> reservCustomer_List = new ArrayList<>();
+    private ArrayList<Reservation> reserveCustomer_List = new ArrayList<>();
     private ArrayList<Customer> customerList = new ArrayList<>();
     private ReservationPayment reservationPayment = new ReservationPayment();
     private Reservation reservationCustomer = new Reservation() ;
@@ -133,8 +133,8 @@ public class ReservePageController implements Initializable {
                 customerList.add(customer);
                 System.out.println("customer list : "+customerList.toString());
                 setReservationCustomerFromGUI();
-                reservCustomer_List.add(reservationCustomer);
-                System.out.println("reservation list : "+reservCustomer_List.toString());
+                reserveCustomer_List.add(reservationCustomer);
+                System.out.println("reservation list : "+reserveCustomer_List.toString());
 
                 clearText();
                 customer = new Customer();
@@ -167,7 +167,7 @@ public class ReservePageController implements Initializable {
                     }
 
                     //insert reservation customer to database
-                    for (Reservation reservation: reservCustomer_List) {
+                    for (Reservation reservation: reserveCustomer_List) {
                         manageableDatabase.insertData(reservation);
                     }
 
@@ -406,7 +406,7 @@ public class ReservePageController implements Initializable {
         clearText();
         customerList.clear();
         newCustomerID_List.clear();
-        reservCustomer_List.clear();
+        reserveCustomer_List.clear();
         customer = new Customer();
         reservationCustomer = new Reservation();
         reservationPayment = new ReservationPayment();

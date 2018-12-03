@@ -33,55 +33,27 @@ public class InvoicePageController implements Initializable {
 
     @FXML
     private ComboBox<String> tourIDChoiceDI;
-
-    @FXML
-    private JFXButton createDepositInvoiceBtn;
-
-    @FXML
-    private JFXButton confirmDepositInvoiceStatusBtn;
-
-    @FXML
-    private ComboBox<String> tourIDChoiceAI;
-
+    @FXML private JFXButton createDepositInvoiceBtn;
+    @FXML private ComboBox<String> tourIDChoiceAI;
     @FXML private TableView<Invoice> depositInvoiceTable;
     @FXML private TableColumn<Invoice, String> reservationCodeColumnDI;
     @FXML private TableColumn<Invoice, String> invoice_No_ColumnDI;
     @FXML private TableColumn<Invoice, Integer> amountColumnDI;
     @FXML private TableColumn<Invoice, String> employeeColumnDI;
     @FXML private TableColumn<Invoice, String> invoiceStatusColumnDI;
-
     @FXML private TableView<Invoice> arrearsInvoiceTable;
     @FXML private TableColumn<Invoice, String> reservationCodeColumnAI;
     @FXML private TableColumn<Invoice, String> invoice_No_ColumnAI;
     @FXML private TableColumn<Invoice, Integer> amountColumnAI;
     @FXML private TableColumn<Invoice, String> employeeColumnAI;
     @FXML private TableColumn<Invoice, String> invoiceStatusColumnAI;
-
-    @FXML
-    private JFXButton createArrearsInvoiceBtn;
-
-    @FXML
-    private JFXButton confirmArrearsInvoiceStatusBtn;
-
-    @FXML
-    private JFXHamburger menu;
-
-    @FXML
-    private JFXDrawer drawerMenu;
+    @FXML private JFXButton createArrearsInvoiceBtn;
+    @FXML private JFXHamburger menu;
+    @FXML private JFXDrawer drawerMenu;
 
 
     ObservableList<Invoice> obListInvoiceDI = FXCollections.observableArrayList();
     ObservableList<Invoice> obListInvoiceAI = FXCollections.observableArrayList();
-
-    @FXML
-    void handleConfirmArrearsInvoiceStatusBtn(ActionEvent event) {
-
-    }
-
-    @FXML
-    void handleConfirmDepositInvoiceStatusBtn(ActionEvent event) {
-
-    }
 
     @FXML
     void handleCreateArrearsInvoiceBtn(ActionEvent event) {

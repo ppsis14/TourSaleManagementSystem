@@ -1,6 +1,5 @@
 package saleSystem;
 
-import Table.Receipt;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -9,13 +8,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,41 +22,37 @@ import java.util.GregorianCalendar;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static saleSystem.SaleManagementUtil.*;
-
 public class PaymentReceiptPageController implements Initializable {
 
-    @FXML private ComboBox<String> tourIDChoiceDR;
-    @FXML private ComboBox<String> tourIDChoiceAR;
-    @FXML private TableView<Receipt> depositReceiptTable;
-    @FXML private TableColumn<Receipt, String> reservationCodeColumnDR;
-    @FXML private TableColumn<Receipt, String> depositReceipt_no_ColumnDR;
-    @FXML private TableColumn<Receipt, Integer> amountColumnDR;
-    @FXML private TableColumn<Receipt, String> employeeNameColumnDR;
-    @FXML private TableColumn<Receipt, String> depositReceiptStatusColumnDR;
+    @FXML
+    private ComboBox<?> tourIDChoiceDR;
 
-    @FXML private TableView<Receipt> arrearsReceiptTable;
-    @FXML private TableColumn<Receipt, String> reservationCodeColumnAR;
-    @FXML private TableColumn<Receipt, String> depositReceipt_no_ColumnAR;
-    @FXML private TableColumn<Receipt, Integer> amountColumnAR;
-    @FXML private TableColumn<Receipt, String> employeeNameColumnAR;
-    @FXML private TableColumn<Receipt, String> depositReceiptStatusColumnAR;
-    @FXML private JFXButton createDepositReceiptBtn;
-    @FXML private JFXButton confirmDepositReceiptStatusBtn;
-    @FXML private JFXButton createArrearsReceiptBtn;
-    @FXML private JFXButton confirmArrearsReceiptStatusBtn;
-    @FXML private JFXHamburger menu;
-    @FXML private JFXDrawer drawerMenu;
-    ObservableList<Receipt> obListReceiptDR = FXCollections.observableArrayList();
-    ObservableList<Receipt> obListReceiptAR = FXCollections.observableArrayList();
+    @FXML
+    private TableView<?> depositReceiptTable;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        SaleManagementUtil.setTourID(tourIDChoiceDR);
-        SaleManagementUtil.setTourID(tourIDChoiceAR);
-        showTableView();
-    }
+    @FXML
+    private JFXButton createDepositReceiptBtn;
+
+    @FXML
+    private JFXButton confirmDepositReceiptStatusBtn;
+
+    @FXML
+    private ComboBox<?> tourIDChoiceAR;
+
+    @FXML
+    private TableView<?> arrearReceiptTable;
+
+    @FXML
+    private JFXButton createArrearsReceiptBtn;
+
+    @FXML
+    private JFXButton confirmArrearsReceiptStatusBtn;
+
+    @FXML
+    private JFXHamburger menu;
+
+    @FXML
+    private JFXDrawer drawerMenu;
 
     @FXML
     void handleConfirmArrearsReceiptStatusBtn(ActionEvent event) {
@@ -70,30 +62,6 @@ public class PaymentReceiptPageController implements Initializable {
     @FXML
     void handleConfirmDepositReceiptStatusBtn(ActionEvent event) {
 
-    }
-
-    public void showTableView(){
-
-        String tourNameDR = tourIDChoiceDR.getSelectionModel().getSelectedItem();
-        String tourNameAR = tourIDChoiceAR.getSelectionModel().getSelectedItem();
-        obListReceiptDR = FXCollections.observableArrayList(manageableDatabase.getAllReceiptInTourName(DEPOSIT_RECEIPT,tourNameDR));
-        obListReceiptAR = FXCollections.observableArrayList(manageableDatabase.getAllReceiptInTourName(ARREARS_RECEIPT,tourNameAR));
-
-        //find data base for show on table view.
-        reservationCodeColumnDR.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
-        depositReceipt_no_ColumnDR.setCellValueFactory(new PropertyValueFactory<>("receiptNo"));
-        amountColumnDR.setCellValueFactory(new PropertyValueFactory<>("amountCustomer"));
-        employeeNameColumnDR.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
-        depositReceiptStatusColumnDR.setCellValueFactory(new PropertyValueFactory<>("receiptStatus"));
-
-        reservationCodeColumnAR.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
-        depositReceipt_no_ColumnAR.setCellValueFactory(new PropertyValueFactory<>("invoiceNo"));
-        amountColumnAR.setCellValueFactory(new PropertyValueFactory<>("amountCustomer"));
-        employeeNameColumnAR.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
-        depositReceiptStatusColumnAR.setCellValueFactory(new PropertyValueFactory<>("receiptStatus"));
-
-        depositReceiptTable.setItems(obListReceiptDR);
-        arrearsReceiptTable.setItems(obListReceiptAR);
     }
 
     @FXML
@@ -145,15 +113,18 @@ public class PaymentReceiptPageController implements Initializable {
 
     @FXML
     void handleTourIDChoiceAR(ActionEvent event) {
-        showTableView();
+
     }
 
     @FXML
     void handleTourIDChoiceDR(ActionEvent event) {
-        showTableView();
+
     }
 
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+    }
     private void createReceipt(String fileName, String titleReceipt) {
         Document document = new Document();
         document.setPageSize(PageSize.A4);

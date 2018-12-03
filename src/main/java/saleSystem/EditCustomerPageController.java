@@ -22,80 +22,31 @@ import java.util.ResourceBundle;
 import static saleSystem.SaleManagementUtil.manageableDatabase;
 
 public class EditCustomerPageController implements Initializable {
-    @FXML
-    private StackPane rootPane;
-
-    @FXML
-    private ChoiceBox<String> titleNameTH;
-
-    @FXML
-    private TextField firstNameTH;
-
-    @FXML
-    private TextField lastNameTH;
-
-    @FXML
-    private ChoiceBox<String> titleNameEN;
-
-    @FXML
-    private TextField firstNameEN;
-
-    @FXML
-    private TextField lastNameEN;
-
-    @FXML
-    private ChoiceBox<String> genderChoice;
-
-    @FXML
-    private TextField age;
-
-    @FXML
-    private TextField occupation;
-
-    @FXML
-    private DatePicker dateOfBirth;
-
-    @FXML
-    private TextField passportNo;
-
-    @FXML
-    private DatePicker expPassportDate;
-
-    @FXML
-    private TextArea address;
-
-    @FXML
-    private TextField cellphoneClient;
-
-    @FXML
-    private TextField homeTelClient;
-
-    @FXML
-    private TextField homeFaxClient;
-
-    @FXML
-    private TextField emailClient;
-
-    @FXML
-    private TextField underlyingDisease;
-
-    @FXML
-    private TextField foodAllergy;
-
-    @FXML
-    private JFXCheckBox eatBeefY;
-
-    @FXML
-    private JFXCheckBox eatBeefN;
-
-    @FXML
-    private TextField moreDetail;
-
-    @FXML
-    private ComboBox<String> hearAboutUsChoices;
-
-    @FXML
-    private JFXButton saveDataBtn;
+    @FXML private StackPane rootPane;
+    @FXML private ChoiceBox<String> titleNameTH;
+    @FXML private TextField firstNameTH;
+    @FXML private TextField lastNameTH;
+    @FXML private ChoiceBox<String> titleNameEN;
+    @FXML private TextField firstNameEN;
+    @FXML private TextField lastNameEN;
+    @FXML private ChoiceBox<String> genderChoice;
+    @FXML private TextField age;
+    @FXML private TextField occupation;
+    @FXML private DatePicker dateOfBirth;
+    @FXML private TextField passportNo;
+    @FXML private DatePicker expPassportDate;
+    @FXML private TextArea address;
+    @FXML private TextField cellphoneClient;
+    @FXML private TextField homeTelClient;
+    @FXML private TextField homeFaxClient;
+    @FXML private TextField emailClient;
+    @FXML private TextField underlyingDisease;
+    @FXML private TextField foodAllergy;
+    @FXML private JFXCheckBox eatBeefY;
+    @FXML private JFXCheckBox eatBeefN;
+    @FXML private TextField moreDetail;
+    @FXML private ComboBox<String> hearAboutUsChoices;
+    @FXML private JFXButton saveDataBtn;
 
 
     private Customer customer = new Customer();
@@ -116,9 +67,9 @@ public class EditCustomerPageController implements Initializable {
         setCustomerFromGUI();
         manageableDatabase.updateData(customer);
 
-        /*Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType buttonTypeOne = new ButtonType("Submit");
-        alert.getButtonTypes().setAll(buttonTypeOne, ButtonType.OK, ButtonType.CANCEL);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        //ButtonType buttonTypeOne = new ButtonType("Submit");
+        //alert.getButtonTypes().setAll(buttonTypeOne, ButtonType.OK, ButtonType.CANCEL);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(null);
         alert.setContentText("Do you want to save?");
@@ -131,9 +82,9 @@ public class EditCustomerPageController implements Initializable {
 
             Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.close();
-        }*/
+        }
 
-        ButtonType foo = new ButtonType("Submit Reservation", ButtonBar.ButtonData.OK_DONE);
+       /* ButtonType foo = new ButtonType("Submit Reservation", ButtonBar.ButtonData.OK_DONE);
         ButtonType bar = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                 "The format for dates is year.month.day.For example, today is 29/11/2561.", foo, bar);
@@ -146,7 +97,7 @@ public class EditCustomerPageController implements Initializable {
 
             Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.close();
-        }
+        }*/
 
         /*JFXDialogLayout content = new JFXDialogLayout();
         content.setHeading(new Text("Confirm Issue"));

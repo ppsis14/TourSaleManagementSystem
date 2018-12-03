@@ -1,7 +1,6 @@
 package Table;
 
 public class Receipt {
-
     private String reservationCode;
     private String receiptNo;
     private String tourID;
