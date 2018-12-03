@@ -11,8 +11,7 @@ public interface ManageableDatabase {
     boolean checkLogin(String username ,String password);
     String getNameEmployee(String employeeID);
 
-
-    TourPackage getTourPackage(String tourID);
+    TourPackage getOneTourPackage(String tourID);
     String getTourID(String tourName);
     int getTourPrice(String tourID);
     int getAvailableByTourID(String tourID);
@@ -26,6 +25,7 @@ public interface ManageableDatabase {
     Customer getOneCustomer(String customerID);
     String getLastCustomerID();
     String getNameCustomer(String customerID);
+    String getFirstNameCustomer(String customerID);
 
     void insertData(Reservation reservation);
     void updateData(Reservation reservation);
@@ -36,22 +36,28 @@ public interface ManageableDatabase {
 
     void insertData(ReservationPayment reservationPayment);
     void updateData(ReservationPayment reservationPayment);
+    void updateStatusPayment(ReservationPayment reservationPayment);
     void deleteData(ReservationPayment reservationPayment);
+    ReservationPayment getOneReservationPayment(String reservationCode);
     List<ReservationPayment> getAllReservationPaymentByTourID(String tourID);
     String getLastReservationPaymentCode();
 
     void insertData(Invoice invoice,String invoiceType);
     void updateData(Invoice invoice,String invoiceType);
+    void updateCreateInvoiceStatus(Invoice invoice,String invoiceType);
     void deleteData(Invoice invoice,String invoiceType);
     List<Invoice> getAllInvoice(String invoiceType);
     List<Invoice> getAllInvoiceInTourName(String invoiceType,String tourName);
+    Invoice getOneInvoice(String invoiceType ,String reservationCode);
     String getLastInvoiceNo(String invoiceType);
 
     void insertData(Receipt receipt,String receiptType);
     void updateData(Receipt receipt,String receiptType);
+    void updateCreateReceiptStatus(Receipt receipt,String receiptType);
     void deleteData(Receipt receipt,String receiptType);
     List<Receipt> getAllReceipt(String receiptType);
     List<Receipt> getAllReceiptInTourName(String receiptType,String tourName);
+    Receipt getOneReceipt(String receiptType ,String reservationCode);
     String getLastReceiptNo(String receiptType);
 
 
