@@ -53,10 +53,10 @@
                               <TableView fx:id="depositReceiptTable" editable="true" fixedCellSize="0.0" prefHeight="308.0" prefWidth="772.0">
                                  <columns>
                                     <TableColumn fx:id="reservationCodeColumnDR" prefWidth="130.0" text="Reservation Code" />
-                                    <TableColumn fx:id="depositReceipt_no_ColumnDR" prefWidth="186.0" text="Deposit Receipt No." />
-                                    <TableColumn fx:id="amountColumnDR" prefWidth="153.0" text="Amount" />
+                                    <TableColumn fx:id="receipt_no_ColumnDR" prefWidth="186.0" text="Deposit Receipt No." />
+                                    <TableColumn fx:id="amountCustomerColumnDR" prefWidth="153.0" text="Amount" />
                                     <TableColumn fx:id="employeeNameColumnDR" prefWidth="139.0" text="Employee ID" />
-                                    <TableColumn fx:id="depositReceiptStatusColumnDR" prefWidth="163.0" text="Deposit Receipt Status" />
+                                    <TableColumn fx:id="receiptStatusColumnDR" prefWidth="163.0" text="Deposit Receipt Status" />
                                  </columns>
                               </TableView>
                               <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
@@ -91,10 +91,10 @@
                               <TableView fx:id="arrearsReceiptTable" editable="true" fixedCellSize="0.0" prefHeight="308.0" prefWidth="772.0">
                                  <columns>
                                     <TableColumn fx:id="reservationCodeColumnAR" prefWidth="130.0" text="Reservation Code" />
-                                    <TableColumn fx:id="depositReceipt_no_ColumnAR" prefWidth="186.0" text="Receipt No." />
-                                    <TableColumn fx:id="amountColumnAR" prefWidth="153.0" text="Amount" />
+                                    <TableColumn fx:id="receipt_no_ColumnAR" prefWidth="186.0" text="Receipt No." />
+                                    <TableColumn fx:id="amountCustomerColumnAR" prefWidth="153.0" text="Amount" />
                                     <TableColumn fx:id="employeeNameColumnAR" prefWidth="139.0" text="Employee ID" />
-                                    <TableColumn fx:id="depositReceiptStatusColumnAR" prefWidth="163.0" text="Receipt Status" />
+                                    <TableColumn fx:id="receiptStatusColumnAR" prefWidth="163.0" text="Receipt Status" />
                                  </columns>
                               </TableView>
                               <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="20.0">
