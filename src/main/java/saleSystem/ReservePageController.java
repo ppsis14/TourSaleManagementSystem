@@ -221,7 +221,7 @@ public class ReservePageController implements Initializable {
         invoice.setEmployeeID(reservationPayment.getEmployeeID());
         invoice.setEmployeeName(reservationPayment.getEmployeeName());
         invoice.setAmountCustomer(reservationPayment.getAmountCustomer());
-        invoice.setTotalPrice(reservationPayment.getTotal_price());
+        invoice.setTotalPrice(reservationPayment.getTotal_price()/2);
         invoice.setInvoiceStatus(NOT_CREATED);
 
     }
