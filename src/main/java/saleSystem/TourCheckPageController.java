@@ -1,8 +1,6 @@
 package saleSystem;
 
-import Table.Reservation;
-import Table.ReservationPayment;
-import Table.TourPackage;
+import Table.*;
 import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,18 +10,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static saleSystem.SaleManagementUtil.manageableDatabase;
+import static saleSystem.SaleManagementUtil.*;
 
 public class TourCheckPageController implements Initializable {
     @FXML private StackPane rootPane;
@@ -64,63 +59,82 @@ public class TourCheckPageController implements Initializable {
 
     @FXML
     void handleConfirmStatusBtn(ActionEvent event) {
-        // ฝาก check ว่า object ที่เลือกมามันไม่ null หน่อยเด้อ
+
+        ReservationPayment selectReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();
+
+        if(selectReservationPayment != null) {
+            // body of dialog
+            VBox box = new VBox();
+            box.setSpacing(10);
+            JFXDialogLayout content = new JFXDialogLayout();
+            content.setHeading(new Text("Please choose invoice payment types to confirm!"));
+            JFXCheckBox depositInvoice = new JFXCheckBox("Deposit Invoice Payment");
+            JFXCheckBox invoice = new JFXCheckBox("Invoice Payment");
+            depositInvoice.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    invoice.setSelected(false);
+                    depositInvoice.setSelected(true);
+                    status = "choose deposit invoice status";
+                    System.out.println("choose deposit invoice status");
+                }
+            });
+
+            invoice.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    depositInvoice.setSelected(false);
+                    invoice.setSelected(true);
+                    status = "choose invoice status";
+                    System.out.println("choose invoice status");
+                }
+            });
+            box.getChildren().addAll(depositInvoice, invoice);
+            content.setBody(box);
+
+            JFXDialog dialog = new JFXDialog(rootPane, content, JFXDialog.DialogTransition.CENTER);
+            dialog.setOverlayClose(false);
+
+            JFXButton yesBtn = new JFXButton("Yes");
+            yesBtn.setStyle("-fx-background-color: #34495e;" +
+                    "-fx-text-fill:  #ffffff;" +
+                    "-fx-pref-width: 50px");
+            yesBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if (depositInvoice.isSelected()) {
+                        selectReservationPayment.setDepositStatus(PAID);
+                        manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
+                        manageableDatabase.insertData(createReceiptData(DEPOSIT_RECEIPT),DEPOSIT_RECEIPT);  //create deposit receipt
+                        manageableDatabase.insertData(createArrearsInvoice(),ARREARS_INVOICE);              //insert arrears invoice
+
+                    }
+                    else if (invoice.isSelected()){
+                        selectReservationPayment.setArrearsStatus(PAID);
+                        manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
+                        manageableDatabase.insertData(createReceiptData(ARREARS_RECEIPT),ARREARS_RECEIPT);  //insert arrears receipt
+                    }
+                    setReservationListTable();
+                    dialog.close();
+
+                }
+            });
+
+            JFXButton noBtn = new JFXButton("No");
+            noBtn.setStyle("-fx-background-color: #f4d03f;" +
+                    "-fx-text-fill:  #34495e;" +
+                    "-fx-pref-width: 50px");
+            noBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    dialog.close();
+                }
+            });
+            content.setActions(yesBtn, noBtn);
+            dialog.show();
 
 
-        // body of dialog
-        VBox box = new VBox();
-        box.setSpacing(10);
-        JFXDialogLayout content = new JFXDialogLayout();
-        content.setHeading(new Text("Please choose invoice payment types to confirm!"));
-        JFXCheckBox depositInvoice = new JFXCheckBox("Deposit Invoice Payment");
-        JFXCheckBox invoice = new JFXCheckBox("Invoice Payment");
-        depositInvoice.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                invoice.setSelected(false);
-                status = "choose deposit invoice status";
-                System.out.println("choose deposit invoice status");
-            }
-        });
-
-        invoice.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                depositInvoice.setSelected(false);
-                status = "choose invoice status";
-                System.out.println("choose invoice status");
-            }
-        });
-        box.getChildren().addAll(depositInvoice, invoice);
-        content.setBody(box);
-
-        JFXDialog dialog = new JFXDialog(rootPane, content, JFXDialog.DialogTransition.CENTER);
-        dialog.setOverlayClose(false);
-
-        JFXButton yesBtn = new JFXButton("Yes");
-        yesBtn.setStyle("-fx-background-color: #34495e;" +
-                "-fx-text-fill:  #ffffff;" +
-                "-fx-pref-width: 50px");
-        yesBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                // code for update result to database
-                dialog.close();
-            }
-        });
-
-        JFXButton noBtn = new JFXButton("No");
-        noBtn.setStyle("-fx-background-color: #f4d03f;" +
-                "-fx-text-fill:  #34495e;" +
-                "-fx-pref-width: 50px");
-        noBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-            }
-        });
-        content.setActions(yesBtn, noBtn);
-        dialog.show();
+        }
     }
 
     @FXML
@@ -141,7 +155,7 @@ public class TourCheckPageController implements Initializable {
                 reservePaymentObList.remove(paymentListTable.getSelectionModel().getSelectedItem()); //delete on table view
                 reservationObList = FXCollections.observableArrayList(manageableDatabase.getAllReservationByTourID(tourID));
                 //update last data
-                TourPackage tourPackage = manageableDatabase.getTourPackage(tourID);
+                TourPackage tourPackage = manageableDatabase.getOneTourPackage(tourID);
                 int availableSeat = tourPackage.getAvailable() + deleteReservationPayment.getAmountCustomer();
                 manageableDatabase.updateAvailableData(tourID,availableSeat);   //update seat in tour package
 
@@ -163,10 +177,10 @@ public class TourCheckPageController implements Initializable {
 
     void showDetailTourPackage(){
         String tourID = manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
-        TourPackage tourPackage = manageableDatabase.getTourPackage(tourID);
+        TourPackage tourPackage = manageableDatabase.getOneTourPackage(tourID);
 
         tourName.setText(tourPackage.getTourName());
-        tourPrice.setText(String.valueOf(tourPackage.getPrice()));
+        tourPrice.setText(String.format("%,.2f",Double.valueOf(tourPackage.getPrice())));
         departureDate.setText(tourPackage.getDepartureDate());
         returnDate.setText(tourPackage.getReturnDate());
         amountCus.setText(String.valueOf(tourPackage.getAmount()));
@@ -193,6 +207,44 @@ public class TourCheckPageController implements Initializable {
         paymentListTable.setItems(reservePaymentObList);
         reservationListTable.setItems(reservationObList);
     }
+
+    private Invoice createArrearsInvoice() {
+        ReservationPayment selectReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();
+        Invoice invoice = manageableDatabase.getOneInvoice(DEPOSIT_INVOICE,selectReservationPayment.getReservationCode());
+        invoice.setInvoiceNo(String.valueOf(Integer.valueOf(manageableDatabase.getLastInvoiceNo(ARREARS_INVOICE))+1));
+        invoice.setInvoiceStatus(NOT_CREATED);
+        return invoice;
+    }
+
+
+    private Receipt createReceiptData(String receiptType){
+
+        String invoiceType = null;
+        if(receiptType == DEPOSIT_RECEIPT)
+            invoiceType = DEPOSIT_INVOICE;
+        else if(receiptType == ARREARS_RECEIPT)
+            invoiceType = ARREARS_INVOICE;
+
+        ReservationPayment selectReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();
+        Invoice selectInvoice = manageableDatabase.getOneInvoice(invoiceType,selectReservationPayment.getReservationCode());
+        Receipt receipt = new Receipt(
+                selectInvoice.getReservationCode(),
+                String.valueOf(Integer.valueOf(manageableDatabase.getLastReceiptNo(receiptType))+1),
+                selectInvoice.getTourID(),
+                selectInvoice.getTourName(),
+                selectInvoice.getCustomerID(),
+                selectInvoice.getCustomerName(),
+                selectInvoice.getEmployeeID(),
+                selectInvoice.getEmployeeName(),
+                selectInvoice.getAmountCustomer(),
+                selectInvoice.getTotalPrice(),
+                NOT_CREATED
+        );
+
+    return receipt;
+    }
+
+
 
 }
 
