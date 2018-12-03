@@ -1,10 +1,12 @@
 package saleSystem;
 
+import createReport.CreateReport;
 import Table.Employee;
 import Table.TourPackage;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerNextArrowBasicTransition;
+import createReport.ReportPDF;
 import databaseConnection.ManageableDatabase;
 import databaseConnection.SpringJDBC_DB;
 import javafx.collections.FXCollections;
@@ -27,7 +29,6 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,6 +47,7 @@ public class SaleManagementUtil {
     public static ApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
 
     public static ManageableDatabase manageableDatabase = context.getBean("SpringJDBC_DB", SpringJDBC_DB.class);
+    public static CreateReport createReport = context.getBean("ReportPDF", ReportPDF.class);
 
     public static Employee loginEmployee = new Employee();
 
