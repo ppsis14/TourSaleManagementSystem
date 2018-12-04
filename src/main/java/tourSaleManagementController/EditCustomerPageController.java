@@ -1,25 +1,22 @@
-package saleSystem;
+package tourSaleManagementController;
 
 import Table.Customer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import tourSaleManagementSystemUtil.*;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static saleSystem.SaleManagementUtil.manageableDatabase;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.manageableDatabase;
 
 public class EditCustomerPageController implements Initializable {
     @FXML private StackPane rootPane;
@@ -53,12 +50,12 @@ public class EditCustomerPageController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SaleManagementUtil.setTitleNameTH(titleNameTH);
-        SaleManagementUtil.setTitleNameEN(titleNameEN);
-        SaleManagementUtil.setGender(genderChoice);
-        SaleManagementUtil.setHearAboutUs(hearAboutUsChoices);
-        SaleManagementUtil.setDatePickerFormat(dateOfBirth);
-        SaleManagementUtil.setDatePickerFormat(expPassportDate);
+        Util.setTitleNameTH(titleNameTH);
+        Util.setTitleNameEN(titleNameEN);
+        Util.setGender(genderChoice);
+        Util.setHearAboutUs(hearAboutUsChoices);
+        Util.setDatePickerFormat(dateOfBirth);
+        Util.setDatePickerFormat(expPassportDate);
 
     }
     @FXML

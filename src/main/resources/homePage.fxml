@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="saleSystem.HomePageController">
+<StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tourSaleManagementController.HomePageController">
    <children>
       <AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #ffffff;">
          <children>

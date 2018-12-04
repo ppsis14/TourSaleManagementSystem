@@ -1,4 +1,4 @@
-package saleSystem;
+package tourSaleManagementController;
 
 import Table.Customer;
 import Table.Invoice;
@@ -15,12 +15,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.controlsfx.control.textfield.TextFields;
+import tourSaleManagementSystemUtil.DisplayGUIUtil;
+import tourSaleManagementSystemUtil.FormatConverter;
+import tourSaleManagementSystemUtil.Util;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 
-import static saleSystem.SaleManagementUtil.*;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.*;
+import static tourSaleManagementSystemUtil.Util.DEPOSIT_INVOICE;
+import static tourSaleManagementSystemUtil.Util.NOT_CREATED;
+import static tourSaleManagementSystemUtil.Util.NOT_PAID;
 
 
 public class ReservePageController implements Initializable {
@@ -67,28 +73,29 @@ public class ReservePageController implements Initializable {
     private Reservation reservationCustomer = new Reservation() ;
     private Customer customer = new Customer();
     private Invoice invoice = new Invoice();
-    private int currentCustomerID = Integer.parseInt(manageableDatabase.getLastCustomerID());
 
     ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        SaleManagementUtil.setTitleNameTH(titleNameTH);
-        SaleManagementUtil.setTitleNameEN(titleNameEN);
-        SaleManagementUtil.setGender(genderChoice);
-        SaleManagementUtil.setHearAboutUs(hearAboutUsChoices);
+        DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+        Util.setTitleNameTH(titleNameTH);
+        Util.setTitleNameEN(titleNameEN);
+        Util.setGender(genderChoice);
+        Util.setHearAboutUs(hearAboutUsChoices);
         newCustomer.setSelected(true);
         oldCustomer.setSelected(false);
         clearText();
+        Util.setTourID(tourIDComboBox);
+        Util.setDatePickerFormat(dateOfBirth);
+        Util.setDatePickerFormat(expPassportDate);
         searchByCustomerName.clear();
         searchByCustomerName.setDisable(true);
         searchCustomerBtn.setDisable(true);
-        reserveCode.setText(createReservationCode());
+        reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
         loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
-        SaleManagementUtil.setTourID(tourIDComboBox);
-        SaleManagementUtil.setDatePickerFormat(dateOfBirth);
-        SaleManagementUtil.setDatePickerFormat(expPassportDate);
+
+
     }
 
     @FXML public void handleNotEatBeefCheckbox(ActionEvent event) { eatBeefY.setSelected(false); }
@@ -213,7 +220,7 @@ public class ReservePageController implements Initializable {
 
     public void setDepositInvoice(){
         invoice.setReservationCode(reservationPayment.getReservationCode());
-        invoice.setInvoiceNo(String.valueOf(Integer.valueOf(manageableDatabase.getLastInvoiceNo(DEPOSIT_INVOICE))+1));
+        invoice.setInvoiceNo(FormatConverter.generateInvoiceNo(DEPOSIT_INVOICE,invoice.getReservationCode()));
         invoice.setTourID(reservationPayment.getTourID());
         invoice.setTourName(reservationPayment.getTourName());
         invoice.setCustomerID(reservationPayment.getCustomerID());
@@ -257,9 +264,8 @@ public class ReservePageController implements Initializable {
 
         if (newCustomer.isSelected()) {
             //increase customerID
-            int newCustomerID = currentCustomerID + 1;
-            currentCustomerID++;
-            customer.setCustomerID(String.valueOf(newCustomerID));
+            String newCustomerID = FormatConverter.generateCustomerID();
+            customer.setCustomerID(newCustomerID);
         }
 
         //information
@@ -289,18 +295,6 @@ public class ReservePageController implements Initializable {
         customer.setEatBeef(eatBeefY.isSelected() ? eatBeefY.getText() : eatBeefN.getText());
         customer.setMoreDetail(moreDetail.getText());
         customer.setHearAboutUs(hearAboutUsChoices.getSelectionModel().getSelectedItem());
-    }
-
-
-
-    public String createReservationCode(){
-        String lastReserveCode;
-        String currentReserveCode;
-
-        lastReserveCode = manageableDatabase.getLastReservationPaymentCode();
-        currentReserveCode = String.format("%08d",Integer.parseInt(lastReserveCode) + 1) ;
-
-        return currentReserveCode;
     }
 
     public void setUpOldCustomerData() {
@@ -401,7 +395,7 @@ public class ReservePageController implements Initializable {
 
     void setUpValueReservationPage(){
         //setup value of reservation page
-        reserveCode.setText(createReservationCode());
+        reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
         customerNo.setText("1");     // setup count amount customer
         clearText();
         customerList.clear();

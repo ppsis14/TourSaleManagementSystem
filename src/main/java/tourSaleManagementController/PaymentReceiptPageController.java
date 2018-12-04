@@ -1,12 +1,6 @@
-package saleSystem;
+package tourSaleManagementController;
 
-import Table.Invoice;
 import Table.Receipt;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
@@ -17,17 +11,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import tourSaleManagementSystemUtil.DisplayGUIUtil;
+import tourSaleManagementSystemUtil.FormatConverter;
+import tourSaleManagementSystemUtil.Util;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static saleSystem.SaleManagementUtil.*;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.*;
+import static tourSaleManagementSystemUtil.Util.ARREARS_RECEIPT;
+import static tourSaleManagementSystemUtil.Util.CREATED;
+import static tourSaleManagementSystemUtil.Util.DEPOSIT_RECEIPT;
 
 public class PaymentReceiptPageController implements Initializable {
 
@@ -45,20 +40,21 @@ public class PaymentReceiptPageController implements Initializable {
     @FXML private TableColumn<Receipt, String> employeeNameColumnAR;
     @FXML private TableColumn<Receipt, String> receiptStatusColumnAR;
     @FXML private JFXButton createDepositReceiptBtn;
-    @FXML private JFXButton confirmDepositReceiptStatusBtn;
     @FXML private ComboBox<String> tourIDChoiceAR;
     @FXML private JFXButton createArrearsReceiptBtn;
-    @FXML private JFXButton confirmArrearsReceiptStatusBtn;
     @FXML private JFXHamburger menu;
     @FXML private JFXDrawer drawerMenu;
+    @FXML private Label currentDateReceipt;
+
     ObservableList<Receipt> obListReceiptDR = FXCollections.observableArrayList();
     ObservableList<Receipt> obListReceiptAR = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        SaleManagementUtil.setTourID(tourIDChoiceDR);
-        SaleManagementUtil.setTourID(tourIDChoiceAR);
+        DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+        Util.setTourID(tourIDChoiceDR);
+        Util.setTourID(tourIDChoiceAR);
+        currentDateReceipt.setText(FormatConverter.getLocalDateFormat("dd-MM-yyyy"));
         showTableView();
 
     }

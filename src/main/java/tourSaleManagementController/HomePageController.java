@@ -1,18 +1,17 @@
-package saleSystem;
+package tourSaleManagementController;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import tourSaleManagementSystemUtil.DisplayGUIUtil;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static saleSystem.SaleManagementUtil.loginEmployee;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.loginEmployee;
 
 public class HomePageController implements Initializable {
 
@@ -28,37 +27,37 @@ public class HomePageController implements Initializable {
     @FXML
     public void handleInvoiceBtn(ActionEvent event) throws IOException {
         invoiceBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/invoicePage.fxml"), "Invoice");
+        DisplayGUIUtil.loadWindow(getClass().getResource("/invoicePage.fxml"), "Invoice");
     }
 
     @FXML
     public void handleLogoutBtn(ActionEvent event) throws IOException {
         logoutBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/loginPage.fxml"), "Log in");
+        DisplayGUIUtil.loadWindow(getClass().getResource("/loginPage.fxml"), "Log in");
     }
 
     @FXML
     public void handleCustomerManageBtn(ActionEvent event) throws IOException {
         customerManageBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/customerManagePage.fxml"), "Customer Management");
+        DisplayGUIUtil.loadWindow(getClass().getResource("/customerManagePage.fxml"), "Customer Management");
     }
 
     @FXML
     public void handleReceiptBtn(ActionEvent event) throws IOException {
         receiptBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/paymentReceiptPage.fxml"), "Payment Receipt");
+        DisplayGUIUtil.loadWindow(getClass().getResource("/paymentReceiptPage.fxml"), "Payment Receipt");
     }
 
     @FXML
     public void handleReserveBtn(ActionEvent event) throws IOException {
         reserveBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/reservationPage.fxml"), "Reservation");
+        DisplayGUIUtil.loadWindow(getClass().getResource("/reservationPage.fxml"), "Reservation");
     }
 
     @FXML
     public void handleTourCheckBtn(ActionEvent event) throws IOException {
         tourCheckBtn.getScene().getWindow().hide();
-        SaleManagementUtil.loadWindow(getClass().getResource("/tourCheckPage.fxml"), "Tour Checking");
+        DisplayGUIUtil.loadWindow(getClass().getResource("/tourCheckPage.fxml"), "Tour Checking");
     }
 
     @Override

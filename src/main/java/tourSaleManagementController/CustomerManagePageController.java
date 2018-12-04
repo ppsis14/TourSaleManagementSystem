@@ -1,4 +1,4 @@
-package saleSystem;
+package tourSaleManagementController;
 
 import Table.Customer;
 import com.jfoenix.controls.JFXButton;
@@ -16,10 +16,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.controlsfx.control.textfield.TextFields;
+import tourSaleManagementSystemUtil.DisplayGUIUtil;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +26,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
-import static saleSystem.SaleManagementUtil.manageableDatabase;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.manageableDatabase;
 
 public class CustomerManagePageController implements Initializable {
 
@@ -51,7 +50,7 @@ public class CustomerManagePageController implements Initializable {
     ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+        DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
 
         showTableView(obListCustomer);  //show data on table view
 

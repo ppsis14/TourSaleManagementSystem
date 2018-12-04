@@ -15,6 +15,7 @@ public interface ManageableDatabase {
     String getTourID(String tourName);
     int getTourPrice(String tourID);
     int getAvailableByTourID(String tourID);
+    String getLastTourID();
     List<TourPackage> getAllTourPackage();
     void updateAvailableData(String tourID ,int availableSeat);
 

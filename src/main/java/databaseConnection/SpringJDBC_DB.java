@@ -1,7 +1,6 @@
 package databaseConnection;
 
 import Table.*;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -9,6 +8,8 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import static tourSaleManagementSystemUtil.Util.*;
 
 public class SpringJDBC_DB implements ManageableDatabase {
 
@@ -67,14 +68,19 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public String getTourID(String tourName) {
-        String tourID;
-
+        String tourID = null;
+        System.out.println(tourName);
         String query = "Select * From tour_package Where Tour_name = "+"'"+tourName+"'";
+        try {
+            TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
+            tourID = tourPackage.getTourID();
+            System.out.println();
+            return tourID;
+        }
+        catch (EmptyResultDataAccessException e){
+            return tourID;
+        }
 
-        TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
-        tourID = String.valueOf(tourPackage.getTourID());
-
-        return tourID;
     }
 
     @Override
@@ -92,6 +98,19 @@ public class SpringJDBC_DB implements ManageableDatabase {
         String query = "Select * From tour_package Where Tour_ID = " +"'"+tourID+"'";
         TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
         return tourPackage.getAvailable();
+    }
+
+    @Override
+    public String getLastTourID() {
+        String  query  = "SELECT * FROM tour_package ";
+        List<TourPackage> tourPackageList = jdbcTemplate.query(query , new TourPackageRowMapper());
+
+        if(tourPackageList.isEmpty())
+            return "0";
+        else{
+            String lastTourID = tourPackageList.get(tourPackageList.size()-1).getTourID();
+            return lastTourID;
+        }
     }
 
     @Override
@@ -193,7 +212,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
         String lastCustomerID;
         if(listCustomer.isEmpty())
-            lastCustomerID = "0";
+            lastCustomerID = "CS00000000";
         else
             lastCustomerID =  listCustomer.get(listCustomer.size()-1).getCustomerID();
 
@@ -327,7 +346,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
         List<Reservation> reservationList = jdbcTemplate.query(query , new ReservationRowMapper());
 
         if(reservationList.isEmpty())
-            return "0";
+            return "AAA-AAA-AAA-0000";
         else{
             String lastReservCode = reservationList.get(reservationList.size()-1).getReservationCode();
             return lastReservCode;
@@ -421,17 +440,21 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public String getLastInvoiceNo(String invoiceType) {
-
-        String lastInvoiceNo;
+        String lastInvoiceNo = null;
         List<Invoice> invoiceList = getAllInvoice(invoiceType);
 
         if (invoiceList.isEmpty())
-            return "0";
+            if(invoiceType.equalsIgnoreCase(DEPOSIT_INVOICE)){
+                lastInvoiceNo =  "DI-XXX-XXXX-000000-000000";
+            }
+            else if (invoiceType.equalsIgnoreCase(ARREARS_INVOICE)){
+                lastInvoiceNo = "AI-XXX-XXXX-000000-000000";
+            }
         else {
 
             lastInvoiceNo = invoiceList.get(invoiceList.size() - 1).getInvoiceNo();
-            return lastInvoiceNo;
         }
+        return lastInvoiceNo;
     }
 
     @Override
@@ -492,9 +515,15 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public Receipt getOneReceipt(String receiptType, String reservationCode) {
+        Receipt receipt = null;
         String query = "select * from " + receiptType +" Where Reservation_code = "+"'"+reservationCode+"'";
-        Receipt receipt = jdbcTemplate.queryForObject(query,new ReceiptRowMapper());
-        return receipt;
+        try {
+            receipt = jdbcTemplate.queryForObject(query, new ReceiptRowMapper());
+            return receipt;
+        }
+        catch (EmptyResultDataAccessException e){
+            return receipt;
+        }
     }
 
     @Override

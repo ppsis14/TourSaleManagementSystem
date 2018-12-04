@@ -1,8 +1,7 @@
-package saleSystem;
+package tourSaleManagementController;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -10,17 +9,15 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.controlsfx.control.textfield.CustomPasswordField;
-import org.controlsfx.control.textfield.CustomTextField;
-import org.controlsfx.control.textfield.TextFields;
+import tourSaleManagementSystemUtil.DisplayGUIUtil;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-import static saleSystem.SaleManagementUtil.loginEmployee;
-import static saleSystem.SaleManagementUtil.manageableDatabase;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.loginEmployee;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.manageableDatabase;
 
 
 public class LoginPageController implements Initializable {
@@ -53,7 +50,7 @@ public class LoginPageController implements Initializable {
             loginEmployee = manageableDatabase.getEmployeeLogin(username.getText(),password.getText());
             //load windows
             loginButton.getScene().getWindow().hide();
-            SaleManagementUtil.loadWindow(getClass().getResource("/homePage.fxml"), "Home");
+            DisplayGUIUtil.loadWindow(getClass().getResource("/homePage.fxml"), "Home");
 
         }
         else {

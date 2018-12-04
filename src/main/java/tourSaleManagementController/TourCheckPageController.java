@@ -1,4 +1,4 @@
-package saleSystem;
+package tourSaleManagementController;
 
 import Table.*;
 import com.jfoenix.controls.*;
@@ -13,12 +13,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import tourSaleManagementSystemUtil.DisplayGUIUtil;
+import tourSaleManagementSystemUtil.FormatConverter;
+import tourSaleManagementSystemUtil.Util;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static saleSystem.SaleManagementUtil.*;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.*;
+import static tourSaleManagementSystemUtil.Util.*;
 
 public class TourCheckPageController implements Initializable {
     @FXML private StackPane rootPane;
@@ -29,6 +33,7 @@ public class TourCheckPageController implements Initializable {
     @FXML private Label returnDate;
     @FXML private Label amountCus;
     @FXML private Label availableSeat;
+    @FXML private Label showTourID;
     @FXML private TableView<ReservationPayment> paymentListTable;
     @FXML private TableColumn<ReservationPayment, String> reservationCodeColumnP;
     @FXML private TableColumn<ReservationPayment, String> nameColumnP;
@@ -51,8 +56,8 @@ public class TourCheckPageController implements Initializable {
     private String status = null;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SaleManagementUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        SaleManagementUtil.setTourID(tourIDComboBox);
+        DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
+        Util.setTourID(tourIDComboBox);
         showDetailTourPackage();
         setReservationListTable();
     }
@@ -106,7 +111,7 @@ public class TourCheckPageController implements Initializable {
                         selectReservationPayment.setDepositStatus(PAID);
                         manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
                         manageableDatabase.insertData(createReceiptData(DEPOSIT_RECEIPT),DEPOSIT_RECEIPT);  //create deposit receipt
-                        manageableDatabase.insertData(createArrearsInvoice(),ARREARS_INVOICE);              //insert arrears invoice
+                        manageableDatabase.insertData(createArrearsInvoice(),ARREARS_INVOICE);        //insert arrears invoice
 
                     }
                     else if (invoice.isSelected()){
@@ -211,7 +216,7 @@ public class TourCheckPageController implements Initializable {
     private Invoice createArrearsInvoice() {
         ReservationPayment selectReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();
         Invoice invoice = manageableDatabase.getOneInvoice(DEPOSIT_INVOICE,selectReservationPayment.getReservationCode());
-        invoice.setInvoiceNo(String.valueOf(Integer.valueOf(manageableDatabase.getLastInvoiceNo(ARREARS_INVOICE))+1));
+        invoice.setInvoiceNo(FormatConverter.generateInvoiceNo(ARREARS_INVOICE,selectReservationPayment.getReservationCode()));
         invoice.setInvoiceStatus(NOT_CREATED);
         return invoice;
     }
@@ -229,7 +234,7 @@ public class TourCheckPageController implements Initializable {
         Invoice selectInvoice = manageableDatabase.getOneInvoice(invoiceType,selectReservationPayment.getReservationCode());
         Receipt receipt = new Receipt(
                 selectInvoice.getReservationCode(),
-                String.valueOf(Integer.valueOf(manageableDatabase.getLastReceiptNo(receiptType))+1),
+                selectInvoice.getInvoiceNo(),
                 selectInvoice.getTourID(),
                 selectInvoice.getTourName(),
                 selectInvoice.getCustomerID(),
