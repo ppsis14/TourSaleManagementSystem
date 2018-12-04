@@ -60,6 +60,7 @@ public class SaleManagementUtil {
             stage.setTitle(title);
             stage.setScene(new Scene(parent));
             stage.show();
+            stage.centerOnScreen();
             stage.setResizable(false);
 
         } catch (IOException e) {

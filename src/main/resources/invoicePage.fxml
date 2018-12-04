@@ -46,7 +46,7 @@
                                  <children>
                                     <Label maxHeight="1.7976931348623157E308" prefWidth="90.0" text="Tour ID :" />
                                     <ComboBox fx:id="tourIDChoiceDI" onAction="#handleTourIDChoiceDI" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" />
-                                    <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="172.0" text="Due Date :" />
+                                    <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="172.0" text="Date :" />
                                     <Label fx:id="dueDateDeposit" alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="120.0" style="-fx-border-color: #2C3E50;" text="29/10/2561" />
                                  </children>
                               </HBox>
@@ -84,7 +84,7 @@
                                  <children>
                                     <Label maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="90.0" text="Tour ID :" />
                                     <ComboBox fx:id="tourIDChoiceAI" onAction="#handleTourIDChoiceAI" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" />
-                                    <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="172.0" text="Due Date :" />
+                                    <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="172.0" text="Date :" />
                                     <Label fx:id="dueDateInvoice" alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="120.0" style="-fx-border-color: #2C3E50;" text="29/10/2561" />
                                  </children>
                               </HBox>
@@ -116,7 +116,5 @@
       </JFXTabPane>
       <JFXHamburger fx:id="menu" styleClass="jfx-hamburger-icon" stylesheets="@style.css" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="40.0" />
       <JFXDrawer fx:id="drawerMenu" direction="RIGHT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="800.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
-      <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="598.0" layoutY="113.0" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="36.0" text="No." />
-      <Label fx:id="depositNo" alignment="CENTER" layoutX="659.0" layoutY="113.0" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="150.0" style="-fx-border-color: #2C3E50;" text="DI-S21805-003" />
    </children>
 </AnchorPane>

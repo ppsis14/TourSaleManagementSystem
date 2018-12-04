@@ -62,16 +62,7 @@ public class PaymentReceiptPageController implements Initializable {
         showTableView();
 
     }
-    @FXML
-    void handleConfirmArrearsReceiptStatusBtn(ActionEvent event) {
 
-
-    }
-
-    @FXML
-    void handleConfirmDepositReceiptStatusBtn(ActionEvent event) {
-
-    }
     @FXML
     void handleCreateDepositReceiptBtn(ActionEvent event) {
 

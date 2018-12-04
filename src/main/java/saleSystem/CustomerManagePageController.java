@@ -94,6 +94,7 @@ public class CustomerManagePageController implements Initializable {
                 Stage stage = new Stage(StageStyle.DECORATED);
                 stage.show();
                 stage.setScene(new Scene(parent));
+                stage.centerOnScreen();
             } catch (IOException e) {
                 e.printStackTrace();
             }

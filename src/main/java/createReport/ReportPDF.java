@@ -26,7 +26,7 @@ public class ReportPDF implements CreateReport {
         Customer customer = manageableDatabase.getOneCustomer(reservationPayment.getCustomerID());
         TourPackage tourPackage = manageableDatabase.getOneTourPackage(reservationPayment.getTourID());
 
-        String reservCode = reservationPayment.getReservationCode();
+        String reserveCode = reservationPayment.getReservationCode();
         String tourID = reservationPayment.getTourID();
         String customerName = reservationPayment.getCustomerName();
         String tel_or_fax = customer.getCell_phone();
@@ -122,7 +122,7 @@ public class ReportPDF implements CreateReport {
             detailTable.getDefaultCell().setPaddingBottom(2);
             detailTable.addCell(createCell("Reservation ID", angsanaNewFont16, 0,1 , Element.ALIGN_LEFT));
             detailTable.addCell(createCell(":", angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
-            detailTable.addCell(createCell(reservCode, angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
+            detailTable.addCell(createCell(reserveCode, angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
             detailTable.addCell(createCell("Tour ID", angsanaNewFont16, 0 ,1, Element.ALIGN_LEFT));
             detailTable.addCell(createCell(":", angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
             detailTable.addCell(createCell(tourID, angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
@@ -216,7 +216,7 @@ public class ReportPDF implements CreateReport {
         Customer customer = manageableDatabase.getOneCustomer(reservationPayment.getCustomerID());
         TourPackage tourPackage = manageableDatabase.getOneTourPackage(reservationPayment.getTourID());
 
-        String reservCode = reservationPayment.getReservationCode();
+        String reserveCode = reservationPayment.getReservationCode();
         String tourID = reservationPayment.getTourID();
         String customerName = reservationPayment.getCustomerName();
         String tel_or_fax = customer.getCell_phone();
@@ -228,14 +228,17 @@ public class ReportPDF implements CreateReport {
         String priceTH = "   Baht     :   ("+totalPrice+" บาทถ้วน)";
         String content = null;
         String dueDate = null;
+        String status = null;
 
         if(titleReceipt == "DEPOSIT RECEIPT / ใบเสร็จรับเงิน"){
             content = "ยอดมัดจำค่าบริการ โปรแกรม "+tourPackage.getTourName()+" สำหรับ "+amountCustomer+" ท่าน";
             dueDate = tourPackage.getDepositDate();
+            status = "Deposit Payment Date";
         }
         else if(titleReceipt == "RECEIPT / ใบสำคัญรับเงิน"){
             dueDate = tourPackage.getArrearsDate();
             content = "ยอดชำระส่วนที่เหลือโปรแกรม "+tourPackage.getTourName()+" สำหรับ "+amountCustomer+" ท่าน";
+            status = "Payment Date";
         }
 
 
@@ -287,19 +290,19 @@ public class ReportPDF implements CreateReport {
             Paragraph titleName = new Paragraph(titleReceipt, angsanaNewFont16);
             titleName.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(titleName);
-            //document.add(new Phrase("\n"));
+            document.add(new Phrase("\n"));
 
             // create table
             PdfPTable invoiceTable = new PdfPTable(2);
-            invoiceTable.setWidthPercentage(30);
+            invoiceTable.setWidthPercentage(40);
             invoiceTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            invoiceTable.setWidths(new float[] {1f, 2f});
+            invoiceTable.setWidths(new float[] {1.5f, 1.3f});
             invoiceTable.getDefaultCell().setPaddingTop(10);
             invoiceTable.addCell(createCell("No.", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             invoiceTable.addCell(createCell("I-S21805-003", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
-            invoiceTable.addCell(createCell("Date", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
+            invoiceTable.addCell(createCell(status, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             invoiceTable.addCell(createCell(currentDate, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
-            invoiceTable.addCell(createCell("Due Date", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
+            invoiceTable.addCell(createCell("Date", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             invoiceTable.addCell(createCell(dueDate, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             document.add(invoiceTable);
 
@@ -312,7 +315,7 @@ public class ReportPDF implements CreateReport {
             detailTable.getDefaultCell().setPaddingBottom(2);
             detailTable.addCell(createCell("Reservation ID", angsanaNewFont16, 0,1 , Element.ALIGN_LEFT));
             detailTable.addCell(createCell(":", angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
-            detailTable.addCell(createCell(reservCode, angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
+            detailTable.addCell(createCell(reserveCode, angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
             detailTable.addCell(createCell("Tour ID", angsanaNewFont16, 0 ,1, Element.ALIGN_LEFT));
             detailTable.addCell(createCell(":", angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
             detailTable.addCell(createCell(tourID, angsanaNewFont16, 0, 1, Element.ALIGN_LEFT));
@@ -361,11 +364,12 @@ public class ReportPDF implements CreateReport {
             remarkTable.addCell(createCell("Remark", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
             remarkTable.addCell(createCell(":", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
             remarkTable.addCell(createCell("ราคาข้างต้นไม่รวมค่าภาษีมูลค่าเพิ่ม 7%", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
+            //remarkTable.addCell(createCell(" ", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
+            //remarkTable.addCell(createCell(" ", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
+           // remarkTable.addCell(createCell(" ", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));    remarkTable.addCell(createCell(" ", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
             remarkTable.addCell(createCell(" ", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
             remarkTable.addCell(createCell(" ", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
-            remarkTable.addCell(createCell(" ", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));    remarkTable.addCell(createCell(" ", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
-            remarkTable.addCell(createCell(" ", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
-            remarkTable.addCell(createCell("กรูณาโอนเงิน ชื่อบัญชี บริษัท อนนเวเคชั่น จำกัด\nธนาคารกสิกรไทย สาขาสุขุมวิท 23 บัญชีกระแสรายวัน เลขที่ xxx-x-xxxxx-x\nหลังการโอนกรูณาแฟกซ์ใบนำฝาก (PAY IN) มาที่เบอร์ 02-910-1998", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
+            remarkTable.addCell(createCell("กรุณาโอนเงิน ชื่อบัญชี บริษัท อนนเวเคชั่น จำกัด\nธนาคารกสิกรไทย สาขาสุขุมวิท 23 บัญชีกระแสรายวัน เลขที่ xxx-x-xxxxx-x\nหลังการโอนกรูณาแฟกซ์ใบนำฝาก (PAY IN) มาที่เบอร์ 02-910-1998", angsanaNewFont16, 0f, 1, Element.ALIGN_LEFT));
             document.add(remarkTable);
             document.add(new Phrase(" "));
 
@@ -376,9 +380,9 @@ public class ReportPDF implements CreateReport {
             signatureTable.setWidths(new float[]{20, 20, 20});
             signatureTable.setHorizontalAlignment(Element.ALIGN_CENTER);
             signatureTable.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-            signatureTable.addCell(createCell("-------------------------------", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
-            signatureTable.addCell(createCell("-------------------------------", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
-            signatureTable.addCell(createCell("-------------------------------", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
+            signatureTable.addCell(createCell(saleName, angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
+            signatureTable.addCell(createCell("...............................", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
+            signatureTable.addCell(createCell("...............................", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
             signatureTable.addCell(createCell("Sales By", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
             signatureTable.addCell(createCell("Account By", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
             signatureTable.addCell(createCell("Approved By\n(For Customer)", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
