@@ -50,7 +50,7 @@
       <Label layoutX="52.0" layoutY="119.0" prefHeight="17.0" prefWidth="118.0" text="Reservation Code :" />
       <Label layoutX="642.0" layoutY="119.0" prefHeight="17.0" prefWidth="100.0" text="Customer No." />
       <Label fx:id="customerNo" alignment="CENTER" contentDisplay="RIGHT" layoutX="748.0" layoutY="113.0" prefHeight="29.0" prefWidth="100.0" style="-fx-border-color: #2C3E50;" text="1" />
-      <Label layoutX="52.0" layoutY="165.0" prefHeight="17.0" prefWidth="85.0" text="Tour Program :" />
+      <Label layoutX="52.0" layoutY="165.0" prefHeight="17.0" prefWidth="92.0" text="Tour Program :" />
       <HBox alignment="CENTER_LEFT" layoutX="50.0" layoutY="206.0" prefHeight="29.0" prefWidth="800.0" spacing="10.0">
          <children>
             <Label prefHeight="17.0" prefWidth="129.0" text="Customer Status :" />
@@ -233,6 +233,6 @@
       </JFXButton>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="167.0" layoutY="589.0" prefHeight="29.0" prefWidth="567.0" text="** Please check the accuracy and completeness of the information before add customer." textFill="#c90000" />
       <ComboBox fx:id="tourIDComboBox" layoutX="153.0" layoutY="159.0" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" stylesheets="@style.css" />
-      <Label fx:id="reserveCode" alignment="CENTER" contentDisplay="RIGHT" layoutX="201.0" layoutY="113.0" prefHeight="29.0" prefWidth="185.0" style="-fx-border-color: #2C3E50;" />
+      <Label fx:id="reserveCode" alignment="CENTER" contentDisplay="RIGHT" layoutX="176.0" layoutY="113.0" prefHeight="29.0" prefWidth="277.0" style="-fx-border-color: #2C3E50;" />
    </children>
 </AnchorPane>
