@@ -8,8 +8,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -43,9 +45,8 @@ public class TourCheckPageController implements Initializable {
     @FXML private TableView<Reservation> reservationListTable;
     @FXML private TableColumn<Reservation, String> reservationCodeColumnR;
     @FXML private TableColumn<Reservation, String> nameColumnR;
-    @FXML private TableColumn<Reservation, String> accountColumnR;
-    @FXML private TableColumn<Reservation, Integer> amountColumnR;
-    @FXML private TableColumn<Reservation, String> invoice_no_ColumnR;
+    @FXML private TableColumn<Reservation, String> customerAge;
+    @FXML private TableColumn<Reservation, String> phoneNumCus;
     @FXML private JFXButton deleteReserveListBtn;
     @FXML private JFXButton confirmStatusBtn;
     @FXML private JFXHamburger menu;
@@ -94,8 +95,7 @@ public class TourCheckPageController implements Initializable {
                     System.out.println("choose invoice status");
                 }
             });
-            box.getChildren().addAll(depositInvoice, invoice);
-            content.setBody(box);
+
 
             JFXDialog dialog = new JFXDialog(rootPane, content, JFXDialog.DialogTransition.CENTER);
             dialog.setOverlayClose(false);
@@ -120,6 +120,7 @@ public class TourCheckPageController implements Initializable {
                         manageableDatabase.insertData(createReceiptData(ARREARS_RECEIPT),ARREARS_RECEIPT);  //insert arrears receipt
                     }
                     setReservationListTable();
+                    System.out.println("yes");
                     dialog.close();
 
                 }
@@ -132,9 +133,12 @@ public class TourCheckPageController implements Initializable {
             noBtn.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    dialog.close();
+                    System.out.println("no");dialog.close();
                 }
             });
+
+            box.getChildren().addAll(depositInvoice, invoice);
+            content.setBody(box);
             content.setActions(yesBtn, noBtn);
             dialog.show();
 
