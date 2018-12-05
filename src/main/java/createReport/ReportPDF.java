@@ -105,9 +105,9 @@ public class ReportPDF implements CreateReport {
 
             // create table
             PdfPTable invoiceTable = new PdfPTable(2);
-            invoiceTable.setTotalWidth(80);
+            invoiceTable.setWidthPercentage(50);
             invoiceTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            invoiceTable.setWidths(new float[] {1f, 2f});
+            invoiceTable.setWidths(new float[] {1f, 1.5f});
             invoiceTable.getDefaultCell().setPaddingTop(10);
             invoiceTable.addCell(createCell("No.", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             invoiceTable.addCell(createCell(invoiceNo, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
@@ -298,9 +298,9 @@ public class ReportPDF implements CreateReport {
 
             // create table
             PdfPTable invoiceTable = new PdfPTable(2);
-            invoiceTable.setTotalWidth(80);
+            invoiceTable.setWidthPercentage(50);
             invoiceTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            invoiceTable.setWidths(new float[] {1.5f, 1.3f});
+            invoiceTable.setWidths(new float[] {1f, 1.5f});
             invoiceTable.getDefaultCell().setPaddingTop(10);
             invoiceTable.addCell(createCell("No.", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             invoiceTable.addCell(createCell(receiptNo, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
