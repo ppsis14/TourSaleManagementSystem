@@ -65,8 +65,6 @@ public class EditCustomerPageController implements Initializable {
         manageableDatabase.updateData(customer);
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        //ButtonType buttonTypeOne = new ButtonType("Submit");
-        //alert.getButtonTypes().setAll(buttonTypeOne, ButtonType.OK, ButtonType.CANCEL);
         alert.setTitle("Confirmation Dialog");
         alert.setHeaderText(null);
         alert.setContentText("Do you want to save?");
@@ -80,50 +78,6 @@ public class EditCustomerPageController implements Initializable {
             Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.close();
         }
-
-       /* ButtonType foo = new ButtonType("Submit Reservation", ButtonBar.ButtonData.OK_DONE);
-        ButtonType bar = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                "The format for dates is year.month.day.For example, today is 29/11/2561.", foo, bar);
-
-        alert.setTitle("Date format warning");
-        Optional<ButtonType> result = alert.showAndWait();
-
-        if (result.orElse(bar) == foo) {
-            System.out.println("Update Successful");
-
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-            stage.close();
-        }*/
-
-        /*JFXDialogLayout content = new JFXDialogLayout();
-        content.setHeading(new Text("Confirm Issue"));
-        content.setBody(new Label("Do you want to save and exit?"));
-        JFXDialog dialog = new JFXDialog(rootPane, content, JFXDialog.DialogTransition.CENTER);
-        dialog.getStyleClass().add("dialog-button");
-        dialog.setOverlayClose(false);
-
-        JFXButton yesBtn = new JFXButton("Submit Reservation");
-        yesBtn.getStylesheets().add("style.css");
-        yesBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-            }
-        });
-
-        JFXButton noBtn = new JFXButton("No");
-        //noBtn.getStylesheets().add("style.css");
-        noBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dialog.close();
-            }
-        });
-
-        content.setActions(yesBtn, noBtn);
-        dialog.show();*/
-
 
     }
     @FXML public void handleNotEatBeefCheckbox(ActionEvent event) { eatBeefY.setSelected(false); }

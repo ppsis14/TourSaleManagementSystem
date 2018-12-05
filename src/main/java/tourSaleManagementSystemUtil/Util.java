@@ -7,7 +7,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.util.StringConverter;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -52,7 +51,7 @@ public class Util {
 
     }
 
-    public static void setTourID(ComboBox comboBox){
+    public static void setTourProgram(ComboBox comboBox){
 
         List<TourPackage> tourPackageList = manageableDatabase.getAllTourPackage();
         ObservableList<String> tourNameList = FXCollections.observableArrayList();

@@ -45,7 +45,7 @@
                         <Label maxHeight="1.7976931348623157E308" text="Tour Program :" />
                         <ComboBox fx:id="tourIDComboBox" onAction="#handleSelectTourIDCombobox" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" stylesheets="@style.css" />
                         <Label maxHeight="1.7976931348623157E308" text="Tour ID :" />
-                        <Label fx:id="showTourID" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="220.0" style="-fx-border-color: #2C3E50;" />
+                        <Label fx:id="showTourID" alignment="CENTER" maxHeight="1.7976931348623157E308" prefHeight="29.0" prefWidth="220.0" style="-fx-border-color: #2C3E50;" />
       
                      </children>
                   </HBox>
@@ -124,7 +124,7 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <TableView fx:id="reservationListTable" editable="true" fixedCellSize="0.0" layoutY="6.0" prefHeight="258.0" prefWidth="770.0">
+                                    <TableView fx:id="reservationListTable" editable="true" fixedCellSize="0.0" layoutY="6.0" prefHeight="296.0" prefWidth="770.0">
                                        <columns>
                                           <TableColumn fx:id="reservationCodeColumnR" minWidth="230.0" prefWidth="230.0" text="Reservation Code" />
                                           <TableColumn fx:id="nameColumnR" minWidth="300.0" prefWidth="140.0" text="Name" />
@@ -132,15 +132,7 @@
                                           <TableColumn fx:id="phoneNumCusColumnR" prefWidth="191.0" text="Phone Number" />
                                        </columns>
                                     </TableView>
-                                    <HBox alignment="CENTER" layoutX="-1.0" layoutY="274.0" prefHeight="41.0" prefWidth="772.0" spacing="20.0">
-                                       <children>
-                                          <JFXButton fx:id="confirmInvoiceStatusBtn" alignment="CENTER" buttonType="RAISED" onAction="#handleConfirmInvoiceStatusBtn" prefHeight="30.0" prefWidth="146.0" style="-fx-background-color: #2ECC71; -fx-background-radius: 5;" text="Confirm Status" textAlignment="RIGHT" textFill="WHITE">
-                                             <font>
-                                                <Font name="System Bold" size="14.0" />
-                                             </font>
-                                          </JFXButton>
-                                       </children>
-                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="-1.0" layoutY="274.0" prefHeight="41.0" prefWidth="772.0" spacing="20.0" />
                                  </children>
                               </AnchorPane>
                            </content>

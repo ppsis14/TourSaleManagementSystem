@@ -24,16 +24,6 @@ import java.util.logging.Logger;
 
 public class DisplayGUIUtil {
 
-
-//    public static final String DEPOSIT_INVOICE = "invoice_deposit";
-//    public static final String ARREARS_INVOICE = "invoice_arrears";
-//    public static final String DEPOSIT_RECEIPT = "receipt_deposit";
-//    public static final String ARREARS_RECEIPT = "receipt_arrears";
-//    public static final String PAID = "Paid";
-//    public static final String NOT_PAID = "Not paid";
-//    public static final String CREATED = "Created";
-//    public static final String NOT_CREATED = "Not created";
-
     public static ApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
 
     public static ManageableDatabase manageableDatabase = context.getBean("SpringJDBC_DB", SpringJDBC_DB.class);

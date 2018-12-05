@@ -5,16 +5,11 @@ import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import tourSaleManagementSystemUtil.DisplayGUIUtil;
 import tourSaleManagementSystemUtil.FormatConverter;
 import tourSaleManagementSystemUtil.Util;
@@ -54,11 +49,11 @@ public class TourCheckPageController implements Initializable {
 
     ObservableList<DisplayReservationCustomer> reservationObList = FXCollections.observableArrayList();
     ObservableList<ReservationPayment> reservePaymentObList = FXCollections.observableArrayList();
-    private String status = null;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        Util.setTourID(tourIDComboBox);
+        Util.setTourProgram(tourIDComboBox);
         showTourID.setText(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
         showDetailTourPackage();
         setReservationListTable();
@@ -76,24 +71,55 @@ public class TourCheckPageController implements Initializable {
             dialog.setTitle("Confirmation Dialog");
             dialog.setHeaderText("Confirm Invoice Payment Status");
             dialog.setContentText("Choose Invoice Payment Type ");
-
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()){
                 if (result.get().equals("Deposit Invoice Payment")) {
-                    //System.out.println("Your choice: " + result.get());
-                    if(selectReservationPayment.getDepositStatus().equals(NOT_PAID)) {
-                        selectReservationPayment.setDepositStatus(PAID);
-                        manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
-                        manageableDatabase.insertData(createReceiptData(DEPOSIT_RECEIPT), DEPOSIT_RECEIPT);  //create deposit receipt
-                        manageableDatabase.insertData(createArrearsInvoice(), ARREARS_INVOICE);        //insert arrears invoice
+                    Invoice depositInvoice = manageableDatabase.getOneInvoice("invoice_deposit", selectReservationPayment.getReservationCode());
+                    if (depositInvoice != null && depositInvoice.getInvoiceStatus().equals("Created")){
+                        if(selectReservationPayment.getDepositStatus().equals(NOT_PAID)) {
+                            selectReservationPayment.setDepositStatus(PAID);
+                            manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
+                            manageableDatabase.insertData(createReceiptData(DEPOSIT_RECEIPT), DEPOSIT_RECEIPT);  //create deposit receipt
+                            manageableDatabase.insertData(createArrearsInvoice(), ARREARS_INVOICE);        //insert arrears invoice
+                        }
+                        else {
+                            Alert alertCheckPaidDepositInvoice = new Alert(Alert.AlertType.WARNING);
+                            alertCheckPaidDepositInvoice.setTitle("Warning Dialog");
+                            alertCheckPaidDepositInvoice.setContentText("Sorry, deposit invoice is paid!");
+                            Optional<ButtonType> checkCheckPaidDepositInvoiceAction = alertCheckPaidDepositInvoice.showAndWait();
+
+                        }
                     }
+                    else {
+                        Alert alertCheckCreatedDepositInvoice = new Alert(Alert.AlertType.ERROR);
+                        alertCheckCreatedDepositInvoice.setTitle("Error Dialog");
+                        alertCheckCreatedDepositInvoice.setHeaderText("Confirmation deposit invoice payment is error");
+                        alertCheckCreatedDepositInvoice.setContentText("Please create deposit invoice!");
+                        Optional<ButtonType> checkCheckCreatedDepositInvoiceAction = alertCheckCreatedDepositInvoice.showAndWait();
+                    }
+
                 }
                 else if (result.get().equals("Invoice Payment")){
-                    //System.out.println("Your choice: " + result.get());
-                    if (selectReservationPayment.getArrearsStatus().equals(NOT_PAID)) {
-                        selectReservationPayment.setArrearsStatus(PAID);
-                        manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
-                        manageableDatabase.insertData(createReceiptData(ARREARS_RECEIPT), ARREARS_RECEIPT);  //insert arrears receipt
+                    Invoice arrearsInvoice = manageableDatabase.getOneInvoice("invoice_arrears", selectReservationPayment.getReservationCode());
+                    if (arrearsInvoice != null && arrearsInvoice.getInvoiceStatus().equals("Created")){
+                        if (selectReservationPayment.getArrearsStatus().equals(NOT_PAID)) {
+                            selectReservationPayment.setArrearsStatus(PAID);
+                            manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
+                            manageableDatabase.insertData(createReceiptData(ARREARS_RECEIPT), ARREARS_RECEIPT);  //insert arrears receipt
+                        }
+                        else {
+                            Alert alertCheckPaidInvoice = new Alert(Alert.AlertType.WARNING);
+                            alertCheckPaidInvoice.setTitle("Warning Dialog");
+                            alertCheckPaidInvoice.setContentText("Sorry, invoice is paid!");
+                            Optional<ButtonType> checkCheckPaidInvoiceAction = alertCheckPaidInvoice.showAndWait();
+                        }
+                    }
+                    else {
+                        Alert alertCheckCreatedInvoice = new Alert(Alert.AlertType.ERROR);
+                        alertCheckCreatedInvoice.setTitle("Error Dialog");
+                        alertCheckCreatedInvoice.setHeaderText("Confirmation invoice payment is error");
+                        alertCheckCreatedInvoice.setContentText("Please create invoice!");
+                        Optional<ButtonType> checkCheckCreatedInvoiceAction = alertCheckCreatedInvoice.showAndWait();
                     }
                 }
                 setReservationListTable();
@@ -103,56 +129,66 @@ public class TourCheckPageController implements Initializable {
 
     @FXML
     void handleDeleteReserveListBtn(ActionEvent event) {
-        Alert alertConfirmToDeleteReservationList = new Alert(Alert.AlertType.CONFIRMATION);
-        alertConfirmToDeleteReservationList.setTitle("Confirmation Dialog");
-        alertConfirmToDeleteReservationList.setHeaderText(null);
-        alertConfirmToDeleteReservationList.setContentText("Do you want to delete this reservation?");
-        Optional<ButtonType> action = alertConfirmToDeleteReservationList.showAndWait();
-        if (action.get() == ButtonType.OK) {
+        ReservationPayment deleteReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();
+        if (deleteReservationPayment != null){
+            Alert alertConfirmToDeleteReservationList = new Alert(Alert.AlertType.CONFIRMATION);
+            alertConfirmToDeleteReservationList.setTitle("Confirmation Dialog");
+            alertConfirmToDeleteReservationList.setHeaderText(null);
+            alertConfirmToDeleteReservationList.setContentText("Do you want to delete this reservation?");
+            Optional<ButtonType> action = alertConfirmToDeleteReservationList.showAndWait();
+            if (action.get() == ButtonType.OK) {
+                //ReservationPayment deleteReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();  //select item for delete
+                String tourID = deleteReservationPayment.getTourID();
+                if (deleteReservationPayment != null) {   //when user select data
 
-            ReservationPayment deleteReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();  //select item for delete
-            String tourID = deleteReservationPayment.getTourID();
-            if (deleteReservationPayment != null) {   //when user select data
+                    String reserveCodeDelete = deleteReservationPayment.getReservationCode();
+                    //delete observerList on table view
 
-                String reservCodeDelete = deleteReservationPayment.getReservationCode();
-                //delete observerList on table view
+                    reservationObList = FXCollections.observableArrayList();
+                    for (DisplayReservationCustomer dis: reservationObList) {
+                        if (dis.getReservationCode().equals(deleteReservationPayment.getReservationCode()))
+                            reservationObList.remove(dis);
+                    }
 
-                reservationObList = FXCollections.observableArrayList();
-                for (DisplayReservationCustomer dis: reservationObList) {
-                    if (dis.getReservationCode().equals(deleteReservationPayment.getReservationCode()))
-                        reservationObList.remove(dis);
+                    reservePaymentObList.remove(paymentListTable.getSelectionModel().getSelectedItem());
+
+                    //delete data in database
+                    manageableDatabase.deleteData(deleteReservationPayment);                                    //delete reservation payment list
+                    manageableDatabase.deleteDataByReserveCode(deleteReservationPayment.getReservationCode());   //delete data in reservation list
+
+                    Invoice depositInvoice = manageableDatabase.getOneInvoice(DEPOSIT_INVOICE,reserveCodeDelete);
+                    Invoice arrearsInvoice = manageableDatabase.getOneInvoice(ARREARS_INVOICE,reserveCodeDelete);
+                    Receipt depositReceipt = manageableDatabase.getOneReceipt(DEPOSIT_RECEIPT,reserveCodeDelete);
+                    Receipt arrearsReceipt = manageableDatabase.getOneReceipt(ARREARS_RECEIPT,reserveCodeDelete);
+
+                    if (depositInvoice != null)
+                        manageableDatabase.deleteData(depositInvoice,DEPOSIT_INVOICE);
+                    if(arrearsInvoice != null)
+                        manageableDatabase.deleteData(arrearsInvoice,ARREARS_INVOICE);
+                    if(depositReceipt != null)
+                        manageableDatabase.deleteData(depositReceipt,DEPOSIT_RECEIPT);
+                    if(arrearsReceipt != null)
+                        manageableDatabase.deleteData(arrearsReceipt,ARREARS_RECEIPT);
+
+                    //update last data
+                    TourPackage tourPackage = manageableDatabase.getOneTourPackage(tourID);
+                    int availableSeat = tourPackage.getAvailable() + deleteReservationPayment.getAmountCustomer();
+                    manageableDatabase.updateAvailableData(tourID,availableSeat);   //update seat in tour package
+
+                    showDetailTourPackage();
+                    setReservationListTable();
+
                 }
-
-                reservePaymentObList.remove(paymentListTable.getSelectionModel().getSelectedItem());
-
-                //delete data in database
-                manageableDatabase.deleteData(deleteReservationPayment);                                    //delete reservation payment list
-                manageableDatabase.deleteDataByReservCode(deleteReservationPayment.getReservationCode());   //delete data in reservation list
-
-                Invoice depositInvoice = manageableDatabase.getOneInvoice(DEPOSIT_INVOICE,reservCodeDelete);
-                Invoice arrearsInvoice = manageableDatabase.getOneInvoice(ARREARS_INVOICE,reservCodeDelete);
-                Receipt depositReceipt = manageableDatabase.getOneReceipt(DEPOSIT_RECEIPT,reservCodeDelete);
-                Receipt arrearsReceipt = manageableDatabase.getOneReceipt(ARREARS_RECEIPT,reservCodeDelete);
-
-                if (depositInvoice != null)
-                    manageableDatabase.deleteData(depositInvoice,DEPOSIT_INVOICE);
-                if(arrearsInvoice != null)
-                    manageableDatabase.deleteData(arrearsInvoice,ARREARS_INVOICE);
-                if(depositReceipt != null)
-                    manageableDatabase.deleteData(depositReceipt,DEPOSIT_RECEIPT);
-                if(arrearsReceipt != null)
-                    manageableDatabase.deleteData(arrearsReceipt,ARREARS_RECEIPT);
-
-                //update last data
-                TourPackage tourPackage = manageableDatabase.getOneTourPackage(tourID);
-                int availableSeat = tourPackage.getAvailable() + deleteReservationPayment.getAmountCustomer();
-                manageableDatabase.updateAvailableData(tourID,availableSeat);   //update seat in tour package
-
-                showDetailTourPackage();
-                setReservationListTable();
-
             }
         }
+        else {
+            Alert alertWarningBeforeDelete = new Alert(Alert.AlertType.WARNING);
+            alertWarningBeforeDelete.setTitle("Warning Dialog");
+            alertWarningBeforeDelete.setHeaderText(null);
+            alertWarningBeforeDelete.setContentText("Please select item before delete");
+            Optional<ButtonType> deleteAction = alertWarningBeforeDelete.showAndWait();
+        }
+
     }
 
     @FXML

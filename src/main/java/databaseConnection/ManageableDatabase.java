@@ -31,7 +31,7 @@ public interface ManageableDatabase {
     void insertData(Reservation reservation);
     void updateData(Reservation reservation);
     void deleteData(Reservation reservation);
-    void deleteDataByReservCode(String reservationCode);
+    void deleteDataByReserveCode(String reservationCode);
 
     List<Reservation> getAllReservationByTourID(String tourID);
 

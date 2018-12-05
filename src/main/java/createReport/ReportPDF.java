@@ -45,12 +45,12 @@ public class ReportPDF implements CreateReport {
         String invoiceNo = null;
         String currentDate = FormatConverter.getLocalDateFormat("dd-MM-yyyy");
 
-        if(titleInvoice == "DEPOSIT INVOICE / ใบแจ้งหนี้-เงินมัดจำ"){
+        if(titleInvoice.equals("DEPOSIT INVOICE / ใบแจ้งหนี้-เงินมัดจำ")){
             content = "ยอดมัดจำค่าบริการ โปรแกรม "+tourPackage.getTourName()+" สำหรับ "+amountCustomer+" ท่าน";
             dueDate = tourPackage.getDepositDate();
             invoiceNo = invoiceDeposit.getInvoiceNo();
         }
-        else if(titleInvoice == "INVOICE / ใบแจ้งหนี้"){
+        else if(titleInvoice.equals("INVOICE / ใบแจ้งหนี้")){
             dueDate = tourPackage.getArrearsDate();
             content = "ยอดชำระส่วนที่เหลือโปรแกรม "+tourPackage.getTourName()+" สำหรับ "+amountCustomer+" ท่าน";
             invoiceNo = invoiceArrears.getInvoiceNo();
@@ -105,9 +105,9 @@ public class ReportPDF implements CreateReport {
 
             // create table
             PdfPTable invoiceTable = new PdfPTable(2);
-            invoiceTable.setWidthPercentage(50);
+            invoiceTable.setWidthPercentage(40);
             invoiceTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            invoiceTable.setWidths(new float[] {1f, 1.5f});
+            invoiceTable.setWidths(new float[] {0.5f, 1.5f});
             invoiceTable.getDefaultCell().setPaddingTop(10);
             invoiceTable.addCell(createCell("No.", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             invoiceTable.addCell(createCell(invoiceNo, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
@@ -236,16 +236,16 @@ public class ReportPDF implements CreateReport {
         String receiptNo = null;
         String currentDate = FormatConverter.getLocalDateFormat("dd-MM-yyyy");
 
-        if(titleReceipt == "DEPOSIT RECEIPT / ใบเสร็จรับเงิน"){
+        if(titleReceipt.equals("DEPOSIT RECEIPT / ใบเสร็จรับเงิน")){
             content = "ยอดมัดจำค่าบริการ โปรแกรม "+tourPackage.getTourName()+" สำหรับ "+amountCustomer+" ท่าน";
             dueDate = tourPackage.getDepositDate();
-            status = "Deposit Payment Date";
+            //status = "Deposit Payment Date";
             receiptNo = receiptDeposit.getReceiptNo();
         }
-        else if(titleReceipt == "RECEIPT / ใบสำคัญรับเงิน"){
+        else if(titleReceipt.equals("RECEIPT / ใบสำคัญรับเงิน")){
             dueDate = tourPackage.getArrearsDate();
             content = "ยอดชำระส่วนที่เหลือโปรแกรม "+tourPackage.getTourName()+" สำหรับ "+amountCustomer+" ท่าน";
-            status = "Payment Date";
+            //status = "Payment Date";
             receiptNo = receiptArrears.getReceiptNo();
         }
 
@@ -298,16 +298,14 @@ public class ReportPDF implements CreateReport {
 
             // create table
             PdfPTable invoiceTable = new PdfPTable(2);
-            invoiceTable.setWidthPercentage(50);
+            invoiceTable.setWidthPercentage(40);
             invoiceTable.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            invoiceTable.setWidths(new float[] {1f, 1.5f});
+            invoiceTable.setWidths(new float[] {0.5f, 1.5f});
             invoiceTable.getDefaultCell().setPaddingTop(10);
             invoiceTable.addCell(createCell("No.", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             invoiceTable.addCell(createCell(receiptNo, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
-            invoiceTable.addCell(createCell(status, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
-            invoiceTable.addCell(createCell(currentDate, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             invoiceTable.addCell(createCell("Date", angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
-            invoiceTable.addCell(createCell(dueDate, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
+            invoiceTable.addCell(createCell(currentDate, angsanaNewFont16, 0.5f, 1, Element.ALIGN_LEFT));
             document.add(invoiceTable);
 
             PdfPTable detailTable = new PdfPTable(6);

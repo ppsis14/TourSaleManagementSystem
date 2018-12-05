@@ -55,8 +55,8 @@ public class InvoicePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        Util.setTourID(tourIDChoiceDI);
-        Util.setTourID(tourIDChoiceAI);
+        Util.setTourProgram(tourIDChoiceDI);
+        Util.setTourProgram(tourIDChoiceAI);
         currentDateInvoice.setText(FormatConverter.getLocalDateFormat("dd-MM-yyyy"));
         showTableView();
     }

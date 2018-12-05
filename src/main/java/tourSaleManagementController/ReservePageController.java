@@ -83,7 +83,7 @@ public class ReservePageController implements Initializable {
         newCustomer.setSelected(true);
         oldCustomer.setSelected(false);
         clearText();
-        Util.setTourID(tourIDComboBox);
+        Util.setTourProgram(tourIDComboBox);
         Util.setDatePickerFormat(dateOfBirth);
         Util.setDatePickerFormat(expPassportDate);
         searchByCustomerName.clear();
@@ -125,48 +125,28 @@ public class ReservePageController implements Initializable {
 
     @FXML
     void handleAddCustomerBtn(ActionEvent event) {
+        if (checkFillOutInformation()){
+            String tour_id = manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
+            int availableSeat = manageableDatabase.getAvailableByTourID(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
+            if(availableSeat - Integer.valueOf(customerNo.getText()) >= 0) {
+                //pop up 1
+                Alert alertConfirmToAddCustomerData = new Alert(Alert.AlertType.CONFIRMATION);
+                alertConfirmToAddCustomerData.setTitle("Confirmation Dialog");
+                alertConfirmToAddCustomerData.setHeaderText(null);
+                alertConfirmToAddCustomerData.setContentText("Do you want to add reservation?");
+                Optional<ButtonType> addCustomerDataAction = alertConfirmToAddCustomerData.showAndWait();
 
-        String tour_id = manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
-        int availableSeat = manageableDatabase.getAvailableByTourID(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
-        if(availableSeat - Integer.valueOf(customerNo.getText()) >= 0) {
-            //pop up 1
-            Alert alertConfirmToAddCustomerData = new Alert(Alert.AlertType.CONFIRMATION);
-            alertConfirmToAddCustomerData.setTitle("Confirmation Dialog");
-            alertConfirmToAddCustomerData.setHeaderText(null);
-            alertConfirmToAddCustomerData.setContentText("Do you want to add reservation?");
-            Optional<ButtonType> addCustomerDataAction = alertConfirmToAddCustomerData.showAndWait();
+                if (addCustomerDataAction.get() == ButtonType.OK) {
 
+                    setCustomerFromGUI();
+                    if (newCustomer.isSelected()) {
+                        newCustomerID_List.add(customer.getCustomerID());
+                    }
+                    //add customer id to list
+                    customerList.add(customer);
+                    setReservationCustomerFromGUI();
+                    reserveCustomer_List.add(reservationCustomer);
 
-            if (addCustomerDataAction.get() == ButtonType.OK) {
-
-                setCustomerFromGUI();
-                if (newCustomer.isSelected()) {
-                    newCustomerID_List.add(customer.getCustomerID());
-                }
-                //add customer id to list
-                customerList.add(customer);
-                setReservationCustomerFromGUI();
-                reserveCustomer_List.add(reservationCustomer);
-
-                clearText();
-                searchByCustomerName.clear();
-                searchByCustomerName.setDisable(true);
-                searchCustomerBtn.setDisable(true);
-                customer = new Customer();
-                reservationCustomer = new Reservation();
-
-                //pop up 2
-                Alert alertConfirmToAddCustomerMore = new Alert(Alert.AlertType.CONFIRMATION);
-                alertConfirmToAddCustomerMore.setTitle("Confirmation Dialog");
-                alertConfirmToAddCustomerMore.setHeaderText(null);
-                alertConfirmToAddCustomerMore.setContentText("Do you want to add another customer?");
-                Optional<ButtonType> addCustomerMoreAction = alertConfirmToAddCustomerMore.showAndWait();
-
-                if (addCustomerMoreAction.get() == ButtonType.OK) { // if user want to add another customer
-
-                    customerNo.setText(String.valueOf(Integer.valueOf(customerNo.getText()) + 1));     // add count amount customer
-
-                    //clear text for fill next data
                     clearText();
                     searchByCustomerName.clear();
                     searchByCustomerName.setDisable(true);
@@ -174,58 +154,81 @@ public class ReservePageController implements Initializable {
                     customer = new Customer();
                     reservationCustomer = new Reservation();
 
-                } else if (addCustomerMoreAction.get() == ButtonType.CANCEL) {     //stop reserving another customer
+                    //pop up 2
+                    Alert alertConfirmToAddCustomerMore = new Alert(Alert.AlertType.CONFIRMATION);
+                    alertConfirmToAddCustomerMore.setTitle("Confirmation Dialog");
+                    alertConfirmToAddCustomerMore.setHeaderText(null);
+                    alertConfirmToAddCustomerMore.setContentText("Do you want to add another customer?");
+                    Optional<ButtonType> addCustomerMoreAction = alertConfirmToAddCustomerMore.showAndWait();
 
-                    //insert customer to database
-                    for (Customer customer : customerList) {
-                        if(newCustomerID_List.contains(customer.getCustomerID()))
-                            manageableDatabase.insertData(customer);    //new customer
-                        else
-                            manageableDatabase.updateData(customer);    //old customer
+                    if (addCustomerMoreAction.get() == ButtonType.OK) { // if user want to add another customer
+
+                        customerNo.setText(String.valueOf(Integer.valueOf(customerNo.getText()) + 1));     // add count amount customer
+
+                        //clear text for fill next data
+                        clearText();
+                        searchByCustomerName.clear();
+                        searchByCustomerName.setDisable(true);
+                        searchCustomerBtn.setDisable(true);
+                        customer = new Customer();
+                        reservationCustomer = new Reservation();
+
+                    } else if (addCustomerMoreAction.get() == ButtonType.CANCEL) {     //stop reserving another customer
+                        //insert customer to database
+                        for (Customer customer : customerList) {
+                            if(newCustomerID_List.contains(customer.getCustomerID()))
+                                manageableDatabase.insertData(customer);    //new customer
+                            else
+                                manageableDatabase.updateData(customer);    //old customer
+                        }
+
+                        //insert reservation customer to database
+                        for (Reservation reservation: reserveCustomer_List) {
+                            manageableDatabase.insertData(reservation);
+                        }
+
+                        //insert reservation payment and deposit invoice to database
+                        setReservationPaymentFromGUI();
+                        setDepositInvoice();
+                        manageableDatabase.insertData(reservationPayment);
+                        manageableDatabase.insertData(invoice, DEPOSIT_INVOICE);
+
+                        //update seat in tour package
+                        manageableDatabase.updateAvailableData(tour_id,availableSeat-Integer.valueOf(customerNo.getText()));
+
+                        //setup value of reservation page
+                        searchByCustomerName.clear();
+                        searchByCustomerName.setDisable(true);
+                        searchCustomerBtn.setDisable(true);
+                        reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
+                        String tmpOrder[] = reserveCode.getText().split("-");
+                        orderReserv = Integer.valueOf(tmpOrder[3]);
+                        setUpValueReservationPage();
                     }
 
-                    //insert reservation customer to database
-                    for (Reservation reservation: reserveCustomer_List) {
-                        manageableDatabase.insertData(reservation);
-                    }
-
-                    //insert reservation payment and deposit invoice to database
-                    setReservationPaymentFromGUI();
-                    setDepositInvoice();
-                    manageableDatabase.insertData(reservationPayment);
-                    manageableDatabase.insertData(invoice, DEPOSIT_INVOICE);
-
-                    //update seat in tour package
-                    manageableDatabase.updateAvailableData(tour_id,availableSeat-Integer.valueOf(customerNo.getText()));
-
-                    //setup value of reservation page
-                    searchByCustomerName.clear();
-                    searchByCustomerName.setDisable(true);
-                    searchCustomerBtn.setDisable(true);
-                    reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
-                    String tmpOrder[] = reserveCode.getText().split("-");
-                    orderReserv = Integer.valueOf(tmpOrder[3]);
+                }
+            }
+            else{
+                //pop up warning
+                Alert alertShowInformationIsUpdate = new Alert(Alert.AlertType.INFORMATION);
+                alertShowInformationIsUpdate.setTitle("Confirmation Dialog");
+                alertShowInformationIsUpdate.setHeaderText(null);
+                alertShowInformationIsUpdate.setContentText("Available seat are full.");
+                Optional<ButtonType> action = alertShowInformationIsUpdate.showAndWait();
+                setUpValueReservationPage();
+                if (action.get() == ButtonType.OK){
                     setUpValueReservationPage();
                 }
 
-            } else if (addCustomerDataAction.get() == ButtonType.CANCEL) {
-                //back to edit
             }
-        }else{
-            //pop up warning
-            Alert alertShowInformationIsUpdate = new Alert(Alert.AlertType.INFORMATION);
-            alertShowInformationIsUpdate.setTitle("Confirmation Dialog");
-            alertShowInformationIsUpdate.setHeaderText(null);
-            alertShowInformationIsUpdate.setContentText("Available seat are full.");
-            Optional<ButtonType> action = alertShowInformationIsUpdate.showAndWait();
-            setUpValueReservationPage();
-            if (action.get() == ButtonType.OK){
-                setUpValueReservationPage();
-            }
-
-
         }
-
+        else {
+            Alert alertCheckFillOutInformation = new Alert(Alert.AlertType.ERROR);
+            alertCheckFillOutInformation.setTitle("Error Dialog");
+            alertCheckFillOutInformation.setHeaderText("Addition customer to reservation is error");
+            alertCheckFillOutInformation.setContentText("Please completely fill out information follow (*)");
+            Optional<ButtonType> checkFillOutAction = alertCheckFillOutInformation.showAndWait();
+        }
     }
 
 
@@ -433,5 +436,27 @@ public class ReservePageController implements Initializable {
         }
         TextFields.bindAutoCompletion(searchByCustomerName, searchList);
     }
+    public Boolean checkFillOutInformation()
+    {
+        int count=0;
+        if (titleNameTH.getSelectionModel().isEmpty() || firstNameTH.getText().isEmpty() || lastNameTH.getText().isEmpty()) count++;
+        if (titleNameEN.getSelectionModel().isEmpty() || firstNameEN.getText().isEmpty() || lastNameEN.getText().isEmpty()) count++;
+        if (genderChoice.getSelectionModel().isEmpty())
+        if (age.getText().isEmpty()) count++;
+        if (dateOfBirth.getEditor().getText().isEmpty()) count++;
+        if (passportNo.getText().isEmpty()) count++;
+        if (expPassportDate.getEditor().getText().isEmpty()) count++;
+        if (phoneNum.getText().isEmpty()) count++;
+        if (underlyingDisease.getText().isEmpty()) count++;
+        if (foodAllergy.getText().isEmpty()) count++;
+        if (!eatBeefY.isSelected() && !eatBeefN.isSelected()) count++;
+        if (hearAboutUsChoices.getSelectionModel().isEmpty()) count++;
 
+        if (count == 0){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 }

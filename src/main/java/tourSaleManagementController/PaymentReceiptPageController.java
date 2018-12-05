@@ -52,8 +52,8 @@ public class PaymentReceiptPageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        Util.setTourID(tourIDChoiceDR);
-        Util.setTourID(tourIDChoiceAR);
+        Util.setTourProgram(tourIDChoiceDR);
+        Util.setTourProgram(tourIDChoiceAR);
         currentDateReceipt.setText(FormatConverter.getLocalDateFormat("dd-MM-yyyy"));
         showTableView();
 

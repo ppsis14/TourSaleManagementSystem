@@ -90,7 +90,7 @@
                               </HBox>
                               <HBox prefHeight="19.0" prefWidth="664.0" spacing="10.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="170.0" text="Gender:" />
+                                    <Label prefHeight="17.0" prefWidth="170.0" text="* Gender:" />
                                     <Label prefHeight="17.0" prefWidth="142.0" text="* Age:" />
                                     <Label prefHeight="17.0" prefWidth="278.0" text="Occupation:" />
                                  </children>
@@ -137,7 +137,7 @@
                               <HBox prefHeight="19.0" prefWidth="664.0" spacing="10.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="216.0" text="* Phone:" />
-                                    <Label prefHeight="17.0" prefWidth="215.0" text="* Home Tel:" />
+                                    <Label prefHeight="17.0" prefWidth="215.0" text="Home Tel:" />
                                     <Label prefHeight="17.0" prefWidth="215.0" text="Fax:" />
                                  </children>
                               </HBox>
@@ -150,7 +150,7 @@
                               </HBox>
                               <HBox prefHeight="19.0" prefWidth="664.0" spacing="10.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="233.0" text="* Email Address:" />
+                                    <Label prefHeight="17.0" prefWidth="233.0" text="Email Address:" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="33.0" prefWidth="240.0" spacing="10.0">
@@ -209,7 +209,6 @@
                                     <Label prefHeight="17.0" prefWidth="448.0" text="* How did you hear about us?" />
                                  </children>
                               </HBox>
-                              <HBox prefHeight="33.0" prefWidth="240.0" spacing="10.0" />
                               <HBox prefHeight="33.0" prefWidth="240.0" spacing="10.0">
                                  <children>
                                     <ComboBox fx:id="hearAboutUsChoices" prefHeight="27.0" prefWidth="186.0" />
@@ -232,7 +231,7 @@
          </font>
       </JFXButton>
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="167.0" layoutY="589.0" prefHeight="29.0" prefWidth="567.0" text="** Please check the accuracy and completeness of the information before add customer." textFill="#c90000" />
-      <ComboBox fx:id="tourIDComboBox" onAction="#handleTourIDComboBox" layoutX="153.0" layoutY="159.0" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" stylesheets="@style.css" />
+      <ComboBox fx:id="tourIDComboBox" layoutX="153.0" layoutY="159.0" onAction="#handleTourIDComboBox" prefHeight="29.0" prefWidth="240.0" style="-fx-border-color: #2C3E50; -fx-background-color: #FFFFFF;" stylesheets="@style.css" />
       <Label fx:id="reserveCode" alignment="CENTER" contentDisplay="RIGHT" layoutX="176.0" layoutY="113.0" prefHeight="29.0" prefWidth="277.0" style="-fx-border-color: #2C3E50;" />
    </children>
 </AnchorPane>

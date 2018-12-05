@@ -249,7 +249,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     }
 
     @Override
-    public void deleteDataByReservCode(String reservationCode) {
+    public void deleteDataByReserveCode(String reservationCode) {
         String deleteQuery = "Delete From reservation_customer Where Reservation_code = ?";
         jdbcTemplate.update(deleteQuery, reservationCode);
     }
