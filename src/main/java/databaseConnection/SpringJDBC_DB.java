@@ -150,7 +150,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     public void updateData(Customer customer) {
         String updateQuery = "update customer set TitleNameTH = ? , FirstNameTH = ?, LastNameTH = ?, TitleNameENG = ?, FirstNameENG = ?, LastNameENG = ?," +
                 "Gender = ?, Age = ?, Occupation = ? , Date_of_birth = ?, Passport_no = ?, Expire_passport_date = ?, Contact_address = ?,Cell_phone = ?, Home_Tel = ?, Fax = ?, " +
-                "Email_address = ?, Disease = ?, Food_allergy = ?,Eat_beef = ?,More_detail = ?, HearAboutUs = ? where Customer_id = "+"'"+customer.getCustomerID()+"'";
+                "Email_address = ?, Disease = ?, Food_allergy = ?,Eat_beef = ?,More_detail = ?, HearAboutUs = ? where Customer_ID = ?";
         Object[] data = new Object[]{
                 customer.getTitleNameTH(), customer.getFirstNameTH(), customer.getLastNameTH(),
                 customer.getTitleNameENG(), customer.getFirstNameENG(), customer.getLastNameENG(),
@@ -159,13 +159,14 @@ public class SpringJDBC_DB implements ManageableDatabase {
                 customer.getContactAddress(), customer.getCell_phone(),
                 customer.getHome_Tel(), customer.getFax(), customer.getEmail(),
                 customer.getDisease(), customer.getFoodAllergy(),
-                customer.getEatBeef(), customer.getMoreDetail(), customer.getHearAboutUs()};
+                customer.getEatBeef(), customer.getMoreDetail(), customer.getHearAboutUs(),
+                customer.getCustomerID()};
         jdbcTemplate.update(updateQuery, data);
     }
 
     @Override
     public void deleteData(Customer customer) {
-        String deleteQuery = "Delete From customer Where customer_id = ?";
+        String deleteQuery = "Delete From customer Where Customer_ID = ?";
         jdbcTemplate.update(deleteQuery, customer.getCustomerID());
     }
 
@@ -375,7 +376,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public void updateData(Invoice invoice ,String invoiceType) {
 
-        String query = "update "+invoiceType+ " set Reservation_code = ? , Invoice_no = ?, Tour_ID = ?,Tour_name = ?,Customer_ID = ?,Customer_name = ?,Employee_ID = ?,Employee_name = ?,Amount_customer = ?,Total_price = ?,Invoice_status = ? Where Reservation_code = )" + invoice.getReservationCode() ;
+        String query = "update "+invoiceType+ " set Reservation_code = ? , Invoice_no = ?, Tour_ID = ?,Tour_name = ?,Customer_ID = ?,Customer_name = ?,Employee_ID = ?,Employee_name = ?,Amount_customer = ?,Total_price = ?,Invoice_status = ? Where Reservation_code = ?)";
 
         Object[] data = new Object[]{
                 invoice.getReservationCode(),
@@ -388,7 +389,8 @@ public class SpringJDBC_DB implements ManageableDatabase {
                 invoice.getEmployeeName(),
                 invoice.getAmountCustomer(),
                 invoice.getTotalPrice(),
-                invoice.getInvoiceStatus()
+                invoice.getInvoiceStatus(),
+                invoice.getReservationCode()
         };
         jdbcTemplate.update(query, data);
     }
@@ -407,7 +409,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public void deleteData(Invoice invoice, String invoiceType) {
 
-        String deleteQuery = "Delete From " + invoiceType + " Where Reservation_code = ?";
+        String deleteQuery = "Delete From " + "'"+ invoiceType + "'" + " Where Reservation_code = ?";
         jdbcTemplate.update(deleteQuery, invoice.getReservationCode());
     }
 
@@ -431,9 +433,16 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public Invoice getOneInvoice(String invoiceType, String reservationCode) {
+        Invoice invoice = null;
         String query = "select * from " + invoiceType +" Where Reservation_code = "+"'"+reservationCode+"'";
-        Invoice invoice = jdbcTemplate.queryForObject(query,new InvoiceRowMapper());
-        return invoice;
+        try {
+             invoice = jdbcTemplate.queryForObject(query,new InvoiceRowMapper());
+            return invoice;
+        }
+        catch (EmptyResultDataAccessException e){
+            return invoice;
+        }
+
     }
 
     @Override
@@ -495,7 +504,8 @@ public class SpringJDBC_DB implements ManageableDatabase {
 
     @Override
     public void deleteData(Receipt receipt, String receiptType) {
-
+        String deleteQuery = "Delete From " + "'" + receiptType +"'" + " Where Reservation_code = ?";
+        jdbcTemplate.update(deleteQuery, receipt.getReservationCode());
     }
 
     @Override
@@ -580,7 +590,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
         public Customer mapRow(ResultSet rs, int rowNum)
                 throws SQLException {
             Customer customer = new Customer(
-                    rs.getString("customer_id"),
+                    rs.getString("Customer_ID"),
                     rs.getString("TitleNameTH"),
                     rs.getString("FirstNameTH"),
                     rs.getString("LastNameTH"),

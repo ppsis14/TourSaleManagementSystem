@@ -42,17 +42,17 @@ public class TourCheckPageController implements Initializable {
     @FXML private TableColumn<ReservationPayment, String> depositPaymentStatusColumnP;
     @FXML private TableColumn<ReservationPayment, String> arrearsPaymentStatusColumnP;
     @FXML private TableColumn<ReservationPayment, String> employeeName_ColumnP;
-    @FXML private TableView<Reservation> reservationListTable;
-    @FXML private TableColumn<Reservation, String> reservationCodeColumnR;
-    @FXML private TableColumn<Reservation, String> nameColumnR;
-    @FXML private TableColumn<Reservation, String> customerAge;
-    @FXML private TableColumn<Reservation, String> phoneNumCus;
+    @FXML private TableView<DisplayReservationCustomer> reservationListTable;
+    @FXML private TableColumn<DisplayReservationCustomer, String> reservationCodeColumnR;
+    @FXML private TableColumn<DisplayReservationCustomer, String> nameColumnR;
+    @FXML private TableColumn<DisplayReservationCustomer, String> customerAgeColumnR;
+    @FXML private TableColumn<DisplayReservationCustomer, String> phoneNumCusColumnR;
     @FXML private JFXButton deleteReserveListBtn;
     @FXML private JFXButton confirmStatusBtn;
     @FXML private JFXHamburger menu;
     @FXML private JFXDrawer drawerMenu;
 
-    ObservableList<Reservation> reservationObList = FXCollections.observableArrayList();
+    ObservableList<DisplayReservationCustomer> reservationObList = FXCollections.observableArrayList();
     ObservableList<ReservationPayment> reservePaymentObList = FXCollections.observableArrayList();
     private String status = null;
     @Override
@@ -114,10 +114,35 @@ public class TourCheckPageController implements Initializable {
             String tourID = deleteReservationPayment.getTourID();
             if (deleteReservationPayment != null) {   //when user select data
 
-                manageableDatabase.deleteData(deleteReservationPayment);  //delete in database
-                manageableDatabase.deleteDataByReservCode(deleteReservationPayment.getReservationCode());
-                reservePaymentObList.remove(paymentListTable.getSelectionModel().getSelectedItem()); //delete on table view
-                reservationObList = FXCollections.observableArrayList(manageableDatabase.getAllReservationByTourID(tourID));
+                String reservCodeDelete = deleteReservationPayment.getReservationCode();
+                //delete observerList on table view
+
+                reservationObList = FXCollections.observableArrayList();
+                for (DisplayReservationCustomer dis: reservationObList) {
+                    if (dis.getReservationCode().equals(deleteReservationPayment.getReservationCode()))
+                        reservationObList.remove(dis);
+                }
+
+                reservePaymentObList.remove(paymentListTable.getSelectionModel().getSelectedItem());
+
+                //delete data in database
+                manageableDatabase.deleteData(deleteReservationPayment);                                    //delete reservation payment list
+                manageableDatabase.deleteDataByReservCode(deleteReservationPayment.getReservationCode());   //delete data in reservation list
+
+                Invoice depositInvoice = manageableDatabase.getOneInvoice(DEPOSIT_INVOICE,reservCodeDelete);
+                Invoice arrearsInvoice = manageableDatabase.getOneInvoice(ARREARS_INVOICE,reservCodeDelete);
+                Receipt depositReceipt = manageableDatabase.getOneReceipt(DEPOSIT_RECEIPT,reservCodeDelete);
+                Receipt arrearsReceipt = manageableDatabase.getOneReceipt(ARREARS_RECEIPT,reservCodeDelete);
+
+                if (depositInvoice != null)
+                    manageableDatabase.deleteData(depositInvoice,DEPOSIT_INVOICE);
+                if(arrearsInvoice != null)
+                    manageableDatabase.deleteData(arrearsInvoice,ARREARS_INVOICE);
+                if(depositReceipt != null)
+                    manageableDatabase.deleteData(depositReceipt,DEPOSIT_RECEIPT);
+                if(arrearsReceipt != null)
+                    manageableDatabase.deleteData(arrearsReceipt,ARREARS_RECEIPT);
+
                 //update last data
                 TourPackage tourPackage = manageableDatabase.getOneTourPackage(tourID);
                 int availableSeat = tourPackage.getAvailable() + deleteReservationPayment.getAmountCustomer();
@@ -155,9 +180,17 @@ public class TourCheckPageController implements Initializable {
     void setReservationListTable(){
 
         String tourID = manageableDatabase.getTourID(String.valueOf(tourIDComboBox.getSelectionModel().getSelectedItem()));
-        reservationObList = FXCollections.observableArrayList(manageableDatabase.getAllReservationByTourID(tourID));
         reservePaymentObList = FXCollections.observableArrayList(manageableDatabase.getAllReservationPaymentByTourID(tourID));
+        reservationObList = FXCollections.observableArrayList();
 
+        for (Reservation re:manageableDatabase.getAllReservationByTourID(tourID)) {
+            Customer customer = manageableDatabase.getOneCustomer(re.getCustomerID());
+            reservationObList.add(new DisplayReservationCustomer(
+                    re.getReservationCode(),
+                    re.getCustomerName(),
+                    customer.getAge(),
+                    customer.getCell_phone()));
+        }
         //find data base for show on table view.
         reservationCodeColumnP.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
         nameColumnP.setCellValueFactory(new PropertyValueFactory<>("customerName"));
@@ -167,6 +200,8 @@ public class TourCheckPageController implements Initializable {
 
         reservationCodeColumnR.setCellValueFactory(new PropertyValueFactory<>("reservationCode"));
         nameColumnR.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        customerAgeColumnR.setCellValueFactory(new PropertyValueFactory<>("ageCustomer"));
+        phoneNumCusColumnR.setCellValueFactory(new PropertyValueFactory<>("phoneNumCustomer"));
 
 
         paymentListTable.setItems(reservePaymentObList);
@@ -209,6 +244,53 @@ public class TourCheckPageController implements Initializable {
     return receipt;
     }
 
+    protected class DisplayReservationCustomer{
+
+        private String reservationCode;
+        private String customerName;
+        private String ageCustomer;
+        private String phoneNumCustomer;
+
+        public DisplayReservationCustomer(){}
+        public DisplayReservationCustomer(String reservationCode, String customerName, String ageCustomer, String phoneNumCustomer) {
+            this.reservationCode = reservationCode;
+            this.customerName = customerName;
+            this.ageCustomer = ageCustomer;
+            this.phoneNumCustomer = phoneNumCustomer;
+        }
+
+        public String getReservationCode() {
+            return reservationCode;
+        }
+
+        public void setReservationCode(String reservationCode) {
+            this.reservationCode = reservationCode;
+        }
+
+        public String getCustomerName() {
+            return customerName;
+        }
+
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
+        }
+
+        public String getAgeCustomer() {
+            return ageCustomer;
+        }
+
+        public void setAgeCustomer(String ageCustomer) {
+            this.ageCustomer = ageCustomer;
+        }
+
+        public String getPhoneNumCustomer() {
+            return phoneNumCustomer;
+        }
+
+        public void setPhoneNumCustomer(String phoneNumCustomer) {
+            this.phoneNumCustomer = phoneNumCustomer;
+        }
+    }
 
 
 }

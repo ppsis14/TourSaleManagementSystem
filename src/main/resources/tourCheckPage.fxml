@@ -128,8 +128,8 @@
                                        <columns>
                                           <TableColumn fx:id="reservationCodeColumnR" minWidth="230.0" prefWidth="230.0" text="Reservation Code" />
                                           <TableColumn fx:id="nameColumnR" minWidth="300.0" prefWidth="140.0" text="Name" />
-                                          <TableColumn fx:id="customerAge" minWidth="100.0" prefWidth="100.0" text="Age" />
-                                          <TableColumn fx:id="phoneNumCus" prefWidth="191.0" text="Phone Number" />
+                                          <TableColumn fx:id="customerAgeColumnR" minWidth="100.0" prefWidth="100.0" text="Age" />
+                                          <TableColumn fx:id="phoneNumCusColumnR" prefWidth="191.0" text="Phone Number" />
                                        </columns>
                                     </TableView>
                                     <HBox alignment="CENTER" layoutX="-1.0" layoutY="274.0" prefHeight="41.0" prefWidth="772.0" spacing="20.0">

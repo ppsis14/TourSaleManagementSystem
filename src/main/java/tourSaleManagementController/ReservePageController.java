@@ -99,8 +99,10 @@ public class ReservePageController implements Initializable {
 
     @FXML public void handleNotEatBeefCheckbox(ActionEvent event) { eatBeefY.setSelected(false); }
     @FXML public void handleEatBeefCheckbox(ActionEvent event) { eatBeefN.setSelected(false); }
+
     @FXML public void handleNewCustomerCheckbox(ActionEvent event) {
         oldCustomer.setSelected(false);
+        newCustomer.setSelected(true);
         clearText();
         searchByCustomerName.clear();
         searchByCustomerName.setDisable(true);
@@ -109,6 +111,7 @@ public class ReservePageController implements Initializable {
     }
     @FXML public void handleOldCustomerCheckbox(ActionEvent event) {
         newCustomer.setSelected(false);
+        oldCustomer.setSelected(true);
         searchByCustomerName.setDisable(false);
         searchCustomerBtn.setDisable(false);
         setSearchCustomer();
@@ -139,16 +142,16 @@ public class ReservePageController implements Initializable {
                 setCustomerFromGUI();
                 if (newCustomer.isSelected()) {
                     newCustomerID_List.add(customer.getCustomerID());
-                    System.out.println("customer ID : "+ newCustomerID_List.toString());
                 }
                 //add customer id to list
                 customerList.add(customer);
-                System.out.println("customer list : "+customerList.toString());
                 setReservationCustomerFromGUI();
                 reserveCustomer_List.add(reservationCustomer);
-                System.out.println("reservation list : "+reserveCustomer_List.toString());
 
                 clearText();
+                searchByCustomerName.clear();
+                searchByCustomerName.setDisable(true);
+                searchCustomerBtn.setDisable(true);
                 customer = new Customer();
                 reservationCustomer = new Reservation();
 
@@ -165,6 +168,9 @@ public class ReservePageController implements Initializable {
 
                     //clear text for fill next data
                     clearText();
+                    searchByCustomerName.clear();
+                    searchByCustomerName.setDisable(true);
+                    searchCustomerBtn.setDisable(true);
                     customer = new Customer();
                     reservationCustomer = new Reservation();
 
@@ -193,6 +199,9 @@ public class ReservePageController implements Initializable {
                     manageableDatabase.updateAvailableData(tour_id,availableSeat-Integer.valueOf(customerNo.getText()));
 
                     //setup value of reservation page
+                    searchByCustomerName.clear();
+                    searchByCustomerName.setDisable(true);
+                    searchCustomerBtn.setDisable(true);
                     reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
                     String tmpOrder[] = reserveCode.getText().split("-");
                     orderReserv = Integer.valueOf(tmpOrder[3]);
@@ -307,6 +316,9 @@ public class ReservePageController implements Initializable {
         if (customer != null) {
             newCustomer.setSelected(false);
             oldCustomer.setSelected(true);
+            searchByCustomerName.clear();
+            searchByCustomerName.setDisable(true);
+            searchCustomerBtn.setDisable(true);
             //information
             titleNameTH.setValue(customer.getTitleNameTH());
             firstNameTH.setText(customer.getFirstNameTH());
@@ -357,9 +369,7 @@ public class ReservePageController implements Initializable {
     public void clearText(){
         newCustomer.setSelected(true);
         oldCustomer.setSelected(false);
-        searchByCustomerName.clear();
-        searchByCustomerName.setDisable(true);
-        searchCustomerBtn.setDisable(true);
+
         //information
         titleNameTH.getSelectionModel().clearSelection();
         titleNameTH.setValue("นางสาว");
