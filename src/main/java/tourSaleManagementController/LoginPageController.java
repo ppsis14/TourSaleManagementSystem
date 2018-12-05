@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import tourSaleManagementSystemUtil.DisplayGUIUtil;
@@ -29,18 +31,7 @@ public class LoginPageController implements Initializable {
     @FXML private Label showErrorLogin;
     @FXML private AnchorPane root;
 
-    @FXML
-    public void handleCancelButton(ActionEvent event) {
-        username.clear();
-        password.clear();
-        showErrorLogin.setText("");
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
-
-    }
-
-    @FXML
-    public void handleLoginButton(ActionEvent event) throws IOException, SQLException {
+    public void login() {
         if (username.getText().isEmpty() || password.getText().isEmpty()){
             showErrorLogin.setText("Username or Password is not correct");
             username.clear();
@@ -58,14 +49,36 @@ public class LoginPageController implements Initializable {
             username.clear();
             password.clear();
         }
+    }
+
+
+    @FXML
+    public void handleCancelButton(ActionEvent event) {
+        username.clear();
+        password.clear();
+        showErrorLogin.setText("");
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
 
     }
 
+    @FXML
+    public void handleLoginButton(ActionEvent event) throws IOException, SQLException {
+        login();
+    }
+    @FXML
+    public void handleWhenPressEnterButton(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            login();
+        }
+
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         username.setVisible(true);
         password.setVisible(true);
     }
+
 }
 
 

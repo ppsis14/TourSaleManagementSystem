@@ -8,13 +8,13 @@ public class TourPackage {
     private  String returnDate;
     private  String depositDate;
     private  String arrearsDate;
-    private  int amount;
+    private  int amountOfCustomer;
     private  int available;
     private String status;
 
     public TourPackage(){}
 
-    public TourPackage(String tourID, String tourName, int price, String departureDate, String returnDate, String depositDate, String arrearsDate, int amount, int available, String status) {
+    public TourPackage(String tourID, String tourName, int price, String departureDate, String returnDate, String depositDate, String arrearsDate, int amountOfCustomer, int available,String status) {
         this.tourID = tourID;
         this.tourName = tourName;
         this.price = price;
@@ -22,8 +22,7 @@ public class TourPackage {
         this.returnDate = returnDate;
         this.depositDate = depositDate;
         this.arrearsDate = arrearsDate;
-        this.amount = amount;
-        this.available = available;
+        this.amountOfCustomer = amountOfCustomer;
         this.status = status;
     }
 
@@ -75,12 +74,12 @@ public class TourPackage {
         this.arrearsDate = arrearsDate;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getAmountOfCustomer() {
+        return amountOfCustomer;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setAmountOfCustomer(int amountOfCustomer) {
+        this.amountOfCustomer = amountOfCustomer;
     }
 
     public int getAvailable() {

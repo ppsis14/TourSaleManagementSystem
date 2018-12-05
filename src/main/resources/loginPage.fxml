@@ -35,7 +35,7 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </JFXButton>
-      <TextField fx:id="username" layoutX="214.0" layoutY="147.0" prefHeight="27.0" prefWidth="214.0" promptText="Username" style="-fx-background-color: #2C3E50; -fx-border-color: #F4D03F; -fx-border-radius: 5; -fx-text-fill: #a0a2ab;" />
-      <PasswordField fx:id="password" layoutX="213.0" layoutY="201.0" prefHeight="27.0" prefWidth="214.0" promptText="Password" style="-fx-background-color: #2C3E50; -fx-border-color: #F4D03F; -fx-border-radius: 5; -fx-text-fill: #a0a2ab;" />
+      <TextField fx:id="username" layoutX="214.0" layoutY="147.0" onKeyPressed="#handleWhenPressEnterButton" prefHeight="27.0" prefWidth="214.0" promptText="Username" style="-fx-background-color: #2C3E50; -fx-border-color: #F4D03F; -fx-border-radius: 5; -fx-text-fill: #a0a2ab;" />
+      <PasswordField fx:id="password" layoutX="213.0" layoutY="201.0" onKeyPressed="#handleWhenPressEnterButton" prefHeight="27.0" prefWidth="214.0" promptText="Password" style="-fx-background-color: #2C3E50; -fx-border-color: #F4D03F; -fx-border-radius: 5; -fx-text-fill: #a0a2ab;" />
    </children>
 </AnchorPane>

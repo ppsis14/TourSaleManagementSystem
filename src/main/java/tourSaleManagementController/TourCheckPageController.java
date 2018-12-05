@@ -209,7 +209,7 @@ public class TourCheckPageController implements Initializable {
         tourPrice.setText(String.format("%,.2f",Double.valueOf(tourPackage.getPrice())));
         departureDate.setText(tourPackage.getDepartureDate());
         returnDate.setText(tourPackage.getReturnDate());
-        amountCus.setText(String.valueOf(tourPackage.getAmount()));
+        amountCus.setText(String.valueOf(tourPackage.getAmountOfCustomer()));
         availableSeat.setText(String.valueOf(tourPackage.getAvailable()));
     }
 
