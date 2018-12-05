@@ -43,7 +43,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
         }
         else
             System.out.println("employee isn't null");
-            return true;
+        return true;
     }
 
     @Override
@@ -69,12 +69,10 @@ public class SpringJDBC_DB implements ManageableDatabase {
     @Override
     public String getTourID(String tourName) {
         String tourID = null;
-        System.out.println(tourName);
         String query = "Select * From tour_package Where Tour_name = "+"'"+tourName+"'";
         try {
             TourPackage tourPackage = jdbcTemplate.queryForObject(query,new TourPackageRowMapper());
             tourID = tourPackage.getTourID();
-            System.out.println();
             return tourID;
         }
         catch (EmptyResultDataAccessException e){
@@ -152,7 +150,7 @@ public class SpringJDBC_DB implements ManageableDatabase {
     public void updateData(Customer customer) {
         String updateQuery = "update customer set TitleNameTH = ? , FirstNameTH = ?, LastNameTH = ?, TitleNameENG = ?, FirstNameENG = ?, LastNameENG = ?," +
                 "Gender = ?, Age = ?, Occupation = ? , Date_of_birth = ?, Passport_no = ?, Expire_passport_date = ?, Contact_address = ?,Cell_phone = ?, Home_Tel = ?, Fax = ?, " +
-                "Email_address = ?, Disease = ?, Food_allergy = ?,Eat_beef = ?,More_detail = ?, HearAboutUs = ? where customer_id = "+customer.getCustomerID();
+                "Email_address = ?, Disease = ?, Food_allergy = ?,Eat_beef = ?,More_detail = ?, HearAboutUs = ? where Customer_id = "+"'"+customer.getCustomerID()+"'";
         Object[] data = new Object[]{
                 customer.getTitleNameTH(), customer.getFirstNameTH(), customer.getLastNameTH(),
                 customer.getTitleNameENG(), customer.getFirstNameENG(), customer.getLastNameENG(),
@@ -450,10 +448,10 @@ public class SpringJDBC_DB implements ManageableDatabase {
             else if (invoiceType.equalsIgnoreCase(ARREARS_INVOICE)){
                 lastInvoiceNo = "AI-XXX-XXXX-000000-000000";
             }
-        else {
+            else {
 
-            lastInvoiceNo = invoiceList.get(invoiceList.size() - 1).getInvoiceNo();
-        }
+                lastInvoiceNo = invoiceList.get(invoiceList.size() - 1).getInvoiceNo();
+            }
         return lastInvoiceNo;
     }
 

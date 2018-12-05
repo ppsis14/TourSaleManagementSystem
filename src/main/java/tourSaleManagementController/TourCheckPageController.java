@@ -59,6 +59,7 @@ public class TourCheckPageController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
         Util.setTourID(tourIDComboBox);
+        showTourID.setText(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
         showDetailTourPackage();
         setReservationListTable();
     }
@@ -68,8 +69,9 @@ public class TourCheckPageController implements Initializable {
 
         ReservationPayment selectReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();
 
-        if(selectReservationPayment == null) {
+        if(selectReservationPayment != null) {
             String[] options = {"Deposit Invoice Payment", "Invoice Payment"};
+
             ChoiceDialog<String> dialog = new ChoiceDialog<String>("Deposit Invoice Payment", options);
             dialog.setTitle("Confirmation Dialog");
             dialog.setHeaderText("Confirm Invoice Payment Status");
@@ -79,18 +81,20 @@ public class TourCheckPageController implements Initializable {
             if (result.isPresent()){
                 if (result.get().equals("Deposit Invoice Payment")) {
                     //System.out.println("Your choice: " + result.get());
-                    selectReservationPayment.setDepositStatus(PAID);
-                    manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
-                    manageableDatabase.insertData(createReceiptData(DEPOSIT_RECEIPT),DEPOSIT_RECEIPT);  //create deposit receipt
-                    manageableDatabase.insertData(createArrearsInvoice(), ARREARS_INVOICE);        //insert arrears invoice
-
+                    if(selectReservationPayment.getDepositStatus().equals(NOT_PAID)) {
+                        selectReservationPayment.setDepositStatus(PAID);
+                        manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
+                        manageableDatabase.insertData(createReceiptData(DEPOSIT_RECEIPT), DEPOSIT_RECEIPT);  //create deposit receipt
+                        manageableDatabase.insertData(createArrearsInvoice(), ARREARS_INVOICE);        //insert arrears invoice
+                    }
                 }
                 else if (result.get().equals("Invoice Payment")){
                     //System.out.println("Your choice: " + result.get());
-                    selectReservationPayment.setArrearsStatus(PAID);
-                    manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
-                    manageableDatabase.insertData(createReceiptData(ARREARS_RECEIPT), ARREARS_RECEIPT);  //insert arrears receipt
-
+                    if (selectReservationPayment.getArrearsStatus().equals(NOT_PAID)) {
+                        selectReservationPayment.setArrearsStatus(PAID);
+                        manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
+                        manageableDatabase.insertData(createReceiptData(ARREARS_RECEIPT), ARREARS_RECEIPT);  //insert arrears receipt
+                    }
                 }
                 setReservationListTable();
             }
@@ -131,6 +135,7 @@ public class TourCheckPageController implements Initializable {
 
     @FXML
     void handleSelectTourIDCombobox(ActionEvent event){
+        showTourID.setText(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
         showDetailTourPackage();
         setReservationListTable();
     }

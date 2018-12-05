@@ -1,9 +1,6 @@
 package tourSaleManagementController;
 
-import Table.Customer;
-import Table.Invoice;
-import Table.Reservation;
-import Table.ReservationPayment;
+import Table.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDrawer;
@@ -73,7 +70,7 @@ public class ReservePageController implements Initializable {
     private Reservation reservationCustomer = new Reservation() ;
     private Customer customer = new Customer();
     private Invoice invoice = new Invoice();
-
+    private int orderReserv ;
     ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
 
     @Override
@@ -93,6 +90,8 @@ public class ReservePageController implements Initializable {
         searchByCustomerName.setDisable(true);
         searchCustomerBtn.setDisable(true);
         reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
+        String tmpOrder[] = reserveCode.getText().split("-");
+        orderReserv = Integer.valueOf(tmpOrder[3]);
         loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
 
 
@@ -113,6 +112,12 @@ public class ReservePageController implements Initializable {
         searchByCustomerName.setDisable(false);
         searchCustomerBtn.setDisable(false);
         setSearchCustomer();
+    }
+    @FXML public void handleTourIDComboBox(ActionEvent e){
+        String tourID = manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
+        String tmp[] = tourID.split("-");
+        tourID = tmp[0]+ "-" +tmp[1]+ "-" +tmp[2] + "-" + String.format("%06d", orderReserv);
+        reserveCode.setText(tourID);
     }
 
     @FXML
@@ -188,6 +193,9 @@ public class ReservePageController implements Initializable {
                     manageableDatabase.updateAvailableData(tour_id,availableSeat-Integer.valueOf(customerNo.getText()));
 
                     //setup value of reservation page
+                    reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
+                    String tmpOrder[] = reserveCode.getText().split("-");
+                    orderReserv = Integer.valueOf(tmpOrder[3]);
                     setUpValueReservationPage();
                 }
 
@@ -209,12 +217,6 @@ public class ReservePageController implements Initializable {
 
         }
 
-    }
-
-    @FXML
-    void handleSearchCustomerBtn(ActionEvent event){
-        if(searchByCustomerName.getText() != null)
-            setUpOldCustomerData();
     }
 
 
@@ -395,7 +397,7 @@ public class ReservePageController implements Initializable {
 
     void setUpValueReservationPage(){
         //setup value of reservation page
-        reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
+
         customerNo.setText("1");     // setup count amount customer
         clearText();
         customerList.clear();
@@ -404,6 +406,12 @@ public class ReservePageController implements Initializable {
         customer = new Customer();
         reservationCustomer = new Reservation();
         reservationPayment = new ReservationPayment();
+    }
+
+    @FXML
+    void handleSearchCustomerBtn(ActionEvent event){
+        if(searchByCustomerName.getText() != null)
+            setUpOldCustomerData();
     }
 
     public void setSearchCustomer(){
