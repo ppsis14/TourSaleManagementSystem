@@ -67,7 +67,7 @@ public class ReportPDF implements CreateReport {
             Font angsanaNewFont14 = new Font(BaseFont.createFont("fonts/Angsa.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 14, Font.NORMAL, BaseColor.BLACK);
 
             // file name pattern -->  invoice type(DI/AI)-reserve id-customer id ex. DI-21805-0003
-            PdfWriter.getInstance(document, new FileOutputStream(fileName + ".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream("./Invoice-report/"+fileName + ".pdf"));
 
             document.open();
 
@@ -189,8 +189,8 @@ public class ReportPDF implements CreateReport {
             signatureTable.setHorizontalAlignment(Element.ALIGN_CENTER);
             signatureTable.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             signatureTable.addCell(createCell(saleName, angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
-            signatureTable.addCell(createCell("-------------------------------", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
-            signatureTable.addCell(createCell("-------------------------------", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
+            signatureTable.addCell(createCell("...............................", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
+            signatureTable.addCell(createCell("...............................", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
             signatureTable.addCell(createCell("Sales By", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
             signatureTable.addCell(createCell("Account By", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
             signatureTable.addCell(createCell("Approved By\n(For Customer)", angsanaNewFont14, 0f, 1, Element.ALIGN_CENTER));
@@ -260,7 +260,7 @@ public class ReportPDF implements CreateReport {
             Font angsanaNewFont14 = new Font(BaseFont.createFont("fonts/Angsa.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED), 14, Font.NORMAL, BaseColor.BLACK);
 
             // file name pattern -->  invoice type(DI/AI)-reserve id-customer id ex. DI-21805-0003
-            PdfWriter.getInstance(document, new FileOutputStream(fileName + ".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream("./Receipt-report/"+fileName + ".pdf"));
 
             document.open();
 

@@ -68,81 +68,32 @@ public class TourCheckPageController implements Initializable {
 
         ReservationPayment selectReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();
 
-        if(selectReservationPayment != null) {
-            // body of dialog
-            VBox box = new VBox();
-            box.setSpacing(10);
-            JFXDialogLayout content = new JFXDialogLayout();
-            content.setHeading(new Text("Please choose invoice payment types to confirm!"));
-            JFXCheckBox depositInvoice = new JFXCheckBox("Deposit Invoice Payment");
-            JFXCheckBox invoice = new JFXCheckBox("Invoice Payment");
-            depositInvoice.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    invoice.setSelected(false);
-                    depositInvoice.setSelected(true);
-                    status = "choose deposit invoice status";
-                    System.out.println("choose deposit invoice status");
-                }
-            });
+        if(selectReservationPayment == null) {
+            String[] options = {"Deposit Invoice Payment", "Invoice Payment"};
+            ChoiceDialog<String> dialog = new ChoiceDialog<String>("Deposit Invoice Payment", options);
+            dialog.setTitle("Confirmation Dialog");
+            dialog.setHeaderText("Confirm Invoice Payment Status");
+            dialog.setContentText("Choose Invoice Payment Type ");
 
-            invoice.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    depositInvoice.setSelected(false);
-                    invoice.setSelected(true);
-                    status = "choose invoice status";
-                    System.out.println("choose invoice status");
-                }
-            });
-
-
-            JFXDialog dialog = new JFXDialog(rootPane, content, JFXDialog.DialogTransition.CENTER);
-            dialog.setOverlayClose(false);
-
-            JFXButton yesBtn = new JFXButton("Yes");
-            yesBtn.setStyle("-fx-background-color: #34495e;" +
-                    "-fx-text-fill:  #ffffff;" +
-                    "-fx-pref-width: 50px");
-            yesBtn.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    if (depositInvoice.isSelected()) {
-                        selectReservationPayment.setDepositStatus(PAID);
-                        manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
-                        manageableDatabase.insertData(createReceiptData(DEPOSIT_RECEIPT),DEPOSIT_RECEIPT);  //create deposit receipt
-                        manageableDatabase.insertData(createArrearsInvoice(),ARREARS_INVOICE);        //insert arrears invoice
-
-                    }
-                    else if (invoice.isSelected()){
-                        selectReservationPayment.setArrearsStatus(PAID);
-                        manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
-                        manageableDatabase.insertData(createReceiptData(ARREARS_RECEIPT),ARREARS_RECEIPT);  //insert arrears receipt
-                    }
-                    setReservationListTable();
-                    System.out.println("yes");
-                    dialog.close();
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()){
+                if (result.get().equals("Deposit Invoice Payment")) {
+                    //System.out.println("Your choice: " + result.get());
+                    selectReservationPayment.setDepositStatus(PAID);
+                    manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
+                    manageableDatabase.insertData(createReceiptData(DEPOSIT_RECEIPT),DEPOSIT_RECEIPT);  //create deposit receipt
+                    manageableDatabase.insertData(createArrearsInvoice(), ARREARS_INVOICE);        //insert arrears invoice
 
                 }
-            });
+                else if (result.get().equals("Invoice Payment")){
+                    //System.out.println("Your choice: " + result.get());
+                    selectReservationPayment.setArrearsStatus(PAID);
+                    manageableDatabase.updateStatusPayment(selectReservationPayment);                   //update status reservation payment
+                    manageableDatabase.insertData(createReceiptData(ARREARS_RECEIPT), ARREARS_RECEIPT);  //insert arrears receipt
 
-            JFXButton noBtn = new JFXButton("No");
-            noBtn.setStyle("-fx-background-color: #f4d03f;" +
-                    "-fx-text-fill:  #34495e;" +
-                    "-fx-pref-width: 50px");
-            noBtn.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    System.out.println("no");dialog.close();
                 }
-            });
-
-            box.getChildren().addAll(depositInvoice, invoice);
-            content.setBody(box);
-            content.setActions(yesBtn, noBtn);
-            dialog.show();
-
-
+                setReservationListTable();
+            }
         }
     }
 
