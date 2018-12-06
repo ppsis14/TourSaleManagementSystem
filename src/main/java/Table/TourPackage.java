@@ -23,6 +23,7 @@ public class TourPackage {
         this.depositDate = depositDate;
         this.arrearsDate = arrearsDate;
         this.amountOfCustomer = amountOfCustomer;
+        this.available = available;
         this.status = status;
     }
 

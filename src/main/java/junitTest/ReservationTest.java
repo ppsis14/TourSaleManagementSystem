@@ -56,7 +56,7 @@ class ReservationTest {
         japanTourReservation.setEmployeeName("Wipawadee Monkut");
         japanTourReservation.setEmployeeID("EMP0000004");
         assertEquals("Wipawadee Monkut",japanTourReservation.getEmployeeName());
-        assertEquals("EMP000004",japanTourReservation.getEmployeeID());
+        assertEquals("EMP0000004",japanTourReservation.getEmployeeID());
     }
 
 }

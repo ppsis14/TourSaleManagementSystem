@@ -48,6 +48,7 @@ public class CustomerManagePageController implements Initializable {
     @FXML private JFXDrawer drawerMenu;
 
     ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
