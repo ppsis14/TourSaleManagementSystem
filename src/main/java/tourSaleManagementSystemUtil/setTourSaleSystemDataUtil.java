@@ -13,7 +13,7 @@ import java.util.List;
 
 import static tourSaleManagementSystemUtil.DisplayGUIUtil.manageableDatabase;
 
-public class Util {
+public class setTourSaleSystemDataUtil {
     public static final String DEPOSIT_INVOICE = "invoice_deposit";
     public static final String ARREARS_INVOICE = "invoice_arrears";
     public static final String DEPOSIT_RECEIPT = "receipt_deposit";

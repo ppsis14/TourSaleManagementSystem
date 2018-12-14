@@ -1,16 +1,10 @@
 package tourSaleManagementSystemUtil;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.PageSize;
-import org.omg.PortableInterceptor.ServerRequestInfo;
-
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 
 import static tourSaleManagementSystemUtil.DisplayGUIUtil.manageableDatabase;
-import static tourSaleManagementSystemUtil.Util.*;
+import static tourSaleManagementSystemUtil.setTourSaleSystemDataUtil.*;
 
 public class FormatConverter {
     // date

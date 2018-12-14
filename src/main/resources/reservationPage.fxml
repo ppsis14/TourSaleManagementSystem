@@ -213,8 +213,6 @@
                                  <children>
                                     <ComboBox fx:id="hearAboutUsChoices" prefHeight="27.0" prefWidth="186.0" />
                                  </children></HBox>
-                              <HBox prefHeight="19.0" prefWidth="664.0" spacing="10.0" />
-                              <HBox prefHeight="33.0" prefWidth="240.0" spacing="10.0" />
                            </children>
                         </VBox>
                      </children>

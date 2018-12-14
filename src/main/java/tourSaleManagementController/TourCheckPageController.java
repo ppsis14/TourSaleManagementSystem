@@ -12,14 +12,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
 import tourSaleManagementSystemUtil.DisplayGUIUtil;
 import tourSaleManagementSystemUtil.FormatConverter;
-import tourSaleManagementSystemUtil.Util;
+import tourSaleManagementSystemUtil.setTourSaleSystemDataUtil;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static tourSaleManagementSystemUtil.DisplayGUIUtil.*;
-import static tourSaleManagementSystemUtil.Util.*;
+import static tourSaleManagementSystemUtil.setTourSaleSystemDataUtil.*;
 
 public class TourCheckPageController implements Initializable {
     @FXML private StackPane rootPane;
@@ -53,7 +53,7 @@ public class TourCheckPageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        Util.setTourProgram(tourIDComboBox);
+        setTourSaleSystemDataUtil.setTourProgram(tourIDComboBox);
         showTourID.setText(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
         showDetailTourPackage();
         setReservationListTable();

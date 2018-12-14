@@ -11,13 +11,9 @@ import tourSaleManagementSystemUtil.FormatConverter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import static tourSaleManagementSystemUtil.DisplayGUIUtil.manageableDatabase;
-import static tourSaleManagementSystemUtil.Util.*;
+import static tourSaleManagementSystemUtil.setTourSaleSystemDataUtil.*;
 
 public class ReportPDF implements CreateReport {
     @Override
