@@ -86,7 +86,7 @@ public class TourCheckPageController implements Initializable {
                             Alert alertCheckPaidDepositInvoice = new Alert(Alert.AlertType.WARNING);
                             alertCheckPaidDepositInvoice.setTitle("Warning Dialog");
                             alertCheckPaidDepositInvoice.setContentText("Sorry, deposit invoice is paid!");
-                            Optional<ButtonType> checkCheckPaidDepositInvoiceAction = alertCheckPaidDepositInvoice.showAndWait();
+                            Optional<ButtonType> checkPaidDepositInvoiceAction = alertCheckPaidDepositInvoice.showAndWait();
 
                         }
                     }
@@ -95,7 +95,7 @@ public class TourCheckPageController implements Initializable {
                         alertCheckCreatedDepositInvoice.setTitle("Error Dialog");
                         alertCheckCreatedDepositInvoice.setHeaderText("Confirmation deposit invoice payment is error");
                         alertCheckCreatedDepositInvoice.setContentText("Please create deposit invoice!");
-                        Optional<ButtonType> checkCheckCreatedDepositInvoiceAction = alertCheckCreatedDepositInvoice.showAndWait();
+                        Optional<ButtonType> checkCreatedDepositInvoiceAction = alertCheckCreatedDepositInvoice.showAndWait();
                     }
 
                 }
@@ -111,7 +111,7 @@ public class TourCheckPageController implements Initializable {
                             Alert alertCheckPaidInvoice = new Alert(Alert.AlertType.WARNING);
                             alertCheckPaidInvoice.setTitle("Warning Dialog");
                             alertCheckPaidInvoice.setContentText("Sorry, invoice is paid!");
-                            Optional<ButtonType> checkCheckPaidInvoiceAction = alertCheckPaidInvoice.showAndWait();
+                            Optional<ButtonType> checkPaidInvoiceAction = alertCheckPaidInvoice.showAndWait();
                         }
                     }
                     else {
@@ -119,7 +119,7 @@ public class TourCheckPageController implements Initializable {
                         alertCheckCreatedInvoice.setTitle("Error Dialog");
                         alertCheckCreatedInvoice.setHeaderText("Confirmation invoice payment is error");
                         alertCheckCreatedInvoice.setContentText("Please create invoice!");
-                        Optional<ButtonType> checkCheckCreatedInvoiceAction = alertCheckCreatedInvoice.showAndWait();
+                        Optional<ButtonType> checkCreatedInvoiceAction = alertCheckCreatedInvoice.showAndWait();
                     }
                 }
                 setReservationListTable();
