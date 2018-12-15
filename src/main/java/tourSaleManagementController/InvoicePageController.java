@@ -13,16 +13,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import tourSaleManagementSystemUtil.DisplayGUIUtil;
 import tourSaleManagementSystemUtil.FormatConverter;
-import tourSaleManagementSystemUtil.setTourSaleSystemDataUtil;
+import tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static tourSaleManagementSystemUtil.DisplayGUIUtil.*;
-import static tourSaleManagementSystemUtil.setTourSaleSystemDataUtil.*;
-import static tourSaleManagementSystemUtil.setTourSaleSystemDataUtil.DEPOSIT_RECEIPT;
-import static tourSaleManagementSystemUtil.setTourSaleSystemDataUtil.PAID;
+import static tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil.*;
 
 public class InvoicePageController implements Initializable {
 
@@ -55,8 +53,8 @@ public class InvoicePageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        setTourSaleSystemDataUtil.setTourProgram(tourIDChoiceDI);
-        setTourSaleSystemDataUtil.setTourProgram(tourIDChoiceAI);
+        SetTourSaleSystemDataUtil.setTourProgram(tourIDChoiceDI);
+        SetTourSaleSystemDataUtil.setTourProgram(tourIDChoiceAI);
         currentDateInvoice.setText(FormatConverter.getLocalDateFormat("dd-MM-yyyy"));
         showTableView();
     }

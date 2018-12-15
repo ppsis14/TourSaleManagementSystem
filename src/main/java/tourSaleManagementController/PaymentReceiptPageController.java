@@ -13,16 +13,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import tourSaleManagementSystemUtil.DisplayGUIUtil;
 import tourSaleManagementSystemUtil.FormatConverter;
-import tourSaleManagementSystemUtil.setTourSaleSystemDataUtil;
+import tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil;
 
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import static tourSaleManagementSystemUtil.DisplayGUIUtil.*;
-import static tourSaleManagementSystemUtil.setTourSaleSystemDataUtil.ARREARS_RECEIPT;
-import static tourSaleManagementSystemUtil.setTourSaleSystemDataUtil.CREATED;
-import static tourSaleManagementSystemUtil.setTourSaleSystemDataUtil.DEPOSIT_RECEIPT;
+import static tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil.ARREARS_RECEIPT;
+import static tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil.CREATED;
+import static tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil.DEPOSIT_RECEIPT;
 
 public class PaymentReceiptPageController implements Initializable {
 
@@ -52,8 +52,8 @@ public class PaymentReceiptPageController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-        setTourSaleSystemDataUtil.setTourProgram(tourIDChoiceDR);
-        setTourSaleSystemDataUtil.setTourProgram(tourIDChoiceAR);
+        SetTourSaleSystemDataUtil.setTourProgram(tourIDChoiceDR);
+        SetTourSaleSystemDataUtil.setTourProgram(tourIDChoiceAR);
         currentDateReceipt.setText(FormatConverter.getLocalDateFormat("dd-MM-yyyy"));
         showTableView();
 
