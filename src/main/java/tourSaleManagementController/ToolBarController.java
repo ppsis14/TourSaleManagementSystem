@@ -17,13 +17,13 @@ public class ToolBarController {
     @FXML
     private void loadHomeWindow(ActionEvent event) {
         homeWindow.getScene().getWindow().hide();
-        DisplayGUIUtil.loadWindow(getClass().getResource("/homePage.fxml"), "Home");
+        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/homePage.fxml"), "Home");
     }
 
     @FXML
     private void loadInvoiceWindow(ActionEvent event) {
         invoiceWindow.getScene().getWindow().hide();
-        DisplayGUIUtil.loadWindow(getClass().getResource("/invoicePage.fxml"), "Invoice");
+        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/invoicePage.fxml"), "Invoice");
     }
 
     @FXML
@@ -34,23 +34,23 @@ public class ToolBarController {
     @FXML
     private void loadCustomerWindow(ActionEvent event){
         customerWindow.getScene().getWindow().hide();
-        DisplayGUIUtil.loadWindow(getClass().getResource("/customerManagePage.fxml"), "Customer Management");
+        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/customerManagePage.fxml"), "Customer Management");
     }
 
     @FXML
     private void loadReceiptWindow(ActionEvent event) {
         receiptWindow.getScene().getWindow().hide();
-        DisplayGUIUtil.loadWindow(getClass().getResource("/paymentReceiptPage.fxml"), "Payment Receipt");
+        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/paymentReceiptPage.fxml"), "Payment Receipt");
     }
     @FXML
     private void loadReserveWindow(ActionEvent event) {
         reserveWindow.getScene().getWindow().hide();
-        DisplayGUIUtil.loadWindow(getClass().getResource("/reservationPage.fxml"), "Reservation");
+        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/reservationPage.fxml"), "Reservation");
     }
 
     @FXML
     private void loadTourCheckWindow(ActionEvent event) {
         tourCheckWindow.getScene().getWindow().hide();
-        DisplayGUIUtil.loadWindow(getClass().getResource("/tourCheckPage.fxml"), "Tour Checking");
+        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/tourCheckPage.fxml"), "Tour Checking");
     }
 }

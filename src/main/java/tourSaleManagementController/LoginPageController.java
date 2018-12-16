@@ -41,7 +41,7 @@ public class LoginPageController implements Initializable {
             loginEmployee = manageableDatabase.getEmployeeLogin(username.getText(),password.getText());
             //load windows
             loginButton.getScene().getWindow().hide();
-            DisplayGUIUtil.loadWindow(getClass().getResource("/homePage.fxml"), "Home");
+            DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/homePage.fxml"), "Home");
 
         }
         else {

@@ -48,6 +48,22 @@ public class DisplayGUIUtil {
         }
     }
 
+    public static void loadWindowWithSetSize(URL loc, String title){
+        try {
+            Parent parent = FXMLLoader.load(loc);
+            Stage stage = null;
+            stage = new Stage(StageStyle.DECORATED);
+            stage.setTitle(title);
+            stage.setScene(new Scene(parent, 890, 690));
+            stage.show();
+            stage.centerOnScreen();
+            stage.setResizable(false);
+
+        } catch (IOException e) {
+            Logger.getLogger(FXMLLoader.class.getName()).log(Level.SEVERE,null, e);
+        }
+    }
+
     public static void initDrawerToolBar(JFXDrawer drawerMenu, JFXHamburger menu, URL loc){
         try {
             VBox toolbar = FXMLLoader.load(loc);
