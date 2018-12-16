@@ -82,7 +82,7 @@ public class CustomerManagePageController implements Initializable {
 
     @FXML
     void handleEditCustomerBtn(ActionEvent event) {
-
+        editCustomerBtn.getScene().getWindow().hide();
         Customer editCustomer = customerTable.getSelectionModel().getSelectedItem();
 
         if(editCustomer != null) {
