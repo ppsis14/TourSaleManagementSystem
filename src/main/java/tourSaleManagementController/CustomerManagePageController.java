@@ -62,30 +62,39 @@ public class CustomerManagePageController implements Initializable {
 
     @FXML
     void handleDeleteCustomerBtn(ActionEvent event) {
-        Alert alertConfirmToDeleteCustomer = new Alert(Alert.AlertType.CONFIRMATION);
-        alertConfirmToDeleteCustomer.setTitle("Confirmation Dialog");
-        alertConfirmToDeleteCustomer.setHeaderText(null);
-        alertConfirmToDeleteCustomer.setContentText("Do you want to delete this customer?");
-        Optional<ButtonType> action = alertConfirmToDeleteCustomer.showAndWait();
-        if (action.get() == ButtonType.OK){
-            // code for delete reservation
-            Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();  //select item for delete
+        Customer editCustomer = customerTable.getSelectionModel().getSelectedItem();
+        if(editCustomer != null) {
+            Alert alertConfirmToDeleteCustomer = new Alert(Alert.AlertType.CONFIRMATION);
+            alertConfirmToDeleteCustomer.setTitle("Confirmation Dialog");
+            alertConfirmToDeleteCustomer.setHeaderText(null);
+            alertConfirmToDeleteCustomer.setContentText("Do you want to delete this customer?");
+            Optional<ButtonType> action = alertConfirmToDeleteCustomer.showAndWait();
+            if (action.get() == ButtonType.OK){
+                // code for delete reservation
+                Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();  //select item for delete
 
-            if (deleteCustomer != null) {   //when user select data
+                if (deleteCustomer != null) {   //when user select data
 
-                manageableDatabase.deleteData(deleteCustomer);  //delete in database
-                obListCustomer.remove(customerTable.getSelectionModel().getSelectedItem()); //delete on table view
+                    manageableDatabase.deleteData(deleteCustomer);  //delete in database
+                    obListCustomer.remove(customerTable.getSelectionModel().getSelectedItem()); //delete on table view
+                }
             }
         }
+        else {
+            Alert alertShowInformationIsUpdate = new Alert(Alert.AlertType.WARNING);
+            alertShowInformationIsUpdate.setTitle("Warning Dialog");
+            alertShowInformationIsUpdate.setHeaderText(null);
+            alertShowInformationIsUpdate.setContentText("Please select customer for deletion!");
+        }
+
     }
 
 
     @FXML
     void handleEditCustomerBtn(ActionEvent event) {
-        editCustomerBtn.getScene().getWindow().hide();
         Customer editCustomer = customerTable.getSelectionModel().getSelectedItem();
-
         if(editCustomer != null) {
+            editCustomerBtn.getScene().getWindow().hide();
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/editCustomer.fxml"));
                 Parent parent = (Parent) loader.load();
