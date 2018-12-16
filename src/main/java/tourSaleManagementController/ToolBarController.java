@@ -8,7 +8,7 @@ import tourSaleManagementSystemUtil.DisplayGUIUtil;
 public class ToolBarController {
     @FXML private JFXButton homeWindow;
     @FXML private JFXButton reserveWindow;
-    @FXML private JFXButton memberWindow;
+    @FXML private JFXButton customerWindow;
     @FXML private JFXButton tourCheckWindow;
     @FXML private JFXButton invoiceWindow;
     @FXML private JFXButton receiptWindow;
@@ -32,8 +32,8 @@ public class ToolBarController {
         DisplayGUIUtil.loadWindow(getClass().getResource("/loginPage.fxml"), "Login");
     }
     @FXML
-    private void loadMemberWindow(ActionEvent event){
-        memberWindow.getScene().getWindow().hide();
+    private void loadCustomerWindow(ActionEvent event){
+        customerWindow.getScene().getWindow().hide();
         DisplayGUIUtil.loadWindow(getClass().getResource("/customerManagePage.fxml"), "Customer Management");
     }
 
