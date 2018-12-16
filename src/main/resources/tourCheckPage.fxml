@@ -59,24 +59,28 @@
                                     <Label text="Tour Name :" />
                                     <Label fx:id="tourName" prefHeight="17.0" prefWidth="242.0" text="XXXXXX" />
                                     <Label text="Price :" />
-                                    <Label fx:id="tourPrice" prefHeight="17.0" prefWidth="116.0" text="XXXXX" />
-                                    <Label text="Baht" />
+                                    <Label fx:id="tourPrice" prefHeight="17.0" prefWidth="68.0" text="XXXXX" />
+                                    <Label prefHeight="17.0" prefWidth="71.0" text="Baht" />
+                                    <Label text="Amount Seats :" />
+                                    <Label fx:id="amountCus" prefHeight="17.0" prefWidth="41.0" text="XXX" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="34.0" prefWidth="719.0" spacing="15.0">
                                  <children>
                                     <Label text="Departure  Date : " />
-                                    <Label fx:id="departureDate" prefHeight="17.0" prefWidth="208.0" text="XXXX-XX-XX" />
+                                    <Label fx:id="departureDate" prefHeight="17.0" prefWidth="214.0" text="XXXX-XX-XX" />
                                     <Label text="Return  Date :" />
-                                    <Label fx:id="returnDate" prefHeight="17.0" prefWidth="242.0" text="XXXX-XX-XX" />
+                                    <Label fx:id="returnDate" prefHeight="17.0" prefWidth="113.0" text="XXXX-XX-XX" />
+                                    <Label text="Available Seats :" />
+                                    <Label fx:id="availableSeat" prefHeight="17.0" prefWidth="41.0" text="XX" />
                                  </children>
                               </HBox>
-                              <HBox prefHeight="34.0" prefWidth="719.0" spacing="15.0">
+                              <HBox layoutX="10.0" layoutY="40.0" prefHeight="34.0" prefWidth="719.0" spacing="15.0">
                                  <children>
-                                    <Label text="Amount :" />
-                                    <Label fx:id="amountCus" prefHeight="17.0" prefWidth="261.0" text="XXX" />
-                                    <Label text="Available :" />
-                                    <Label fx:id="availableSeat" prefHeight="17.0" prefWidth="242.0" text="XX" />
+                                    <Label text="Deposit Payment  Date : " />
+                                    <Label fx:id="depositPaymentDate" prefHeight="17.0" prefWidth="177.0" text="XXXX-XX-XX" />
+                                    <Label text="Payment  Date :" />
+                                    <Label fx:id="finalPaymentDate" prefHeight="17.0" prefWidth="113.0" text="XXXX-XX-XX" />
                                  </children>
                               </HBox>
                            </children>

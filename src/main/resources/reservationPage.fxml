@@ -106,14 +106,14 @@
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="232.0" text="* Date of Birth:" />
                                     <Label prefHeight="17.0" prefWidth="206.0" text="* Passport Number:" />
-                                    <Label prefHeight="17.0" prefWidth="232.0" text="* Expire Date:" />
+                                    <Label prefHeight="17.0" prefWidth="232.0" text="* Passport Expire Date:" />
                                  </children>
                               </HBox>
                               <HBox prefHeight="33.0" prefWidth="240.0" spacing="10.0">
                                  <children>
                                     <DatePicker fx:id="dateOfBirth" prefHeight="27.0" prefWidth="233.0" promptText="Date of birth" style="-fx-border-color: #2C3E50;" />
                                     <TextField fx:id="passportNo" prefHeight="29.0" prefWidth="206.0" promptText="Passport Number" style="-fx-border-color: #2C3E50;" />
-                                    <DatePicker fx:id="expPassportDate" prefHeight="27.0" prefWidth="232.0" promptText="Expire Date" style="-fx-border-color: #2C3E50;" />
+                                    <DatePicker fx:id="expPassportDate" prefHeight="27.0" prefWidth="232.0" promptText="Passport Expire Date" style="-fx-border-color: #2C3E50;" />
                                  </children>
                               </HBox>
                            </children>
@@ -133,7 +133,7 @@
                                     <Label prefHeight="17.0" prefWidth="448.0" text="* Contact Address:" />
                                  </children>
                               </HBox>
-                              <TextArea fx:id="address" prefHeight="65.0" prefWidth="664.0" style="-fx-border-color: #2C3E50;" />
+                              <TextArea fx:id="address" prefHeight="65.0" prefWidth="664.0" style="-fx-border-color: #2C3E50;" promptText="Address" />
                               <HBox prefHeight="19.0" prefWidth="664.0" spacing="10.0">
                                  <children>
                                     <Label prefHeight="17.0" prefWidth="216.0" text="* Phone:" />

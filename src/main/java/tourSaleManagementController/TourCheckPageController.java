@@ -31,6 +31,8 @@ public class TourCheckPageController implements Initializable {
     @FXML private Label amountCus;
     @FXML private Label availableSeat;
     @FXML private Label showTourID;
+    @FXML private Label depositPaymentDate;
+    @FXML private Label finalPaymentDate;
     @FXML private TableView<ReservationPayment> paymentListTable;
     @FXML private TableColumn<ReservationPayment, String> reservationCodeColumnP;
     @FXML private TableColumn<ReservationPayment, String> nameColumnP;
@@ -192,9 +194,6 @@ public class TourCheckPageController implements Initializable {
     }
 
     @FXML
-    void handleConfirmInvoiceStatusBtn(ActionEvent event){}
-
-    @FXML
     void handleSelectTourIDCombobox(ActionEvent event){
         showTourID.setText(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
         showDetailTourPackage();
@@ -209,6 +208,8 @@ public class TourCheckPageController implements Initializable {
         tourPrice.setText(String.format("%,.2f",Double.valueOf(tourPackage.getPrice())));
         departureDate.setText(tourPackage.getDepartureDate());
         returnDate.setText(tourPackage.getReturnDate());
+        depositPaymentDate.setText(tourPackage.getDepositDate());
+        finalPaymentDate.setText(tourPackage.getArrearsDate());
         amountCus.setText(String.valueOf(tourPackage.getAmountOfCustomer()));
         availableSeat.setText(String.valueOf(tourPackage.getAvailable()));
     }
