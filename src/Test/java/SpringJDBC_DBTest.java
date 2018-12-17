@@ -43,7 +43,7 @@ class SpringJDBC_DBTest {
         assertEquals(38,manageableDatabaseTest.getAvailableByTourID("GER-5D4N-000001"));
         assertEquals(50,manageableDatabaseTest.getAvailableByTourID("EUR-5D4N-000002"));
         assertEquals(0,manageableDatabaseTest.getAvailableByTourID("UAE-5D4N-000003"));
-        assertEquals(45,manageableDatabaseTest.getAvailableByTourID("JPN-4D3N-000004"));
+        assertEquals(42,manageableDatabaseTest.getAvailableByTourID("JPN-4D3N-000004"));
     }
 
     @Test

@@ -20,15 +20,7 @@
     </bean>
 
 
-
-
-
-
-
     <bean id="ReportPDF" class="createReport.ReportPDF">
     </bean>
-
-
-
 
 </beans>

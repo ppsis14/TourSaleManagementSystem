@@ -18,8 +18,8 @@ class FormatConverterTest {
 
     @Test
     void testGenerateReservationCodeMethod() {
-        assertEquals("JPN-4D3N-000001-000001",FormatConverter.generateReservationCode("JPN-4D3N-000001"));
-        assertEquals("GER-6D8N-000001-000001", FormatConverter.generateReservationCode("GER-6D8N-000001"));
+        assertEquals("JPN-4D3N-000001-000003",FormatConverter.generateReservationCode("JPN-4D3N-000001"));
+        assertEquals("GER-6D8N-000001-000003", FormatConverter.generateReservationCode("GER-6D8N-000001"));
     }
 
     @Test

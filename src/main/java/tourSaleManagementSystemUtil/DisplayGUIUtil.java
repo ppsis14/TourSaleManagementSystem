@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 public class DisplayGUIUtil {
 
     public static ApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
-    public static ApplicationContext contextTest = new ClassPathXmlApplicationContext("configTest.xml");
+    public static ApplicationContext contextTest = new ClassPathXmlApplicationContext("configForTestDB.xml");
 
 
     public static ManageableDatabase manageableDatabase = context.getBean("SpringJDBC_DB", SpringJDBC_DB.class);
