@@ -25,12 +25,14 @@ import java.util.logging.Logger;
 public class DisplayGUIUtil {
 
     public static ApplicationContext context = new ClassPathXmlApplicationContext("config.xml");
+    public static ApplicationContext contextTest = new ClassPathXmlApplicationContext("configTest.xml");
+
 
     public static ManageableDatabase manageableDatabase = context.getBean("SpringJDBC_DB", SpringJDBC_DB.class);
+    public static ManageableDatabase manageableDatabaseTest = contextTest.getBean("SpringJDBC_DB_Test",SpringJDBC_DB.class);
     public static CreateReport createReport = context.getBean("ReportPDF", ReportPDF.class);
 
     public static Employee loginEmployee = new Employee();
-
 
     public static void loadWindow(URL loc, String title){
         try {

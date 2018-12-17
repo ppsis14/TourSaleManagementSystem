@@ -56,8 +56,6 @@ public class CustomerManagePageController implements Initializable {
         showTableView(obListCustomer);  //show data on table view
 
         setSearchCustomer();
-
-
     }
 
     @FXML

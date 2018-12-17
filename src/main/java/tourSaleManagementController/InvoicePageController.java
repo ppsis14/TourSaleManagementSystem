@@ -80,7 +80,7 @@ public class InvoicePageController implements Initializable {
                 if (createDepositInvoiceAction.get() == ButtonType.OK) {
                     // create deposit invoice
                     String invoiceName = selectInvoice.getReservationCode()+"_"+manageableDatabase.getFirstNameCustomer(selectInvoice.getCustomerID())+"_DepositInvoice";
-                    createReport.createInvoice(invoiceName, "DEPOSIT INVOICE / ใบแจ้งหนี้-เงินมัดจำ",selectInvoice.getReservationCode());
+                        createReport.createInvoice(invoiceName, "DEPOSIT INVOICE / ใบแจ้งหนี้-เงินมัดจำ",selectInvoice.getReservationCode());
 
                     Alert alertShowCreateDepositInvoice = new Alert(Alert.AlertType.INFORMATION);
                     alertShowCreateDepositInvoice.setTitle("Information Dialog");
