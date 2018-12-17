@@ -436,27 +436,14 @@ public class ReservePageController implements Initializable {
         }
         TextFields.bindAutoCompletion(searchByCustomerName, searchList);
     }
-    public Boolean checkFillOutInformation()
-    {
-        int count=0;
-        if (titleNameTH.getSelectionModel().isEmpty() || firstNameTH.getText().isEmpty() || lastNameTH.getText().isEmpty()) count++;
-        if (titleNameEN.getSelectionModel().isEmpty() || firstNameEN.getText().isEmpty() || lastNameEN.getText().isEmpty()) count++;
-        if (genderChoice.getSelectionModel().isEmpty())
-        if (age.getText().isEmpty()) count++;
-        if (dateOfBirth.getEditor().getText().isEmpty()) count++;
-        if (passportNo.getText().isEmpty()) count++;
-        if (expPassportDate.getEditor().getText().isEmpty()) count++;
-        if (phoneNum.getText().isEmpty()) count++;
-        if (underlyingDisease.getText().isEmpty()) count++;
-        if (foodAllergy.getText().isEmpty()) count++;
-        if (!eatBeefY.isSelected() && !eatBeefN.isSelected()) count++;
-        if (hearAboutUsChoices.getSelectionModel().isEmpty()) count++;
-
-        if (count == 0){
-            return true;
-        }
-        else {
+    public Boolean checkFillOutInformation() {
+        if (firstNameTH.getText().isEmpty() || lastNameTH.getText().isEmpty() || firstNameEN.getText().isEmpty() || lastNameEN.getText().isEmpty() || age.getText().isEmpty()
+        || dateOfBirth.getEditor().getText().isEmpty() || passportNo.getText().isEmpty() || expPassportDate.getEditor().getText().isEmpty() || phoneNum.getText().isEmpty()
+        || (!eatBeefY.isSelected() && !eatBeefN.isSelected())){
             return false;
+        }
+        else{
+            return true;
         }
     }
 }
