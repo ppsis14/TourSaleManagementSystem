@@ -60,8 +60,8 @@ public class CustomerManagePageController implements Initializable {
 
     @FXML
     void handleDeleteCustomerBtn(ActionEvent event) {
-        Customer editCustomer = customerTable.getSelectionModel().getSelectedItem();
-        if(editCustomer != null) {
+        Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();
+        if(deleteCustomer != null) {
             Alert alertConfirmToDeleteCustomer = new Alert(Alert.AlertType.CONFIRMATION);
             alertConfirmToDeleteCustomer.setTitle("Confirmation Dialog");
             alertConfirmToDeleteCustomer.setHeaderText(null);
@@ -69,20 +69,15 @@ public class CustomerManagePageController implements Initializable {
             Optional<ButtonType> action = alertConfirmToDeleteCustomer.showAndWait();
             if (action.get() == ButtonType.OK){
                 // code for delete reservation
-                Customer deleteCustomer = customerTable.getSelectionModel().getSelectedItem();  //select item for delete
-
-                if (deleteCustomer != null) {   //when user select data
-
-                    manageableDatabase.deleteData(deleteCustomer);  //delete in database
-                    obListCustomer.remove(customerTable.getSelectionModel().getSelectedItem()); //delete on table view
-                }
+                manageableDatabase.deleteData(deleteCustomer);  //delete in database
+                obListCustomer.remove(customerTable.getSelectionModel().getSelectedItem()); //delete on table view
             }
         }
         else {
-            Alert alertShowInformationIsUpdate = new Alert(Alert.AlertType.WARNING);
-            alertShowInformationIsUpdate.setTitle("Warning Dialog");
-            alertShowInformationIsUpdate.setHeaderText(null);
-            alertShowInformationIsUpdate.setContentText("Please select customer for deletion!");
+            Alert alertWarningBeforeDelete = new Alert(Alert.AlertType.WARNING);
+            alertWarningBeforeDelete.setTitle("Warning Dialog");
+            alertWarningBeforeDelete.setHeaderText(null);
+            alertWarningBeforeDelete.setContentText("Please select customer for delete!");
         }
 
     }
@@ -92,6 +87,7 @@ public class CustomerManagePageController implements Initializable {
     void handleEditCustomerBtn(ActionEvent event) {
         Customer editCustomer = customerTable.getSelectionModel().getSelectedItem();
         if(editCustomer != null) {
+            System.out.println("no");
             editCustomerBtn.getScene().getWindow().hide();
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/editCustomer.fxml"));
@@ -106,6 +102,12 @@ public class CustomerManagePageController implements Initializable {
                 e.printStackTrace();
             }
         }
+        else {
+            Alert alertWarningBeforeEdit = new Alert(Alert.AlertType.WARNING);
+            alertWarningBeforeEdit.setTitle("Warning Dialog");
+            alertWarningBeforeEdit.setHeaderText(null);
+            alertWarningBeforeEdit.setContentText("Please select item before edit");
+        }
     }
 
     @FXML
@@ -119,7 +121,7 @@ public class CustomerManagePageController implements Initializable {
         Alert alertShowInformationIsUpdate = new Alert(Alert.AlertType.INFORMATION);
         alertShowInformationIsUpdate.setTitle("Confirmation Dialog");
         alertShowInformationIsUpdate.setHeaderText(null);
-        alertShowInformationIsUpdate.setContentText("Customer Information is update!");
+        alertShowInformationIsUpdate.setContentText("Customer information is update!");
         Optional<ButtonType> action = alertShowInformationIsUpdate.showAndWait();
         if (action.get() == ButtonType.OK){
             // code for delete reservation

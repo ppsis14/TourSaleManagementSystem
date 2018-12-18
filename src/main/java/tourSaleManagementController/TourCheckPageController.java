@@ -139,7 +139,6 @@ public class TourCheckPageController implements Initializable {
             alertConfirmToDeleteReservationList.setContentText("Do you want to delete this reservation?");
             Optional<ButtonType> action = alertConfirmToDeleteReservationList.showAndWait();
             if (action.get() == ButtonType.OK) {
-                //ReservationPayment deleteReservationPayment = paymentListTable.getSelectionModel().getSelectedItem();  //select item for delete
                 String tourID = deleteReservationPayment.getTourID();
                 if (deleteReservationPayment != null) {   //when user select data
 

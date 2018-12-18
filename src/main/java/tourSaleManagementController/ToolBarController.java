@@ -34,7 +34,7 @@ public class ToolBarController {
     @FXML
     private void loadCustomerWindow(ActionEvent event){
         customerWindow.getScene().getWindow().hide();
-        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/customerManagePage.fxml"), "Customer Management");
+        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/customerManagementPage.fxml"), "Customer Management");
     }
 
     @FXML

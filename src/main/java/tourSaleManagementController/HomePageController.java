@@ -39,7 +39,7 @@ public class HomePageController implements Initializable {
     @FXML
     public void handleCustomerManageBtn(ActionEvent event) throws IOException {
         customerManageBtn.getScene().getWindow().hide();
-        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/customerManagePage.fxml"), "Customer Management");
+        DisplayGUIUtil.loadWindowWithSetSize(getClass().getResource("/customerManagementPage.fxml"), "Customer Management");
     }
 
     @FXML

@@ -113,7 +113,7 @@
                         <Font size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="logoutBtn" contentDisplay="TOP" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleLogoutBtn" prefHeight="130.0" prefWidth="201.0" style="-fx-background-color: #2C3E50;" styleClass="jfx-button" stylesheets="@style.css" text="Log Out" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                  <JFXButton fx:id="logoutBtn" contentDisplay="TOP" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#handleLogoutBtn" prefHeight="130.0" prefWidth="201.0" style="-fx-background-color: #2C3E50;" styleClass="jfx-button" stylesheets="@style.css" text="Log out" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                            <image>
