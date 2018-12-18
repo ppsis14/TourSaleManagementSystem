@@ -147,7 +147,7 @@
                               <TextField fx:id="address" alignment="TOP_LEFT" pickOnBounds="false" prefHeight="68.0" prefWidth="664.0" style="-fx-border-color: #2C3E50;" />
                               <HBox prefHeight="19.0" prefWidth="664.0" spacing="10.0">
                                  <children>
-                                    <Label prefHeight="17.0" prefWidth="216.0" text="* Phone:" />
+                                    <Label prefHeight="17.0" prefWidth="216.0" text="* Cell Phone:" />
                                     <Label prefHeight="17.0" prefWidth="215.0" text="Home Tel:" />
                                     <Label prefHeight="17.0" prefWidth="215.0" text="Fax:" />
                                  </children>
