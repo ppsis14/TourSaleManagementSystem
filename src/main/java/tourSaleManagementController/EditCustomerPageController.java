@@ -32,7 +32,7 @@ public class EditCustomerPageController implements Initializable {
     @FXML private DatePicker dateOfBirth;
     @FXML private TextField passportNo;
     @FXML private DatePicker expPassportDate;
-    @FXML private TextArea address;
+    @FXML private TextField address;
     @FXML private TextField cellphoneClient;
     @FXML private TextField homeTelClient;
     @FXML private TextField homeFaxClient;

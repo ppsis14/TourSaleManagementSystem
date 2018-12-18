@@ -287,7 +287,6 @@ public class TourCheckPageController implements Initializable {
         private String ageCustomer;
         private String phoneNumCustomer;
 
-        public DisplayReservationCustomer(){}
         public DisplayReservationCustomer(String reservationCode, String customerName, String ageCustomer, String phoneNumCustomer) {
             this.reservationCode = reservationCode;
             this.customerName = customerName;

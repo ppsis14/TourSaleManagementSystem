@@ -42,7 +42,7 @@ public class ReservePageController implements Initializable {
     @FXML private DatePicker dateOfBirth;
     @FXML private TextField passportNo;
     @FXML private DatePicker expPassportDate;
-    @FXML private TextArea address;
+    @FXML private TextField address;
     @FXML private TextField phoneNum;
     @FXML private TextField homeTelNum;
     @FXML private TextField faxNum;
@@ -441,7 +441,7 @@ public class ReservePageController implements Initializable {
     public Boolean checkFillOutInformation() {
         if (firstNameTH.getText().isEmpty() || lastNameTH.getText().isEmpty() || firstNameEN.getText().isEmpty() || lastNameEN.getText().isEmpty() || age.getText().isEmpty()
         || dateOfBirth.getEditor().getText().isEmpty() || passportNo.getText().isEmpty() || expPassportDate.getEditor().getText().isEmpty() || phoneNum.getText().isEmpty()
-        || (!eatBeefY.isSelected() && !eatBeefN.isSelected())){
+        || address.getText().isEmpty() || (!eatBeefY.isSelected() && !eatBeefN.isSelected())){
             return false;
         }
         else{
