@@ -129,9 +129,9 @@
                                     </HBox>
                                     <HBox prefHeight="33.0" prefWidth="240.0" spacing="10.0">
                                        <children>
-                                          <TextField fx:id="cellphoneClient" prefHeight="29.0" prefWidth="232.0" promptText="Cell Phone" style="-fx-border-color: #2C3E50;" />
-                                          <TextField fx:id="homeTelClient" prefHeight="29.0" prefWidth="232.0" promptText="Home Tel" style="-fx-border-color: #2C3E50;" />
-                                          <TextField fx:id="homeFaxClient" prefHeight="29.0" prefWidth="232.0" promptText="Fax" style="-fx-border-color: #2C3E50;" />
+                                          <TextField fx:id="phoneNum" prefHeight="29.0" prefWidth="232.0" promptText="Cell Phone" style="-fx-border-color: #2C3E50;" />
+                                          <TextField fx:id="homeTelNum" prefHeight="29.0" prefWidth="232.0" promptText="Home Tel" style="-fx-border-color: #2C3E50;" />
+                                          <TextField fx:id="faxNum" prefHeight="29.0" prefWidth="232.0" promptText="Fax" style="-fx-border-color: #2C3E50;" />
                                        </children>
                                     </HBox>
                                     <HBox prefHeight="19.0" prefWidth="664.0" spacing="10.0">
@@ -141,7 +141,7 @@
                                     </HBox>
                                     <HBox prefHeight="33.0" prefWidth="240.0" spacing="10.0">
                                        <children>
-                                          <TextField fx:id="emailClient" prefHeight="29.0" prefWidth="232.0" promptText="Email Address" style="-fx-border-color: #2C3E50;" />
+                                          <TextField fx:id="email" prefHeight="29.0" prefWidth="232.0" promptText="Email Address" style="-fx-border-color: #2C3E50;" />
                                        </children>
                                     </HBox>
                                  </children>

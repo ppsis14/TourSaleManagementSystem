@@ -44,6 +44,7 @@ public class InvoicePageController implements Initializable {
     @FXML private JFXHamburger menu;
     @FXML private JFXDrawer drawerMenu;
     @FXML private Label currentDateInvoice;
+    @FXML private Label loginNameLabel;
 
 
     ObservableList<Invoice> obListInvoiceDI = FXCollections.observableArrayList();
@@ -57,6 +58,7 @@ public class InvoicePageController implements Initializable {
         SetTourSaleSystemDataUtil.setTourProgram(tourIDChoiceAI);
         currentDateInvoice.setText(FormatConverter.getLocalDateFormat("dd-MM-yyyy"));
         showTableView();
+        loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
     }
 
     @FXML

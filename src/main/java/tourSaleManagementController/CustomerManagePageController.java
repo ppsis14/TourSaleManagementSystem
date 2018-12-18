@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.loginEmployee;
 import static tourSaleManagementSystemUtil.DisplayGUIUtil.manageableDatabase;
 
 public class CustomerManagePageController implements Initializable {
@@ -46,15 +47,15 @@ public class CustomerManagePageController implements Initializable {
     @FXML private JFXButton deleteCustomerBtn;
     @FXML private JFXHamburger menu;
     @FXML private JFXDrawer drawerMenu;
+    @FXML private Label loginNameLabel;
 
     ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DisplayGUIUtil.initDrawerToolBar(drawerMenu, menu, getClass().getResource("/hamburgerMenu.fxml"));
-
+        loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
         showTableView(obListCustomer);  //show data on table view
-
         setSearchCustomer();
     }
 
@@ -78,6 +79,7 @@ public class CustomerManagePageController implements Initializable {
             alertWarningBeforeDelete.setTitle("Warning Dialog");
             alertWarningBeforeDelete.setHeaderText(null);
             alertWarningBeforeDelete.setContentText("Please select customer for delete!");
+            Optional<ButtonType> deleteCustomerAction = alertWarningBeforeDelete.showAndWait();
         }
 
     }
@@ -106,7 +108,8 @@ public class CustomerManagePageController implements Initializable {
             Alert alertWarningBeforeEdit = new Alert(Alert.AlertType.WARNING);
             alertWarningBeforeEdit.setTitle("Warning Dialog");
             alertWarningBeforeEdit.setHeaderText(null);
-            alertWarningBeforeEdit.setContentText("Please select item before edit");
+            alertWarningBeforeEdit.setContentText("Please select item before edit!");
+            Optional<ButtonType> editCustomerAction = alertWarningBeforeEdit.showAndWait();
         }
     }
 

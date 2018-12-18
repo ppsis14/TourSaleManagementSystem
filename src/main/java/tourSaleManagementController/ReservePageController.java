@@ -1,6 +1,9 @@
 package tourSaleManagementController;
 
-import Table.*;
+import Table.Customer;
+import Table.Invoice;
+import Table.Reservation;
+import Table.ReservationPayment;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDrawer;
@@ -8,9 +11,11 @@ import com.jfoenix.controls.JFXHamburger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import org.controlsfx.control.textfield.TextFields;
 import tourSaleManagementSystemUtil.DisplayGUIUtil;
 import tourSaleManagementSystemUtil.FormatConverter;
@@ -18,14 +23,16 @@ import tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static tourSaleManagementSystemUtil.DisplayGUIUtil.*;
-import static tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil.DEPOSIT_INVOICE;
-import static tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil.NOT_CREATED;
-import static tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil.NOT_PAID;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.loginEmployee;
+import static tourSaleManagementSystemUtil.DisplayGUIUtil.manageableDatabase;
+import static tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil.*;
 
 
 public class ReservePageController implements Initializable {
@@ -72,7 +79,7 @@ public class ReservePageController implements Initializable {
     private Reservation reservationCustomer = new Reservation() ;
     private Customer customer = new Customer();
     private Invoice invoice = new Invoice();
-    private int orderReserv ;
+    private int orderReserve;
     ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
 
     @Override
@@ -93,10 +100,10 @@ public class ReservePageController implements Initializable {
         searchCustomerBtn.setDisable(true);
         reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
         String tmpOrder[] = reserveCode.getText().split("-");
-        orderReserv = Integer.valueOf(tmpOrder[3]);
+        orderReserve = Integer.valueOf(tmpOrder[3]);
         loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
 
-
+        setValidateOnKeyRelease();
     }
 
     @FXML public void handleNotEatBeefCheckbox(ActionEvent event) { eatBeefY.setSelected(false); }
@@ -121,7 +128,7 @@ public class ReservePageController implements Initializable {
     @FXML public void handleTourIDComboBox(ActionEvent e){
         String tourID = manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
         String tmp[] = tourID.split("-");
-        tourID = tmp[0]+ "-" +tmp[1]+ "-" +tmp[2] + "-" + String.format("%06d", orderReserv);
+        tourID = tmp[0]+ "-" +tmp[1]+ "-" +tmp[2] + "-" + String.format("%06d", orderReserve);
         reserveCode.setText(tourID);
     }
 
@@ -204,7 +211,7 @@ public class ReservePageController implements Initializable {
                         searchCustomerBtn.setDisable(true);
                         reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
                         String tmpOrder[] = reserveCode.getText().split("-");
-                        orderReserv = Integer.valueOf(tmpOrder[3]);
+                        orderReserve = Integer.valueOf(tmpOrder[3]);
                         setUpValueReservationPage();
                     }
 
@@ -438,14 +445,428 @@ public class ReservePageController implements Initializable {
         }
         TextFields.bindAutoCompletion(searchByCustomerName, searchList);
     }
+
     public Boolean checkFillOutInformation() {
-        if (firstNameTH.getText().isEmpty() || lastNameTH.getText().isEmpty() || firstNameEN.getText().isEmpty() || lastNameEN.getText().isEmpty() || age.getText().isEmpty()
-        || dateOfBirth.getEditor().getText().isEmpty() || passportNo.getText().isEmpty() || expPassportDate.getEditor().getText().isEmpty() || phoneNum.getText().isEmpty()
-        || address.getText().isEmpty() || (!eatBeefY.isSelected() && !eatBeefN.isSelected())){
+
+        if (validateFieldsIsEmpty()){
             return false;
         }
-        else{
+        else return true;
+    }
+
+    public void setValidateOnKeyRelease(){
+        occupation.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                occupation.setStyle("-fx-border-color: #2C3E50");
+            }
+        });
+
+        homeTelNum.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                occupation.setStyle("-fx-border-color: #2C3E50");
+            }
+        });
+        faxNum.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                occupation.setStyle("-fx-border-color: #2C3E50");
+            }
+        });
+        underlyingDisease.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                occupation.setStyle("-fx-border-color: #2C3E50");
+            }
+        });
+        foodAllergy.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                occupation.setStyle("-fx-border-color: #2C3E50");
+            }
+        });
+        moreDetail.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                occupation.setStyle("-fx-border-color: #2C3E50");
+            }
+        });
+        firstNameTH.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateFirstNameTH()){
+                    firstNameTH.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    firstNameTH.setStyle("-fx-border-color: #922B21");
+                }
+
+            }
+        });
+
+        lastNameTH.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateLastNameTH()){
+                    lastNameTH.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    lastNameTH.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        firstNameEN.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateFirstNameEN()){
+                    firstNameEN.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    firstNameEN.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        lastNameEN.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateLastNameEN()){
+                    lastNameEN.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    lastNameEN.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        age.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateAge()){
+                    age.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    age.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        dateOfBirth.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                dateOfBirth.setStyle("-fx-border-color: #2C3E50");
+            }
+        });
+
+        passportNo.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validatePassportNo()){
+                    passportNo.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    passportNo.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        expPassportDate.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                expPassportDate.setStyle("-fx-border-color: #2C3E50");
+            }
+        });
+
+        address.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateAddress()){
+                    address.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    address.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        phoneNum.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validatePhoneNum()){
+                    phoneNum.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    phoneNum.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        homeTelNum.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateHomeTelNum()){
+                    homeTelNum.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    homeTelNum.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        faxNum.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateFaxNum()){
+                    faxNum.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    faxNum.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        underlyingDisease.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateUnderDisease()){
+                    underlyingDisease.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    underlyingDisease.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        foodAllergy.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateFoodAllergy()){
+                    foodAllergy.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    foodAllergy.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        moreDetail.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateMoreDetail()){
+                    moreDetail.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    moreDetail.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        occupation.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (validateOccupation()){
+                    occupation.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    occupation.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+        email.setOnKeyReleased(new EventHandler<KeyEvent>(){
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(validateEmail()){
+                    email.setStyle("-fx-border-color: #27AE60");
+                }else{
+                    email.setStyle("-fx-border-color: #922B21");
+                }
+            }
+        });
+
+    }
+
+    private boolean validateFirstNameTH(){
+        Pattern pattern = Pattern.compile("^[ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]+$");
+        Matcher matcher = pattern.matcher(firstNameTH.getText());
+        if (matcher.find() && matcher.group().equals(firstNameTH.getText())){
             return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean validateLastNameTH(){
+        Pattern pattern = Pattern.compile("^[ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]+$");
+        Matcher matcher = pattern.matcher(lastNameTH.getText());
+        if (matcher.find() && matcher.group().equals(lastNameTH.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean validateFirstNameEN(){
+        Pattern pattern = Pattern.compile("^[a-zA-Z]+$");
+        Matcher matcher = pattern.matcher(firstNameEN.getText());
+        if (matcher.find() && matcher.group().equals(firstNameEN.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean validateLastNameEN(){
+        Pattern pattern = Pattern.compile("^[a-zA-Z]+$");
+        Matcher matcher = pattern.matcher(lastNameEN.getText());
+        if (matcher.find() && matcher.group().equals(lastNameEN.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean validateAge(){
+        Pattern pattern = Pattern.compile("^[0-9]+$");
+        Matcher matcher = pattern.matcher(age.getText());
+        if (matcher.find() && matcher.group().equals(age.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean validateOccupation(){
+        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-z]|[-])+$");
+        Matcher matcher = pattern.matcher(occupation.getText());
+        if (matcher.find() && matcher.group().equals(occupation.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean validatePassportNo(){
+        Pattern pattern = Pattern.compile("^[A-Z0-9]+$");
+        Matcher matcher = pattern.matcher(passportNo.getText());
+        if (matcher.find() && matcher.group().equals(passportNo.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean validateAddress(){
+        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z]|[ ]|[0-9])+$");
+        Matcher matcher = pattern.matcher(address.getText());
+        if (matcher.find() && matcher.group().equals(address.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean validatePhoneNum(){
+        Pattern p = Pattern.compile("[0-9][0-9]{9}|[-]+");
+        Matcher m = p.matcher(phoneNum.getText());
+        if(m.find() && m.group().equals(phoneNum.getText())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    private boolean validateHomeTelNum(){
+        Pattern p = Pattern.compile("[0-9][0-9]{8}|[-]+");
+        Matcher m = p.matcher(homeTelNum.getText());
+        if(m.find() && m.group().equals(homeTelNum.getText())){
+            return true;
+        }else{
+
+            return false;
+        }
+    }
+    private boolean validateFaxNum(){
+        Pattern p = Pattern.compile("[0-9][0-9]{8}|[-]+");
+        Matcher m = p.matcher(faxNum.getText());
+        if(m.find() && m.group().equals(faxNum.getText())){
+            return true;
+        }else{
+
+            return false;
+        }
+    }private boolean validateEmail(){
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9._\\-]+@[a-zA-Z0-9]+[.][a-zA-Z.]+");
+        Matcher matcher = pattern.matcher(email.getText());
+        if(matcher.find() && matcher.group().equals(email.getText())){
+            return true;
+        }else{
+
+            return false;
+        }
+    }
+    private boolean validateUnderDisease(){
+        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z0-9]|[ -])+$");
+        Matcher matcher = pattern.matcher(underlyingDisease.getText());
+        if (matcher.find() && matcher.group().equals(underlyingDisease.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    private boolean validateFoodAllergy(){
+        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z]|[ -])+$");
+        Matcher matcher = pattern.matcher(foodAllergy.getText());
+        if (matcher.find() && matcher.group().equals(foodAllergy.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private boolean validateMoreDetail(){
+        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z0-9]|[ -])+$");
+        Matcher matcher = pattern.matcher(moreDetail.getText());
+        if (matcher.find() && matcher.group().equals(moreDetail.getText())){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private boolean validateFieldsIsEmpty(){
+        int count=0;
+        if (firstNameTH.getText().isEmpty()){firstNameTH.setStyle("-fx-border-color: #C0392B");count++;}
+        else {firstNameTH.setStyle("-fx-border-color: #2C3E50");}
+        if (lastNameTH.getText().isEmpty()){lastNameTH.setStyle("-fx-border-color: #C0392B");count++;}
+        else {lastNameTH.setStyle("-fx-border-color: #2C3E50");}
+        if (firstNameEN.getText().isEmpty()){firstNameEN.setStyle("-fx-border-color: #C0392B");count++;}
+        else {firstNameEN.setStyle("-fx-border-color: #2C3E50");}
+        if (lastNameEN.getText().isEmpty()){lastNameEN.setStyle("-fx-border-color: #C0392B");count++;}
+        else {lastNameEN.setStyle("-fx-border-color: #2C3E50");}
+        if (address.getText().isEmpty()){address.setStyle("-fx-border-color: #C0392B");count++;}
+        else {address.setStyle("-fx-border-color: #2C3E50");}
+        if (age.getText().isEmpty()){age.setStyle("-fx-border-color: #C0392B");count++;}
+        else {age.setStyle("-fx-border-color: #2C3E50");}
+        if (dateOfBirth.getEditor().getText().isEmpty()){dateOfBirth.setStyle("-fx-border-color: #C0392B");count++;}
+        else {dateOfBirth.setStyle("-fx-border-color: #2C3E50");}
+        if (passportNo.getText().isEmpty()){passportNo.setStyle("-fx-border-color: #C0392B");count++;}
+        else {passportNo.setStyle("-fx-border-color:  #2C3E50");}
+        if (expPassportDate.getEditor().getText().isEmpty()){expPassportDate.setStyle("-fx-border-color: #C0392B");count++;}
+        else {expPassportDate.setStyle("-fx-border-color: #2C3E50");}
+        if (phoneNum.getText().isEmpty()){phoneNum.setStyle("-fx-border-color: #C0392B");count++;}
+        else {phoneNum.setStyle("-fx-border-color: #2C3E50");}
+        if (!eatBeefY.isSelected() && !eatBeefN.isSelected()){eatBeefY.setStyle("-fx-text-fill: #C0392B"); eatBeefN.setStyle("-fx-text-fill: #C0392B");count++;}
+        else { eatBeefY.setStyle("-fx-text-fill: #5a5a5a"); eatBeefN.setStyle("-fx-text-fill: #5a5a5a");}
+        if (count != 0){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 }

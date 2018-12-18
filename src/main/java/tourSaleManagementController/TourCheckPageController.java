@@ -48,6 +48,7 @@ public class TourCheckPageController implements Initializable {
     @FXML private JFXButton confirmStatusBtn;
     @FXML private JFXHamburger menu;
     @FXML private JFXDrawer drawerMenu;
+    @FXML private Label loginNameLabel;
 
     ObservableList<DisplayReservationCustomer> reservationObList = FXCollections.observableArrayList();
     ObservableList<ReservationPayment> reservePaymentObList = FXCollections.observableArrayList();
@@ -59,6 +60,7 @@ public class TourCheckPageController implements Initializable {
         showTourID.setText(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
         showDetailTourPackage();
         setReservationListTable();
+        loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
     }
 
     @FXML

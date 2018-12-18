@@ -45,6 +45,7 @@ public class PaymentReceiptPageController implements Initializable {
     @FXML private JFXHamburger menu;
     @FXML private JFXDrawer drawerMenu;
     @FXML private Label currentDateReceipt;
+    @FXML private Label loginNameLabel;
 
     ObservableList<Receipt> obListReceiptDR = FXCollections.observableArrayList();
     ObservableList<Receipt> obListReceiptAR = FXCollections.observableArrayList();
@@ -56,6 +57,7 @@ public class PaymentReceiptPageController implements Initializable {
         SetTourSaleSystemDataUtil.setTourProgram(tourIDChoiceAR);
         currentDateReceipt.setText(FormatConverter.getLocalDateFormat("dd-MM-yyyy"));
         showTableView();
+        loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
 
     }
 
