@@ -22,11 +22,10 @@ import tourSaleManagementSystemUtil.FormatConverter;
 import tourSaleManagementSystemUtil.SetTourSaleSystemDataUtil;
 
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +43,6 @@ public class ReservePageController implements Initializable {
     @FXML private TextField firstNameEN;
     @FXML private TextField lastNameEN;
     @FXML private ChoiceBox<String> genderChoice;
-    @FXML private TextField age;
     @FXML private TextField occupation;
     @FXML private DatePicker dateOfBirth;
     @FXML private TextField passportNo;
@@ -71,6 +69,8 @@ public class ReservePageController implements Initializable {
     @FXML private TextField searchByCustomerName;
     @FXML private Button searchCustomerBtn;
     @FXML private Label loginNameLabel;
+    @FXML private JFXButton submitBtn;
+    @FXML private Label reservedSeats;
 
     private ArrayList<String> newCustomerID_List = new ArrayList<>();
     private ArrayList<Reservation> reserveCustomer_List = new ArrayList<>();
@@ -80,6 +80,9 @@ public class ReservePageController implements Initializable {
     private Customer customer = new Customer();
     private Invoice invoice = new Invoice();
     private int orderReserve;
+    private int countErr=0;
+    private String tourID ;
+    private int availableSeat;
     ObservableList<Customer> obListCustomer = FXCollections.observableList(manageableDatabase.getAllCustomer());
 
     @Override
@@ -102,8 +105,7 @@ public class ReservePageController implements Initializable {
         String tmpOrder[] = reserveCode.getText().split("-");
         orderReserve = Integer.valueOf(tmpOrder[3]);
         loginNameLabel.setText(loginEmployee.getFirstName()+" "+loginEmployee.getLastName()+" [ "+loginEmployee.getPosition().toUpperCase()+" ]");
-
-        setValidateOnKeyRelease();
+        submitBtn.setDisable(true);
     }
 
     @FXML public void handleNotEatBeefCheckbox(ActionEvent event) { eatBeefY.setSelected(false); }
@@ -134,110 +136,53 @@ public class ReservePageController implements Initializable {
 
     @FXML
     void handleAddCustomerBtn(ActionEvent event) {
-        if (checkFillOutInformation()){
-            String tour_id = manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
-            int availableSeat = manageableDatabase.getAvailableByTourID(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
-            if(availableSeat - Integer.valueOf(customerNo.getText()) >= 0) {
-                //pop up 1
-                Alert alertConfirmToAddCustomerData = new Alert(Alert.AlertType.CONFIRMATION);
-                alertConfirmToAddCustomerData.setTitle("Confirmation Dialog");
-                alertConfirmToAddCustomerData.setHeaderText(null);
-                alertConfirmToAddCustomerData.setContentText("Do you want to add reservation?");
-                Optional<ButtonType> addCustomerDataAction = alertConfirmToAddCustomerData.showAndWait();
+        countErr = 0;
+        checkFillOutInformation();
+    }
 
-                if (addCustomerDataAction.get() == ButtonType.OK) {
+    @FXML
+    void handleSubmitBtn(ActionEvent event) {
 
-                    setCustomerFromGUI();
-                    if (newCustomer.isSelected()) {
-                        newCustomerID_List.add(customer.getCustomerID());
-                    }
-                    //add customer id to list
-                    customerList.add(customer);
-                    setReservationCustomerFromGUI();
-                    reserveCustomer_List.add(reservationCustomer);
-
-                    clearText();
-                    searchByCustomerName.clear();
-                    searchByCustomerName.setDisable(true);
-                    searchCustomerBtn.setDisable(true);
-                    customer = new Customer();
-                    reservationCustomer = new Reservation();
-
-                    //pop up 2
-                    Alert alertConfirmToAddCustomerMore = new Alert(Alert.AlertType.CONFIRMATION);
-                    alertConfirmToAddCustomerMore.setTitle("Confirmation Dialog");
-                    alertConfirmToAddCustomerMore.setHeaderText(null);
-                    alertConfirmToAddCustomerMore.setContentText("Do you want to add another customer?");
-                    Optional<ButtonType> addCustomerMoreAction = alertConfirmToAddCustomerMore.showAndWait();
-
-                    if (addCustomerMoreAction.get() == ButtonType.OK) { // if user want to add another customer
-
-                        customerNo.setText(String.valueOf(Integer.valueOf(customerNo.getText()) + 1));     // add count amount customer
-
-                        //clear text for fill next data
-                        clearText();
-                        searchByCustomerName.clear();
-                        searchByCustomerName.setDisable(true);
-                        searchCustomerBtn.setDisable(true);
-                        customer = new Customer();
-                        reservationCustomer = new Reservation();
-
-                    } else if (addCustomerMoreAction.get() == ButtonType.CANCEL) {     //stop reserving another customer
-                        //insert customer to database
-                        for (Customer customer : customerList) {
-                            if(newCustomerID_List.contains(customer.getCustomerID()))
-                                manageableDatabase.insertData(customer);    //new customer
-                            else
-                                manageableDatabase.updateData(customer);    //old customer
-                        }
-
-                        //insert reservation customer to database
-                        for (Reservation reservation: reserveCustomer_List) {
-                            manageableDatabase.insertData(reservation);
-                        }
-
-                        //insert reservation payment and deposit invoice to database
-                        setReservationPaymentFromGUI();
-                        setDepositInvoice();
-                        manageableDatabase.insertData(reservationPayment);
-                        manageableDatabase.insertData(invoice, DEPOSIT_INVOICE);
-
-                        //update seat in tour package
-                        manageableDatabase.updateAvailableData(tour_id,availableSeat-Integer.valueOf(customerNo.getText()));
-
-                        //setup value of reservation page
-                        searchByCustomerName.clear();
-                        searchByCustomerName.setDisable(true);
-                        searchCustomerBtn.setDisable(true);
-                        reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
-                        String tmpOrder[] = reserveCode.getText().split("-");
-                        orderReserve = Integer.valueOf(tmpOrder[3]);
-                        setUpValueReservationPage();
-                    }
-
-                }
-            }
-            else{
-                //pop up warning
-                Alert alertShowInformationIsUpdate = new Alert(Alert.AlertType.INFORMATION);
-                alertShowInformationIsUpdate.setTitle("Confirmation Dialog");
-                alertShowInformationIsUpdate.setHeaderText(null);
-                alertShowInformationIsUpdate.setContentText("Available seat are full.");
-                Optional<ButtonType> action = alertShowInformationIsUpdate.showAndWait();
-                setUpValueReservationPage();
-                if (action.get() == ButtonType.OK){
-                    setUpValueReservationPage();
-                }
-
-            }
+        //insert customer to database
+        for (Customer customer : customerList) {
+            if(newCustomerID_List.contains(customer.getCustomerID()))
+                manageableDatabase.insertData(customer);    //new customer
+            else
+                manageableDatabase.updateData(customer);    //old customer
         }
-        else {
-            Alert alertCheckFillOutInformation = new Alert(Alert.AlertType.ERROR);
-            alertCheckFillOutInformation.setTitle("Error Dialog");
-            alertCheckFillOutInformation.setHeaderText("Addition customer to reservation is error");
-            alertCheckFillOutInformation.setContentText("Please completely fill out information follow (*)");
-            Optional<ButtonType> checkFillOutAction = alertCheckFillOutInformation.showAndWait();
+
+        //insert reservation customer to database
+        for (Reservation reservation: reserveCustomer_List) {
+            manageableDatabase.insertData(reservation);
         }
+
+        //insert reservation payment and deposit invoice to database
+        setReservationPaymentFromGUI();
+        setDepositInvoice();
+        manageableDatabase.insertData(reservationPayment);          //inset reservationPayment to database
+        manageableDatabase.insertData(invoice, DEPOSIT_INVOICE);    // insert deposit invoice
+
+        //update seat in tour package
+        manageableDatabase.updateAvailableData(tourID,availableSeat-Integer.valueOf(customerNo.getText()));
+
+        //pop up warning
+        Alert alertConfirmToSubmitCustomerData = new Alert(Alert.AlertType.INFORMATION);
+        alertConfirmToSubmitCustomerData.setTitle("Confirmation Dialog");
+        alertConfirmToSubmitCustomerData.setHeaderText(null);
+        alertConfirmToSubmitCustomerData.setContentText("Submit reservation customer successfully!");
+        Optional<ButtonType> action = alertConfirmToSubmitCustomerData.showAndWait();
+
+        clearText();
+
+        //setup value of reservation page
+        searchByCustomerName.clear();
+        searchByCustomerName.setDisable(true);
+        searchCustomerBtn.setDisable(true);
+        reserveCode.setText(FormatConverter.generateReservationCode(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem())));
+        String tmpOrder[] = reserveCode.getText().split("-");
+        orderReserve = Integer.valueOf(tmpOrder[3]);
+        //setUpValueReservationPage();
+        addCustomerBtn.setDisable(false);
     }
 
 
@@ -299,7 +244,6 @@ public class ReservePageController implements Initializable {
         customer.setFirstNameENG(firstNameEN.getText());
         customer.setLastNameENG(lastNameEN.getText());
         customer.setGender(genderChoice.getSelectionModel().getSelectedItem());
-        customer.setAge(age.getText());
         customer.setDateOfBirth(dateOfBirth.getEditor().getText());
         if (customer.getDateOfBirth().isEmpty()) customer.setDateOfBirth("dd-mm-yyyy");
         customer.setPassport_no(passportNo.getText());
@@ -339,7 +283,6 @@ public class ReservePageController implements Initializable {
             firstNameEN.setText(customer.getFirstNameENG());
             lastNameEN.setText(customer.getLastNameENG());
             genderChoice.setValue(customer.getGender());
-            age.setText(customer.getAge());
             String[] dateCut = customer.getDateOfBirth().split("-");
             dateOfBirth.setValue(LocalDate.of(Integer.valueOf(dateCut[2]), Integer.valueOf(dateCut[1]), Integer.valueOf(dateCut[0])));
             passportNo.setText(customer.getPassport_no());
@@ -379,9 +322,6 @@ public class ReservePageController implements Initializable {
     }
 
     public void clearText(){
-        newCustomer.setSelected(true);
-        oldCustomer.setSelected(false);
-
         //information
         titleNameTH.getSelectionModel().clearSelection();
         titleNameTH.setValue("นางสาว");
@@ -393,7 +333,6 @@ public class ReservePageController implements Initializable {
         lastNameEN.clear();
         genderChoice.getSelectionModel().clearSelection();
         genderChoice.setValue("Female");
-        age.clear();
         dateOfBirth.getEditor().clear();
         passportNo.clear();
         expPassportDate.getEditor().clear();
@@ -446,396 +385,219 @@ public class ReservePageController implements Initializable {
         TextFields.bindAutoCompletion(searchByCustomerName, searchList);
     }
 
-    public Boolean checkFillOutInformation() {
-
+    public void checkFillOutInformation() {
         if (validateFieldsIsEmpty()){
-            return false;
+            Alert alertFillOutInformationError = new Alert(Alert.AlertType.ERROR);
+            alertFillOutInformationError.setTitle("Error Dialog");
+            alertFillOutInformationError.setHeaderText("Saving customer information is error!");
+            alertFillOutInformationError.setContentText("Please completely fill out information follow (*)");
+            Optional<ButtonType> checkFillOutInformationAction = alertFillOutInformationError.showAndWait();
         }
-        else return true;
+        else if (!allFieldIsAccuracy()){
+            Alert alertFillOutPatternError = new Alert(Alert.AlertType.ERROR);
+            alertFillOutPatternError.setTitle("Error Dialog");
+            alertFillOutPatternError.setHeaderText("Saving customer information is error!");
+            alertFillOutPatternError.setContentText("Some fields are not yet accurate, please fill form again");
+            Optional<ButtonType> checkPatternErrorAction = alertFillOutPatternError.showAndWait();
+            if (checkPatternErrorAction.get() == ButtonType.OK){ countErr = 0; }
+        }
+        else{
+            String tour_id = manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem());
+            int availableSeat = manageableDatabase.getAvailableByTourID(manageableDatabase.getTourID(tourIDComboBox.getSelectionModel().getSelectedItem()));
+
+            if (availableSeat - Integer.valueOf(customerNo.getText()) >= 0) {
+                //---------------------------------------------------------
+                // case show "Do you want to save this customer information?" -> ok = continue/ cancel = add another customer
+                Alert alertSaveCustomerInformation = new Alert(Alert.AlertType.CONFIRMATION);
+                alertSaveCustomerInformation.setTitle("Confirmation Dialog");
+                alertSaveCustomerInformation.setHeaderText(null);
+                alertSaveCustomerInformation.setContentText("Do you want to save this customer information?");
+                Optional<ButtonType> saveCustomerInfoAction = alertSaveCustomerInformation.showAndWait();
+
+                if (saveCustomerInfoAction.get() == ButtonType.OK) {
+
+                    setCustomerFromGUI();
+                    //add new customer to list for check
+                    if (newCustomer.isSelected()) {
+                        newCustomerID_List.add(customer.getCustomerID());
+                    }
+                    //add customer id to list
+                    customerList.add(customer);
+                    setReservationCustomerFromGUI();
+                    reserveCustomer_List.add(reservationCustomer);
+
+                    Alert alertAddMoreCustomer = new Alert(Alert.AlertType.CONFIRMATION);
+                    alertAddMoreCustomer.setTitle("Confirmation Dialog");
+                    alertAddMoreCustomer.setHeaderText(null);
+                    alertAddMoreCustomer.setContentText("Do you want to add another customer?");
+                    Optional<ButtonType> addMoreCustomerAction = alertAddMoreCustomer.showAndWait();
+                    if (addMoreCustomerAction.get() == ButtonType.OK) {
+
+                        // add count amount customer
+                        customerNo.setText(String.valueOf(Integer.valueOf(customerNo.getText()) + 1));
+                        //set reserv seat
+                        String[] reservText = reservedSeats.getText().split(" / ");
+                        reservedSeats.setText(String.valueOf( Integer.valueOf(reservText[0]) + 1 ) + " / " + reservText[1]);
+
+                    }
+
+                    else if (addMoreCustomerAction.get() == ButtonType.CANCEL) {
+                        //disable btn -----> after press submit
+                        addCustomerBtn.setDisable(true);
+                        submitBtn.setDisable(false);
+
+                    }
+
+                    //After choose btn OK/CANCEL
+                    clearText();
+                    searchByCustomerName.clear();
+                    searchByCustomerName.setDisable(true);
+                    searchCustomerBtn.setDisable(true);
+                    customer = new Customer();
+                    reservationCustomer = new Reservation();
+
+                } else if (saveCustomerInfoAction.get() == ButtonType.CANCEL) {
+                    // back to edit customer information
+                }
+            } else {
+                //pop up warning
+                Alert alertShowInformationIsUpdate = new Alert(Alert.AlertType.INFORMATION);
+                alertShowInformationIsUpdate.setTitle("Information Dialog");
+                alertShowInformationIsUpdate.setHeaderText(null);
+                alertShowInformationIsUpdate.setContentText("Available seat are full.");
+                Optional<ButtonType> action = alertShowInformationIsUpdate.showAndWait();
+                setUpValueReservationPage();
+                if (action.get() == ButtonType.OK) {
+                    setUpValueReservationPage();
+                }
+            }
+
+        }
     }
 
-    public void setValidateOnKeyRelease(){
-        occupation.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                occupation.setStyle("-fx-border-color: #2C3E50");
-            }
-        });
-
-        homeTelNum.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                occupation.setStyle("-fx-border-color: #2C3E50");
-            }
-        });
-        faxNum.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                occupation.setStyle("-fx-border-color: #2C3E50");
-            }
-        });
-        underlyingDisease.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                occupation.setStyle("-fx-border-color: #2C3E50");
-            }
-        });
-        foodAllergy.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                occupation.setStyle("-fx-border-color: #2C3E50");
-            }
-        });
-        moreDetail.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                occupation.setStyle("-fx-border-color: #2C3E50");
-            }
-        });
-        firstNameTH.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateFirstNameTH()){
-                    firstNameTH.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    firstNameTH.setStyle("-fx-border-color: #922B21");
-                }
-
-            }
-        });
-
-        lastNameTH.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateLastNameTH()){
-                    lastNameTH.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    lastNameTH.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        firstNameEN.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateFirstNameEN()){
-                    firstNameEN.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    firstNameEN.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        lastNameEN.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateLastNameEN()){
-                    lastNameEN.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    lastNameEN.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        age.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateAge()){
-                    age.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    age.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        dateOfBirth.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                dateOfBirth.setStyle("-fx-border-color: #2C3E50");
-            }
-        });
-
-        passportNo.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validatePassportNo()){
-                    passportNo.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    passportNo.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        expPassportDate.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                expPassportDate.setStyle("-fx-border-color: #2C3E50");
-            }
-        });
-
-        address.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateAddress()){
-                    address.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    address.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        phoneNum.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validatePhoneNum()){
-                    phoneNum.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    phoneNum.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        homeTelNum.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateHomeTelNum()){
-                    homeTelNum.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    homeTelNum.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        faxNum.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateFaxNum()){
-                    faxNum.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    faxNum.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        underlyingDisease.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateUnderDisease()){
-                    underlyingDisease.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    underlyingDisease.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        foodAllergy.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateFoodAllergy()){
-                    foodAllergy.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    foodAllergy.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        moreDetail.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateMoreDetail()){
-                    moreDetail.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    moreDetail.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        occupation.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (validateOccupation()){
-                    occupation.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    occupation.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
-        email.setOnKeyReleased(new EventHandler<KeyEvent>(){
-
-            @Override
-            public void handle(KeyEvent event) {
-                if(validateEmail()){
-                    email.setStyle("-fx-border-color: #27AE60");
-                }else{
-                    email.setStyle("-fx-border-color: #922B21");
-                }
-            }
-        });
-
+    private void compareDOBAndExp(){
+        if (validateDateExpPassport()) expPassportDate.setStyle("-fx-border-color: #27AE60");
+        else { expPassportDate.setStyle("-fx-border-color: #922B21");countErr++;}
     }
-
     private boolean validateFirstNameTH(){
         Pattern pattern = Pattern.compile("^[ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]+$");
         Matcher matcher = pattern.matcher(firstNameTH.getText());
-        if (matcher.find() && matcher.group().equals(firstNameTH.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(firstNameTH.getText())) return true;
+        else return false;
     }
     private boolean validateLastNameTH(){
         Pattern pattern = Pattern.compile("^[ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]+$");
         Matcher matcher = pattern.matcher(lastNameTH.getText());
-        if (matcher.find() && matcher.group().equals(lastNameTH.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(lastNameTH.getText()))return true;
+        else return false;
     }
     private boolean validateFirstNameEN(){
         Pattern pattern = Pattern.compile("^[a-zA-Z]+$");
         Matcher matcher = pattern.matcher(firstNameEN.getText());
-        if (matcher.find() && matcher.group().equals(firstNameEN.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(firstNameEN.getText()))return true;
+        else return false;
     }
     private boolean validateLastNameEN(){
         Pattern pattern = Pattern.compile("^[a-zA-Z]+$");
         Matcher matcher = pattern.matcher(lastNameEN.getText());
-        if (matcher.find() && matcher.group().equals(lastNameEN.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    private boolean validateAge(){
-        Pattern pattern = Pattern.compile("^[0-9]+$");
-        Matcher matcher = pattern.matcher(age.getText());
-        if (matcher.find() && matcher.group().equals(age.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(lastNameEN.getText()))return true;
+        return false;
     }
     private boolean validateOccupation(){
-        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-z]|[-])+$");
+        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-z]|[-]|[ ])+$");
         Matcher matcher = pattern.matcher(occupation.getText());
-        if (matcher.find() && matcher.group().equals(occupation.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(occupation.getText()))return true;
+        else return false;
+
     }
+
+    private boolean validateDateOfBirth() {
+        boolean status = false;
+        String dateOfBirth_ = dateOfBirth.getEditor().getText();
+        Date today = new Date();
+        Date dobDate = null;
+        try {
+            dobDate = new SimpleDateFormat("dd-MM-yyyy").parse(dateOfBirth_);
+            if (dobDate.compareTo(today) < 0) {
+                //before or equals today
+                status = true;
+            }
+            else status = false;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
+
+    private boolean validateDateExpPassport()  {
+        boolean status = false;
+        String passportDate = expPassportDate.getEditor().getText();
+        String dateOfBirth_ = dateOfBirth.getEditor().getText();
+        try {
+            Date dobDate = new SimpleDateFormat("dd-MM-yyyy").parse(dateOfBirth_);
+            Date expDate = new SimpleDateFormat("dd-MM-yyyy").parse(passportDate);
+            if (dobDate.compareTo(expDate) < 0) status = true;
+        }
+        catch (ParseException e){ e.printStackTrace();}
+        return status;
+    }
+
+
     private boolean validatePassportNo(){
         Pattern pattern = Pattern.compile("^[A-Z0-9]+$");
         Matcher matcher = pattern.matcher(passportNo.getText());
-        if (matcher.find() && matcher.group().equals(passportNo.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(passportNo.getText()))return true;
+        else return false;
     }
+
     private boolean validateAddress(){
         Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z]|[ ]|[0-9])+$");
         Matcher matcher = pattern.matcher(address.getText());
-        if (matcher.find() && matcher.group().equals(address.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(address.getText()))return true;
+        else return false;
     }
     private boolean validatePhoneNum(){
-        Pattern p = Pattern.compile("[0-9][0-9]{9}|[-]+");
+        Pattern p = Pattern.compile("[0-9][0-9]{9}");
         Matcher m = p.matcher(phoneNum.getText());
-        if(m.find() && m.group().equals(phoneNum.getText())){
-            return true;
-        }else{
-            return false;
-        }
+        if(m.find() && m.group().equals(phoneNum.getText())) return true;
+        else return false;
     }
     private boolean validateHomeTelNum(){
-        Pattern p = Pattern.compile("[0-9][0-9]{8}|[-]+");
+        Pattern p = Pattern.compile("[0-9][0-9]{8}");
         Matcher m = p.matcher(homeTelNum.getText());
-        if(m.find() && m.group().equals(homeTelNum.getText())){
-            return true;
-        }else{
-
-            return false;
-        }
+        if(m.find() && m.group().equals(homeTelNum.getText())) return true;
+        else return false;
     }
     private boolean validateFaxNum(){
-        Pattern p = Pattern.compile("[0-9][0-9]{8}|[-]+");
+        Pattern p = Pattern.compile("[0-9][0-9]{8}");
         Matcher m = p.matcher(faxNum.getText());
-        if(m.find() && m.group().equals(faxNum.getText())){
-            return true;
-        }else{
-
-            return false;
-        }
-    }private boolean validateEmail(){
+        if(m.find() && m.group().equals(faxNum.getText())) return true;
+        else return false;
+    }
+    private boolean validateEmail(){
         Pattern pattern = Pattern.compile("[a-zA-Z0-9._\\-]+@[a-zA-Z0-9]+[.][a-zA-Z.]+");
         Matcher matcher = pattern.matcher(email.getText());
-        if(matcher.find() && matcher.group().equals(email.getText())){
-            return true;
-        }else{
-
-            return false;
-        }
+        if(matcher.find() && matcher.group().equals(email.getText())) return true;
+        else return false;
     }
     private boolean validateUnderDisease(){
-        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z0-9]|[ -])+$");
+        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z0-9]|[ ]|[-])+$");
         Matcher matcher = pattern.matcher(underlyingDisease.getText());
-        if (matcher.find() && matcher.group().equals(underlyingDisease.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(underlyingDisease.getText())) return true;
+        else return false;
     }
     private boolean validateFoodAllergy(){
-        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z]|[ -])+$");
+        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z0-9]|[ ]|[-])+$");
         Matcher matcher = pattern.matcher(foodAllergy.getText());
-        if (matcher.find() && matcher.group().equals(foodAllergy.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(foodAllergy.getText())) return true;
+        else return false;
     }
 
     private boolean validateMoreDetail(){
-        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z0-9]|[ -])+$");
+        Pattern pattern = Pattern.compile("([ๅภถุึคตจขชๆไำพะัีรนยบลฃฟหกดเ้่าสวงผปแอิืทมใฝฎฑธํ๊ณฯญฐฅฤฆฏโฌ็๋ษศซฉฮฺ์ฒฬฦ]|[a-zA-Z0-9]|[ ]|[-])+$");
         Matcher matcher = pattern.matcher(moreDetail.getText());
-        if (matcher.find() && matcher.group().equals(moreDetail.getText())){
-            return true;
-        }
-        else {
-            return false;
-        }
+        if (matcher.find() && matcher.group().equals(moreDetail.getText())) return true;
+        else return false;
     }
 
     private boolean validateFieldsIsEmpty(){
@@ -850,8 +612,6 @@ public class ReservePageController implements Initializable {
         else {lastNameEN.setStyle("-fx-border-color: #2C3E50");}
         if (address.getText().isEmpty()){address.setStyle("-fx-border-color: #C0392B");count++;}
         else {address.setStyle("-fx-border-color: #2C3E50");}
-        if (age.getText().isEmpty()){age.setStyle("-fx-border-color: #C0392B");count++;}
-        else {age.setStyle("-fx-border-color: #2C3E50");}
         if (dateOfBirth.getEditor().getText().isEmpty()){dateOfBirth.setStyle("-fx-border-color: #C0392B");count++;}
         else {dateOfBirth.setStyle("-fx-border-color: #2C3E50");}
         if (passportNo.getText().isEmpty()){passportNo.setStyle("-fx-border-color: #C0392B");count++;}
@@ -868,5 +628,134 @@ public class ReservePageController implements Initializable {
         else{
             return false;
         }
+    }
+
+    private boolean allFieldIsAccuracy(){
+        if(validateFirstNameTH()){
+            firstNameTH.setStyle("-fx-border-color: #27AE60");
+        }else{
+            firstNameTH.setStyle("-fx-border-color: #922B21");
+            countErr++;
+        }
+
+        if(validateLastNameTH()){
+            lastNameTH.setStyle("-fx-border-color: #27AE60");
+        }else{
+            lastNameTH.setStyle("-fx-border-color: #922B21");
+            countErr++;
+        }
+
+        if(validateFirstNameEN()){
+            firstNameEN.setStyle("-fx-border-color: #27AE60");
+        }else{
+            firstNameEN.setStyle("-fx-border-color: #922B21");
+            countErr++;
+        }
+
+        if(validateLastNameEN()){
+            lastNameEN.setStyle("-fx-border-color: #27AE60");
+        }else{
+            lastNameEN.setStyle("-fx-border-color: #922B21");
+            countErr++;
+        }
+
+        if(validatePassportNo()){
+            passportNo.setStyle("-fx-border-color: #27AE60");
+        }else{
+            passportNo.setStyle("-fx-border-color: #922B21");
+            countErr++;
+        }
+
+        if(validateAddress()){
+            address.setStyle("-fx-border-color: #27AE60");
+        }else{
+            address.setStyle("-fx-border-color: #922B21");
+            countErr++;
+        }
+
+        if(validatePhoneNum()){
+            phoneNum.setStyle("-fx-border-color: #27AE60");
+        }else{
+            phoneNum.setStyle("-fx-border-color: #922B21");
+            countErr++;
+        }
+
+        if (validateDateOfBirth()) dateOfBirth.setStyle("-fx-border-color: #27AE60");
+        else {
+            dateOfBirth.setStyle("-fx-border-color: #922B21");
+            countErr++;
+        }
+        if (!expPassportDate.getEditor().getText().equals("")) {
+            compareDOBAndExp();
+        }
+        if (!dateOfBirth.getEditor().getText().equals("")) {
+            compareDOBAndExp();
+        }
+
+        if (!homeTelNum.getText().isEmpty()){
+            if(validateHomeTelNum()){
+                homeTelNum.setStyle("-fx-border-color: #27AE60");
+            }else{
+                homeTelNum.setStyle("-fx-border-color: #922B21");
+                countErr++;
+            }
+        }
+
+        if (!faxNum.getText().isEmpty()){
+            if(validateFaxNum()){
+                faxNum.setStyle("-fx-border-color: #27AE60");
+            }else{
+                faxNum.setStyle("-fx-border-color: #922B21");
+                countErr++;
+            }
+        }
+
+        if(!underlyingDisease.getText().isEmpty()){
+            if(validateUnderDisease()){
+                underlyingDisease.setStyle("-fx-border-color: #27AE60");
+            }else{
+                underlyingDisease.setStyle("-fx-border-color: #922B21");
+                countErr++;
+            }
+        }
+
+        if (!foodAllergy.getText().isEmpty()){
+            if(validateFoodAllergy()){
+                foodAllergy.setStyle("-fx-border-color: #27AE60");
+            }else{
+                foodAllergy.setStyle("-fx-border-color: #922B21");
+                countErr++;
+            }
+        }
+
+        if (!moreDetail.getText().isEmpty()){
+            if(validateMoreDetail()){
+                moreDetail.setStyle("-fx-border-color: #27AE60");
+            }else{
+                moreDetail.setStyle("-fx-border-color: #922B21");
+                countErr++;
+            }
+        }
+
+        if (!occupation.getText().isEmpty()){
+            if (validateOccupation()){
+                occupation.setStyle("-fx-border-color: #27AE60");
+            }else{
+                occupation.setStyle("-fx-border-color: #922B21");
+                countErr++;
+            }
+        }
+
+        if (!email.getText().isEmpty()){
+            if(validateEmail()){
+                email.setStyle("-fx-border-color: #27AE60");
+            }else{
+                email.setStyle("-fx-border-color: #922B21");
+                countErr++;
+            }
+        }
+
+        if (countErr == 0) return true;
+        return false;
     }
 }
